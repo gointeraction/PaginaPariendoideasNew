@@ -1,0 +1,610 @@
+Principios:
+1. Denormalización controlada para lecturas rápidas
+2. Subcolecciones para datos 1:N acotados
+3. Colecciones raíz para datos que crecen indefinidamente
+4. Composite indexes para queries frecuentes
+5. Counter fields para aggregaciones (evitar count queries)
+
+
+Firestore Database
+│
+├── users/{userId}                              # Perfil de usuaria
+│   ├── firstName: string
+│   ├── lastName: string
+│   ├── email: string
+│   ├── photoURL: string
+│   ├── role: "ADMIN" | "MENTORA" | "EMPRENDEDORA" | "INVITADA"
+│   ├── country: string
+│   ├── city: string
+│   ├── bio: string
+│   ├── category: string[]                      # ["Tecnología", "Gastronomía"]
+│   ├── businessStage: "IDEA" | "LAUNCH" | "GROWTH" | "SCALE"
+│   ├── onboardingComplete: boolean
+│   ├── emailVerified: boolean
+│   ├── activePlan: "FREE" | "BASICO" | "PRO" | "PREMIUM"
+│   ├── createdAt: timestamp
+│   ├── updatedAt: timestamp
+│   ├── stats: {
+│   │     productsCount: number
+│   │     salesCount: number
+│   │     mentorshipSessions: number
+│   │     communityPosts: number
+│   │   }
+│   │
+│   ├── subcolecciones:
+│   ├── ├── devices/{deviceId}                  # FCM tokens
+│   ├── │     token: string
+│   ├── │     platform: "web" | "ios" | "android"
+│   ├── │
+│   ├── ├── notifications/{notifId}
+│   ├── │     type: string
+│   ├── │     title: string
+│   ├── │     body: string
+│   ├── │     read: boolean
+│   ├── │     createdAt: timestamp
+│   ├── │     data: map
+│   ├── │
+│   └── └── feedback/{feedbackId}
+│         sessionId: string
+│         rating: number
+│         comment: string
+│         createdAt: timestamp
+│
+├── scholarship_applications/{appId}            # Solicitudes de beca
+│   ├── userId: string
+│   ├── userName: string
+│   ├── userEmail: string
+│   ├── motivation: string
+│   ├── currentSituation: string
+│   ├── preferredModule: "PSICOSOCIAL" | "DIGITAL" | "MENTORIA"
+│   ├── availability: "MATUTINA" | "VESPERTINA" | "FLEXIBLE"
+│   ├── incomeRange: string
+│   ├── status: "PENDIENTE" | "APROBADA" | "RECHAZADA" | "MORE_INFO"
+│   ├── reviewedBy: string                      # admin uid
+│   ├── reviewedAt: timestamp
+│   ├── rejectionReason: string
+│   ├── assignedMentorId: string
+│   ├── duration: string                        # "3 meses"
+│   ├── createdAt: timestamp
+│   └── updatedAt: timestamp
+│
+├── stores/{storeId}                            # Tiendas E-commerce
+│   ├── ownerId: string                         # userId
+│   ├── ownerName: string
+│   ├── storeName: string
+│   ├── slug: string                            # URL-friendly
+│   ├── description: string
+│   ├── logoURL: string
+│   ├── coverURL: string
+│   ├── theme: map { primaryColor, font }
+│   ├── isActive: boolean
+│   ├── plan: "BASICO" | "PRO" | "PREMIUM"
+│   ├── stats: {
+│   │     totalProducts: number
+│   │     totalOrders: number
+│   │     totalRevenue: number
+│   │   }
+│   ├── createdAt: timestamp
+│   │
+│   ├── subcolecciones:
+│   ├── ├── products/{productId}
+│   ├── │     name: string
+│   ├── │     description: string
+│   ├── │     price: number
+│   ├── │     comparePrice: number
+│   ├── │     category: string
+│   ├── │     images: string[]
+│   ├── │     stock: number
+│   ├── │     isActive: boolean
+│   ├── │     soldCount: number
+│   ├── │     createdAt: timestamp
+│   ├── │     updatedAt: timestamp
+│   ├── │
+│   ├── ├── orders/{orderId}
+│   ├── │     buyerId: string | null            # null si es POS
+│   ├── │     buyerEmail: string
+│   ├── │     items: array<{
+│   ├── │       productId: string,
+│   ├── │       name: string,
+│   ├── │       quantity: number,
+│   ├── │       unitPrice: number
+│   ├── │     }>
+│   ├── │     subtotal: number
+│   ├── │     tax: number
+│   ├── │     total: number
+│   ├── │     paymentMethod: "CARD" | "CASH" | "TRANSFER" | "MERCADOPAGO"
+│   ├── │     paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED"
+│   ├── │     fulfillmentStatus: "PENDING" | "PROCESSING" | "SHIPPED" | "DELIVERED"
+│   ├── │     source: "ECOMMERCE" | "POS" | "MARKETPLACE"
+│   ├── │     isOffline: boolean
+│   ├── │     syncedAt: timestamp | null
+│   ├── │     createdAt: timestamp
+│   ├── │
+│   └── └── pos_sessions/{sessionId}            # Sesiones POS
+│         openedAt: timestamp
+│         closedAt: timestamp | null
+│         initialCash: number
+│         finalCash: number | null
+│         transactionsCount: number
+│         totalSales: number
+│
+├── mentorship_sessions/{sessionId}             # Sesiones de mentoría
+│   ├── menteeId: string
+│   ├── menteeName: string
+│   ├── mentorId: string
+│   ├── mentorName: string
+│   ├── status: "PENDING" | "CONFIRMED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED"
+│   ├── scheduledAt: timestamp
+│   ├── duration: number                        # minutos
+│   ├── meetingLink: string
+│   ├── meetingPlatform: "ZOOM" | "MEET" | "TEAMS"
+│   ├── topic: string
+│   ├── menteeNotes: string
+│   ├── mentorNotes: string
+│   ├── feedback: {
+│   │     menteeRating: number
+│   │     menteeComment: string
+│   │     mentorNotes: string
+│   │     mentorRating: number                  # rating de la mentora a la emprendedora
+│   │   }
+│   ├── reminderSent24h: boolean
+│   ├── reminderSent1h: boolean
+│   ├── createdAt: timestamp
+│   └── updatedAt: timestamp
+│
+├── mentors/{mentorId}                          # Perfiles de mentoras
+│   ├── userId: string
+│   ├── specialties: string[]
+│   ├── languages: string[]
+│   ├── availability: map<{day, slots}>
+│   ├── rating: number
+│   ├── totalSessions: number
+│   ├── bio: string
+│   ├── certifications: string[]
+│   ├── isActive: boolean
+│   ├── createdAt: timestamp
+│   │
+│   └── subcolecciones:
+│       └── schedule_overrides/{overrideId}     # Excepciones de horario
+│           date: timestamp
+│           isAvailable: boolean
+│           reason: string
+│
+├── marketplace_listings/{listingId}            # Publicaciones del marketplace
+│   ├── ownerId: string
+│   ├── ownerName: string
+│   ├── ownerPhotoURL: string
+│   ├── type: "SERVICIO" | "PRODUCTO"
+│   ├── title: string
+│   ├── description: string
+│   ├── category: string
+│   ├── subcategory: string
+│   ├── price: number | null
+│   ├── priceType: "FIXED" | "HOURLY" | "RANGE" | "NEGOTIABLE"
+│   ├── priceRange: { min: number, max: number } | null
+│   ├── images: string[]
+│   ├── isRemote: boolean
+│   ├── location: string | null
+│   ├── status: "DRAFT" | "PENDING_REVIEW" | "APPROVED" | "REJECTED" | "PAUSED"
+│   ├── stats: {
+│   │     views: number
+│   │     inquiries: number
+│   │   }
+│   ├── createdAt: timestamp
+│   └── updatedAt: timestamp
+│
+├── events/{eventId}                            # Eventos P.I. Fest
+│   ├── title: string
+│   ├── description: string
+│   ├── coverImage: string
+│   ├── startDate: timestamp
+│   ├── endDate: timestamp
+│   ├── modality: "VIRTUAL" | "PRESENCIAL" | "HIBRIDO"
+│   ├── location: string | null
+│   ├── meetingLink: string | null
+│   ├── capacity: number
+│   ├── registeredCount: number
+│   ├── category: string
+│   ├── tags: string[]
+│   ├── speakers: array<{name, role, photoURL}>
+│   ├── isActive: boolean
+│   ├── createdBy: string
+│   ├── createdAt: timestamp
+│   │
+│   └── subcolecciones:
+│       └── registrations/{regId}
+│           userId: string
+│           userName: string
+│           userEmail: string
+│           registeredAt: timestamp
+│           attended: boolean
+│           feedbackRating: number | null
+│           feedbackComment: string | null
+│
+├── community_posts/{postId}                    # Foro de comunidad
+│   ├── authorId: string
+│   ├── authorName: string
+│   ├── authorPhotoURL: string
+│   ├── category: string
+│   ├── title: string
+│   ├── content: string
+│   ├── tags: string[]
+│   ├── likesCount: number
+│   ├── commentsCount: number
+│   ├── isPinned: boolean
+│   ├── createdAt: timestamp
+│   │
+│   └── subcolecciones:
+│       └── comments/{commentId}
+│           authorId: string
+│           authorName: string
+│           content: string
+│           likesCount: number
+│           createdAt: timestamp
+│
+├── conversations/{conversationId}              # Mensajería directa
+│   ├── participants: string[]                  # [uid1, uid2]
+│   ├── participantNames: map<string, string>
+│   ├── participantPhotos: map<string, string>
+│   ├── lastMessage: {
+│   │     text: string
+│   │     senderId: string
+│   │     sentAt: timestamp
+│   │   }
+│   ├── unreadCount: map<string, number>        # {uid: count}
+│   ├── createdAt: timestamp
+│   │
+│   └── subcolecciones:
+│       └── messages/{messageId}
+│           senderId: string
+│           text: string
+│           type: "TEXT" | "IMAGE" | "FILE" | "LINK"
+│           mediaURL: string | null
+│           readBy: string[]
+│           createdAt: timestamp
+│
+└── analytics/{date}                            # Agregaciones diarias
+    ├── date: timestamp
+    ├── newUsers: number
+    ├── activeUsers: number
+    ├── newScholarshipApps: number
+    ├── approvedScholarships: number
+    ├── newStores: number
+    ├── totalOrders: number
+    ├── totalRevenue: number
+    ├── mentorshipSessions: number
+    ├── newMarketplaceListings: number
+    ├── eventRegistrations: number
+    └── updatedAt: timestamp
+
+
+// Firestore Composite Indexes (firebase-firestore-indexes.json)
+
+{
+  "indexes": [
+    // Users
+    { "collectionGroup": "users", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "role", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    { "collectionGroup": "users", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "country", "order": "ASCENDING" },
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "businessStage", "order": "ASCENDING" }
+      ]
+    },
+
+    // Scholarship Applications
+    { "collectionGroup": "scholarship_applications", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    { "collectionGroup": "scholarship_applications", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+
+    // Products
+    { "collectionGroup": "products", "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isActive", "order": "ASCENDING" },
+        { "fieldPath": "soldCount", "order": "DESCENDING" }
+      ]
+    },
+
+    // Orders
+    { "collectionGroup": "orders", "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "paymentStatus", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    { "collectionGroup": "orders", "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "isOffline", "order": "ASCENDING" },
+        { "fieldPath": "syncedAt", "order": "ASCENDING" }
+      ]
+    },
+
+    // Mentorship Sessions
+    { "collectionGroup": "mentorship_sessions", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "mentorId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "scheduledAt", "order": "ASCENDING" }
+      ]
+    },
+    { "collectionGroup": "mentorship_sessions", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "menteeId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "scheduledAt", "order": "ASCENDING" }
+      ]
+    },
+
+    // Marketplace Listings
+    { "collectionGroup": "marketplace_listings", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    { "collectionGroup": "marketplace_listings", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "isRemote", "order": "ASCENDING" },
+        { "fieldPath": "stats.views", "order": "DESCENDING" }
+      ]
+    },
+
+    // Events
+    { "collectionGroup": "events", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isActive", "order": "ASCENDING" },
+        { "fieldPath": "startDate", "order": "ASCENDING" }
+      ]
+    },
+    { "collectionGroup": "events", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isActive", "order": "ASCENDING" },
+        { "fieldPath": "startDate", "order": "ASCENDING" }
+      ]
+    },
+
+    // Community Posts
+    { "collectionGroup": "community_posts", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isPinned", "order": "DESCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+
+    // Notifications
+    { "collectionGroup": "notifications", "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "read", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
+
+
+
+// firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() &&
+             request.auth.token.role == role;
+    }
+
+    function isAdmin() {
+      return hasRole('ADMIN');
+    }
+
+    function isMentor() {
+      return hasRole('MENTORA');
+    }
+
+    function isEmprendedora() {
+      return hasRole('EMPRENDEDORA');
+    }
+
+    // ============ USERS ============
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /devices/{deviceId} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId);
+      }
+
+      match /notifications/{notifId} {
+        allow read: if isOwner(userId);
+        allow update: if isOwner(userId) && request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['read']);
+        allow create: if false; // only via Cloud Functions
+        allow delete: if false;
+      }
+
+      match /feedback/{feedbackId} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId);
+      }
+    }
+
+    // ============ SCHOLARSHIP APPLICATIONS ============
+    match /scholarship_applications/{appId} {
+      allow read: if isAuthenticated() &&
+                     (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && isEmprendedora()
+                     && request.resource.data.userId == request.auth.uid
+                     && request.resource.data.status == 'PENDIENTE';
+      allow update: if isAdmin()
+                     || (isOwner(resource.data.userId)
+                         && request.resource.data.diff(resource.data).affectedKeys()
+                            .hasOnly(['updatedAt']));
+      allow delete: if false; // never delete, only change status
+    }
+
+    // ============ STORES ============
+    match /stores/{storeId} {
+      allow read: if true; // public stores
+      allow create: if isAuthenticated();
+      allow update: if isOwner(resource.data.ownerId) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /products/{productId} {
+        allow read: if true; // public products
+        allow create: if isOwner(get(/databases/$(database)/documents/stores/$(storeId)).data.ownerId);
+        allow update: if isOwner(get(/databases/$(database)/documents/stores/$(storeId)).data.ownerId)
+                       || isAdmin();
+        allow delete: if isOwner(get(/databases/$(database)/documents/stores/$(storeId)).data.ownerId)
+                       || isAdmin();
+      }
+
+      match /orders/{orderId} {
+        allow read: if isAuthenticated() &&
+                     (resource.data.buyerId == request.auth.uid
+                      || isOwner(get(/databases/$(database)/documents/stores/$(storeId)).data.ownerId)
+                      || isAdmin());
+        allow create: if isAuthenticated();
+        allow update: if isOwner(get(/databases/$(database)/documents/stores/$(storeId)).data.ownerId)
+                       || isAdmin();
+      }
+
+      match /pos_sessions/{sessionId} {
+        allow read, write: if isOwner(get(/databases/$(database)/documents/stores/$(storeId)).data.ownerId)
+                           || isAdmin();
+      }
+    }
+
+    // ============ MENTORSHIP SESSIONS ============
+    match /mentorship_sessions/{sessionId} {
+      allow read: if isAuthenticated() &&
+                     (resource.data.menteeId == request.auth.uid
+                      || resource.data.mentorId == request.auth.uid
+                      || isAdmin());
+      allow create: if isAuthenticated() &&
+                     (request.resource.data.menteeId == request.auth.uid
+                      || request.resource.data.mentorId == request.auth.uid);
+      allow update: if isAuthenticated() &&
+                     (resource.data.menteeId == request.auth.uid
+                      || resource.data.mentorId == request.auth.uid
+                      || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ============ MENTORS ============
+    match /mentors/{mentorId} {
+      allow read: if isAuthenticated();
+      allow create: if isMentor() || isAdmin();
+      allow update: if isOwner(resource.data.userId) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /schedule_overrides/{overrideId} {
+        allow read: if isAuthenticated();
+        allow write: if isOwner(get(/databases/$(database)/documents/mentors/$(mentorId)).data.userId)
+                    || isAdmin();
+      }
+    }
+
+    // ============ MARKETPLACE LISTINGS ============
+    match /marketplace_listings/{listingId} {
+      allow read: if resource.data.status == 'APPROVED' || isAdmin()
+                  || (isAuthenticated() && resource.data.ownerId == request.auth.uid);
+      allow create: if isAuthenticated() &&
+                     request.resource.data.ownerId == request.auth.uid;
+      allow update: if isOwner(resource.data.ownerId) || isAdmin();
+      allow delete: if isOwner(resource.data.ownerId) || isAdmin();
+    }
+
+    // ============ EVENTS ============
+    match /events/{eventId} {
+      allow read: if true; // public events
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+
+      match /registrations/{regId} {
+        allow read: if isAuthenticated() &&
+                     (resource.data.userId == request.auth.uid || isAdmin());
+        allow create: if isAuthenticated() &&
+                     request.resource.data.userId == request.auth.uid;
+        allow update: if isAdmin();
+        allow delete: if isOwner(resource.data.userId) || isAdmin();
+      }
+    }
+
+    // ============ COMMUNITY POSTS ============
+    match /community_posts/{postId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isOwner(resource.data.authorId) || isAdmin();
+      allow delete: if isOwner(resource.data.authorId) || isAdmin();
+
+      match /comments/{commentId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated();
+        allow update: if isOwner(resource.data.authorId) || isAdmin();
+        allow delete: if isOwner(resource.data.authorId) || isAdmin();
+      }
+    }
+
+    // ============ CONVERSATIONS ============
+    match /conversations/{conversationId} {
+      allow read: if isAuthenticated() &&
+                     request.auth.uid in resource.data.participants;
+      allow create: if isAuthenticated() &&
+                     request.auth.uid in request.resource.data.participants;
+      allow update: if isAuthenticated() &&
+                     request.auth.uid in resource.data.participants;
+
+      match /messages/{messageId} {
+        allow read: if isAuthenticated() &&
+                     request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants;
+        allow create: if isAuthenticated() &&
+                     request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants
+                     && request.resource.data.senderId == request.auth.uid;
+      }
+    }
+
+    // ============ ANALYTICS ============
+    match /analytics/{date} {
+      allow read: if isAdmin();
+      allow write: if false; // only via Cloud Functions
+    }
+  }
+}
+
+
+
+
+

@@ -1,0 +1,244 @@
+// functions/src/index.ts
+
+// ===== AUTH TRIGGERS =====
+export const onUserCreated = functions.auth.user()
+  .onCreate(require('./auth/onUserCreated'));
+
+export const onUserDeleted = functions.auth.user()
+  .onDelete(require('./auth/onUserDeleted'));
+
+// ===== FIRESTORE TRIGGERS =====
+export const onScholarshipRequest = functions.firestore
+  .document('scholarship_applications/{appId}')
+  .onCreate(require('./scholarships/onScholarshipRequest'));
+
+export const onScholarshipDecision = functions.firestore
+  .document('scholarship_applications/{appId}')
+  .onUpdate(require('./scholarships/onScholarshipDecision'));
+
+export const onNewOrder = functions.firestore
+  .document('stores/{storeId}/orders/{orderId}')
+  .onCreate(require('./stores/onNewOrder'));
+
+export const onNewMarketplaceListing = functions.firestore
+  .document('marketplace_listings/{listingId}')
+  .onCreate(require('./marketplace/onNewListing'));
+
+export const onNewEventRegistration = functions.firestore
+  .document('events/{eventId}/registrations/{regId}')
+  .onCreate(require('./events/onNewRegistration'));
+
+export const onMentorshipRequest = functions.firestore
+  .document('mentorship_sessions/{sessionId}')
+  .onCreate(require('./mentorship/onSessionRequest'));
+
+export const onMentorshipConfirmed = functions.firestore
+  .document('mentorship_sessions/{sessionId}')
+  .onUpdate(require('./mentorship/onSessionConfirmed'));
+
+export const onNewMessage = functions.firestore
+  .document('conversations/{conversationId}/messages/{messageId}')
+  .onCreate(require('./messaging/onNewMessage'));
+
+export const onNewCommunityPost = functions.firestore
+  .document('community_posts/{postId}')
+  .onCreate(require('./community/onNewPost'));
+
+// ===== SCHEDULED FUNCTIONS =====
+export const dailyAnalytics = functions.pubsub
+  .schedule('every day 00:00')
+  .timeZone('America/Caracas')
+  .onRun(require('./analytics/dailyAggregation'));
+
+export const sessionReminders = functions.pubsub
+  .schedule('every 1 hours')
+  .timeZone('America/Caracas')
+  .onRun(require('./mentorship/sendReminders'));
+
+export const weeklyReport = functions.pubsub
+  .schedule('every monday 08:00')
+  .timeZone('America/Caracas')
+  .onRun(require('./reports/generateWeeklyReport'));
+
+// ===== CALLABLE FUNCTIONS =====
+export const setCustomClaims = functions.https
+  .onCall(require('./auth/setCustomClaims'));
+
+export const processPayment = functions.https
+  .onCall(require('./stores/processPayment'));
+
+export const generateMeetingLink = functions.https
+  .onCall(require('./mentorship/generateMeetingLink'));
+
+export const syncOfflineData = functions.https
+  .onCall(require('./stores/syncOfflineData'));
+
+export const mentorMatching = functions.https
+  .onCall(require('./mentorship/matchingAlgorithm'));
+
+
+
+
+
+// functions/src/auth/onUserCreated.ts
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { sendWelcomeEmail } from '../notifications/sendEmail';
+
+export const onUserCreated = functions.auth.user().onCreate(async (user) => {
+  const db = admin.firestore();
+  const uid = user.uid;
+  const email = user.email || '';
+  const displayName = user.displayName || '';
+  const photoURL = user.photoURL || '';
+
+  // 1. Crear documento de usuario en Firestore
+  await db.collection('users').doc(uid).set({
+    firstName: displayName.split(' ')[0] || '',
+    lastName: displayName.split(' ').slice(1).join(' ') || '',
+    email,
+    photoURL,
+    role: 'EMPRENDEDORA',
+    country: '',
+    city: '',
+    bio: '',
+    category: [],
+    businessStage: 'IDEA',
+    onboardingComplete: false,
+    emailVerified: user.emailVerified,
+    activePlan: 'FREE',
+    stats: {
+      productsCount: 0,
+      salesCount: 0,
+      mentorshipSessions: 0,
+      communityPosts: 0,
+    },
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  // 2. Enviar email de bienvenida
+  await sendWelcomeEmail(email, displayName);
+
+  // 3. Si no verificó email, enviar verificación
+  if (!user.emailVerified) {
+    try {
+      const link = await admin.auth().generateEmailVerificationLink(email, {
+        url: `${process.env.APP_URL}/verify-email`,
+      });
+      await sendVerificationEmail(email, link);
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+    }
+  }
+
+  // 4. Actualizar analytics
+  const today = new Date().toISOString().split('T')[0];
+  await db.collection('analytics').doc(today).set({
+    newUsers: admin.firestore.FieldValue.increment(1),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  }, { merge: true });
+
+  return null;
+});
+
+
+// functions/src/mentorship/matchingAlgorithm.ts
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+
+interface MatchingRequest {
+  menteeId: string;
+  specialty?: string;
+  language?: string;
+}
+
+export const mentorMatching = functions.https.onCall(async (data: MatchingRequest, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'Usuario no autenticado');
+  }
+
+  const db = admin.firestore();
+  const { menteeId, specialty, language } = data;
+
+  // Obtener perfil de la emprendedora
+  const menteeDoc = await db.collection('users').doc(menteeId).get();
+  if (!menteeDoc.exists) {
+    throw new functions.https.HttpsError('not-found', 'Perfil de emprendedora no encontrado');
+  }
+
+  const menteeData = menteeDoc.data()!;
+
+  // Query mentoras
+  let mentorsQuery = db.collection('mentors').where('isActive', '==', true);
+
+  if (specialty) {
+    mentorsQuery = mentorsQuery.where('specialties', 'array-contains', specialty);
+  }
+
+  const mentorsSnapshot = await mentorsQuery.get();
+
+  if (mentorsSnapshot.empty) {
+    return { matches: [] };
+  }
+
+  // Scoring algorithm
+  const scoredMentors = mentorsSnapshot.docs.map(doc => {
+    const mentor = doc.data();
+    let score = 0;
+
+    // Specialty match (+40)
+    const specialtyOverlap = mentor.specialties.filter((s: string) =>
+      menteeData.category.includes(s) || s === specialty
+    ).length;
+    score += specialtyOverlap * 40;
+
+    // Language match (+20)
+    if (language && mentor.languages.includes(language)) {
+      score += 20;
+    }
+    if (mentor.languages.includes('Español')) {
+      score += 10; // bonus para LATAM
+    }
+
+    // Rating (+15 for each star above 3)
+    score += Math.max(0, (mentor.rating - 3)) * 15;
+
+    // Availability bonus (+10)
+    if (Object.keys(mentor.availability).length > 3) {
+      score += 10;
+    }
+
+    // Load balancing (-2 per active session this week)
+    const activeSessions = mentor.totalSessions; // simplified
+    score -= Math.min(20, activeSessions * 2);
+
+    // Same country bonus (+15)
+    if (mentor.country === menteeData.country) {
+      score += 15;
+    }
+
+    return {
+      id: doc.id,
+      ...mentor,
+      score,
+    };
+  });
+
+  // Sort by score descending
+  scoredMentors.sort((a, b) => b.score - a.score);
+
+  // Return top 5
+  return {
+    matches: scoredMentors.slice(0, 5).map(m => ({
+      id: m.id,
+      userId: m.userId,
+      specialties: m.specialties,
+      rating: m.rating,
+      totalSessions: m.totalSessions,
+      score: m.score,
+    })),
+  };
+});
+
+

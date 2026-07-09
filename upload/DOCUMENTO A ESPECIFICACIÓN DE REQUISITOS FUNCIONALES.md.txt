@@ -1,0 +1,124 @@
+
+A.1 Visión General del Sistema
+
+| Campo | Descripción |
+|-------|-------------|
+| **Nombre** | Pariendo Ideas — Hub de Aceleramiento Femenino |
+| **Alcance** | Plataforma integral de aceleramiento digital femenino para Venezuela y LATAM |
+| **Usuarios objetivo** | Mujeres emprendedoras, CEO, profesionales en reconversión digital |
+| **Plataforma** | Web responsive (desktop, tablet, móvil) + PWA |
+
+A.2 Módulos Identificados desde las Imágenes
+┌─────────────────────────────────────────────────────────┐
+│                  PARIENDO IDEAS                          │
+├─────────────┬──────────────────┬────────────────────────┤
+│  IMPULSO    │  KIT MUJER CEO   │  ACELERACIÓN DIGITAL   │
+│  (Programa  │  (Ecosistema     │  (Reconstrucción       │
+│   Renacer)  │   Digital Int.)  │   Digital)             │
+├─────────────┼──────────────────┼────────────────────────┤
+│ • Acompaña- │ • E-commerce     │ • Becas Formación      │
+│   miento    │ • POS            │ • Mentoría 1:1         │
+│   Psicosocial│ • Marketplace   │ • KIT Digital          │
+│ • Bienestar │ • Eventos/Fest   │ • Reconstrucción       │
+│ • Reconstr. │ • Comunidad      │   Acelerada            │
+│   Digital   │ • Educación      │                        │
+│ • Becas     │ • Mentores       │                        │
+└─────────────┴──────────────────┴────────────────────────┘
+
+
+A.3 Requisitos Funcionales Detallados
+
+RF-01.1  Registro de usuaria con email/password y OAuth (Google)
+RF-01.2  Login con Firebase Authentication
+RF-01.3  Perfil de usuaria con datos: nombre, ubicación, tipo de emprendimiento,
+         etapa de negocio, foto de perfil
+RF-01.4  Roles: ADMIN, MENTORA, EMPRENDEDORA, INVITADA
+RF-01.5  Recuperación de contraseña via email
+RF-01.6  Verificación de email obligatoria para acceso a servicios premium
+RF-01.7  Onboarding guiado post-registro (wizard 3 pasos)
+
+
+RF-01.7  Onboarding guiado post-registro (wizard 3 pasos)
+
+RF-02.1  Visualizar programa Impulso con 3 módulos de servicio
+RF-02.2  Solicitar "Beca de Reconstrucción" mediante formulario
+RF-02.3  Módulo: Acompañamiento Psicosocial y Bienestar
+         - Agendar sesiones con psicólogas/terapeutas
+         - Recursos de bienestar (meditaciones, ejercicios)
+         - Seguimiento emocional semanal
+RF-02.4  Módulo: Reconstrucción Digital Acelerada
+         - Solicitar KIT de formación
+         - Acceso a contenido secuencial de digitalización
+         - Progreso tracker por módulo
+RF-02.5  Módulo: Becas de Formación y Mentoría 1:1
+         - Catálogo de becas disponibles
+         - Aplicar a becas específicas
+         - Matching automático mentora-emprendedora
+         - Sesiones de mentoría scheduling
+RF-02.6  Dashboard de progreso personal en el programa
+
+
+RF-03: KIT MUJER CEO — Ecosistema Digital Integrado
+
+RF-03.1  E-commerce integrado para cada emprendedora
+         - Catálogo de productos con CRUD
+         - Gestión de inventario básica
+         - Procesamiento de pagos (MercadoPago/Stripe)
+         - Dashboard de ventas
+RF-03.2  Punto de Venta (POS)
+         - Interfaz de venta rápida
+         - Registro de transacciones
+         - Reportes diarios/semanales
+         - Modo offline con sync posterior
+RF-03.3  Marketplace de Talento
+         - Publicar servicios/productos
+         - Búsqueda y filtrado por categoría
+         - Sistema de reseñas y calificaciones
+         - Perfil público de emprendedora
+RF-03.4  Categorías del ecosistema:
+         - Educación, Comunidad, Mentores
+         - Gastronomía, Turismo, Moda, Tecnología, Salud, Otros
+
+RF-04: Ecosistema Festivo y Eventos
+
+RF-04.1  Sección P.I. Fest — Eventos del hub
+         - Calendario de eventos
+         - Registro/asistencia a eventos
+         - Eventos virtuales y presenciales
+         - Recordatorios y notificaciones
+RF-04.2  Ecosistema Festivo
+         - Networking interactivo
+         - Salas temáticas de conversación
+         - Actividades de comunidad
+
+RF-05: Comunidad y Networking
+
+RF-05.1  Foro de comunidad por categorías
+RF-05.2  Mensajería directa entre usuarias
+RF-05.3  Grupos de interés/temáticos
+RF-05.4  Tablón de oportunidades (trabajo, colaboración)
+RF-05.5  Directorio de emprendedoras con filtros
+
+RF-06: Contenido Educativo
+RF-06.1  Biblioteca de cursos y recursos formativos
+RF-06.2  Categorías: Marketing Digital, Finanzas, Legal, Tecnología
+RF-06.3  Progreso de cursos con certificación
+RF-06.4  Webinars grabados y en vivo
+RF-06.5  Recursos descargables (plantillas, guías)
+
+
+RF-07: Panel de Administración
+
+RF-07.1  Dashboard admin con métricas globales
+RF-07.2  Gestión de usuarias (CRUD, roles, suspensiones)
+RF-07.3  Gestión de becas y programas
+RF-07.4  Gestión de mentoras y asignaciones
+RF-07.5  Moderación de contenido comunitario
+RF-07.6  Reportes y analytics exportables
+RF-07.7  Gestión de eventos
+RF-07.8  Configuración del sistema
+
+
+
+
+
