@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Sparkles, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
@@ -93,6 +94,8 @@ export function Navbar() {
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
+
+            <ThemeToggle />
 
             {/* Mobile toggle */}
             <button

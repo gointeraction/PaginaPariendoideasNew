@@ -84,7 +84,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.12 }}
-              className="mx-auto mt-6 max-w-2xl text-base md:text-lg text-muted-foreground text-pretty lg:mx-0"
+              className="mx-auto mt-6 max-w-2xl text-base md:text-lg text-muted-foreground text-pretty truncate lg:mx-0"
             >
               Hub de aceleramiento digital femenino para Venezuela y LATAM. Acompañamiento
               psicosocial, reconstrucción digital acelerada, mentoría 1:1 y un ecosistema
@@ -219,8 +219,8 @@ function HeroVisual({ reduce }: { reduce: boolean | null }) {
   return (
     <div className="relative mx-auto max-w-md lg:max-w-none">
       {/* Main card — Dashboard preview */}
-      <div className="relative rounded-3xl gradient-primary p-[1.5px] shadow-glow">
-        <div className="rounded-[calc(1.5rem-1.5px)] bg-white p-5 md:p-6">
+      <div className="relative rounded-3xl gradient-primary p-[1.5px] shadow-glow group transition-all duration-500 hover:shadow-[0_0_40px_8px_rgba(168,85,247,0.25)]">
+        <div className="rounded-[calc(1.5rem-1.5px)] bg-white p-5 md:p-6 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-brand-muted/30 group-hover:to-white">
           {/* Card header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -238,13 +238,13 @@ function HeroVisual({ reduce }: { reduce: boolean | null }) {
           </div>
 
           {/* Progress overview */}
-          <div className="mt-5 grid grid-cols-3 gap-2">
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
               { label: 'Impulso', value: 72, color: 'from-pink-500 to-rose-500' },
               { label: 'Kit CEO', value: 58, color: 'from-purple-500 to-fuchsia-500' },
               { label: 'Mentoría', value: 90, color: 'from-orange-500 to-amber-500' },
             ].map((p) => (
-              <div key={p.label} className="rounded-2xl bg-brand-muted/50 p-3">
+              <div key={p.label} className="rounded-2xl bg-brand-muted/50 p-3 sm:p-3">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
                   {p.label}
                 </div>
@@ -287,7 +287,7 @@ function HeroVisual({ reduce }: { reduce: boolean | null }) {
       <motion.div
         animate={reduce ? undefined : { y: [0, -10, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -left-4 sm:-left-10 top-32 hidden sm:block w-44 rounded-2xl border border-brand-border bg-white p-4 shadow-lift"
+        className="absolute -left-4 sm:-left-10 top-32 hidden lg:block w-44 rounded-2xl border border-brand-border bg-white p-4 shadow-lift"
       >
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-muted-foreground">Ventas del mes</span>
@@ -296,11 +296,11 @@ function HeroVisual({ reduce }: { reduce: boolean | null }) {
           </span>
         </div>
         <div className="mt-2 font-display text-2xl font-bold text-brand-deep">$3,420</div>
-        <div className="mt-3 flex h-10 items-end gap-1">
+        <div className="mt-3 flex h-10 items-end gap-1 overflow-hidden">
           {[40, 65, 50, 80, 60, 95, 75].map((h, i) => (
             <div
               key={i}
-              className="flex-1 rounded-t gradient-primary opacity-80"
+              className="flex-1 min-h-[4px] rounded-t gradient-primary opacity-80"
               style={{ height: `${h}%` }}
             />
           ))}
@@ -311,7 +311,7 @@ function HeroVisual({ reduce }: { reduce: boolean | null }) {
       <motion.div
         animate={reduce ? undefined : { y: [0, 10, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        className="absolute -right-4 sm:-right-8 -bottom-6 hidden sm:block w-52 rounded-2xl border border-brand-border bg-white p-4 shadow-lift"
+        className="absolute -right-4 sm:-right-8 -bottom-6 hidden lg:block w-52 rounded-2xl border border-brand-border bg-white p-4 shadow-lift"
       >
         <div className="flex items-center gap-2.5">
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 to-rose-500 text-white text-xs font-bold">

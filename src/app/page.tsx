@@ -6,6 +6,7 @@ import { TrustBar } from '@/components/sections/TrustBar'
 import { Modules } from '@/components/sections/Modules'
 import { ImpulsoProgram } from '@/components/sections/ImpulsoProgram'
 import { KitMujerCEO } from '@/components/sections/KitMujerCEO'
+import { Pricing } from '@/components/sections/Pricing'
 import { Mentorship } from '@/components/sections/Mentorship'
 import { Events } from '@/components/sections/Events'
 import { Community } from '@/components/sections/Community'
@@ -28,6 +29,7 @@ export default function Home() {
         <Modules />
         <ImpulsoProgram />
         <KitMujerCEO />
+        <Pricing />
         <Mentorship />
         <Events />
         <Community />

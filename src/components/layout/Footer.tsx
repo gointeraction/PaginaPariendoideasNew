@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import Link from 'next/link'
 import {
   Sparkles,
@@ -11,6 +12,8 @@ import {
   MapPin,
   Heart,
   ArrowUpRight,
+  CheckCircle2,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -62,6 +65,38 @@ const SOCIAL_LINKS = [
 ]
 
 export function Footer() {
+  const [email, setEmail] = React.useState('')
+  const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = React.useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) return
+
+    setStatus('loading')
+    setErrorMsg('')
+
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+
+      if (res.ok) {
+        setStatus('success')
+        setEmail('')
+      } else {
+        setStatus('error')
+        setErrorMsg(data.error || 'Algo salió mal')
+      }
+    } catch {
+      setStatus('error')
+      setErrorMsg('Error de conexión')
+    }
+  }
+
   return (
     <footer className="relative mt-auto overflow-hidden bg-brand-deep text-white">
       {/* Decorative top gradient line */}
@@ -91,26 +126,51 @@ export function Footer() {
           </div>
 
           <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSubmit}
             className="flex flex-col gap-3 self-end w-full"
           >
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Input
-                type="email"
-                placeholder="tu@email.com"
-                className="h-12 flex-1 rounded-full bg-white/10 border-white/15 text-white placeholder:text-white/50 backdrop-blur focus-visible:ring-brand-secondary/60"
-              />
-              <Button
-                type="submit"
-                className="h-12 px-6 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90"
-              >
-                Suscribirme
-                <ArrowUpRight className="ml-1.5 h-4 w-4" />
-              </Button>
-            </div>
-            <p className="text-xs text-white/50">
-              Al suscribirte aceptas recibir comunicaciones de Pariendo Ideas. Puedes darte de baja cuando quieras.
-            </p>
+            {status === 'success' ? (
+              <div className="flex items-center gap-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 p-4">
+                <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-400" />
+                <div>
+                  <p className="font-semibold text-emerald-200">¡Suscrita con éxito!</p>
+                  <p className="text-sm text-emerald-300/80">Revisa tu correo para confirmar tu suscripción.</p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); setStatus('idle') }}
+                    placeholder="tu@email.com"
+                    required
+                    className="h-12 flex-1 rounded-full bg-white/10 border-white/15 text-white placeholder:text-white/50 backdrop-blur focus-visible:ring-brand-secondary/60"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={status === 'loading'}
+                    className="h-12 px-6 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 disabled:opacity-60"
+                  >
+                    {status === 'loading' ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        Suscribirme
+                        <ArrowUpRight className="ml-1.5 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+                {status === 'error' && (
+                  <p className="text-sm text-red-300">{errorMsg}</p>
+                )}
+                <p className="text-xs text-white/50">
+                  Al suscribirte aceptas recibir comunicaciones de Pariendo Ideas. Puedes darte de baja cuando quieras.
+                </p>
+              </>
+            )}
           </form>
         </div>
 
