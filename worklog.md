@@ -107,3 +107,46 @@ Próximos pasos recomendados:
 - Implementar dashboard funcional con datos reales
 - Integrar Prisma para persistencia de becas, mentorías, eventos
 - Añadir más micro-interacciones y detalles visuales
+
+---
+Task ID: 2
+Agent: Main (Coordinator) — Cron Review Round 1
+Task: QA con agent-browser, fix de issues y nuevas features (FAQ, Impact Stats, Journey, Resources, Allies, Scroll Utilities)
+
+Work Log:
+- Revisado worklog.md previo — proyecto tenía landing page completa con 10 secciones
+- Verificado estado del dev server: estaba caído, reiniciado con watchdog (node next dev -p 3000 -H 0.0.0.0)
+- Realizado QA completo con agent-browser en http://21.0.12.232:3000
+- Análisis VLM del Hero: identificados issues menores de layout (falsa alarma en su mayoría)
+- Análisis VLM de secciones medias: sin errores críticos de renderizado
+- Verificada responsividad móvil (375px): 8/10, sin overflow ni texto cortado
+- Creadas 6 nuevas secciones/componentes:
+  1. FAQ.tsx — Sección de preguntas frecuentes con buscador en vivo, filtros por categoría y accordion interactivo
+  2. ImpactStats.tsx — Sección de métricas de impacto con contadores animados (useMotionValue + animate), fondo oscuro con gradientes
+  3. Resources.tsx — Sección de recursos y blog con 3 featured resources + 3 blog posts con gradientes y hover effects
+  4. Allies.tsx — Grid de 8 aliados estratégicos (MercadoPago, Stripe, Google, Canva, Meta, UN Women, etc.) con stat strip
+  5. Journey.tsx — Timeline de 4 pasos (Postula → Diagnóstico → Aceleramos → Egresas) con checklist de egreso
+  6. ScrollUtilities.tsx — Barra de progreso de scroll + botón "volver arriba" flotante con animación
+- Actualizado page.tsx con las 6 nuevas secciones (ahora 16 secciones total)
+- Actualizado Navbar con 7 links (Impulso, Kit CEO, Mentoría, Proceso, Impacto, Recursos, FAQ)
+- Verificado interactividad del FAQ: accordion expande/contrae correctamente, filtro de búsqueda funciona
+- Lint pasa sin errores
+- Dev server estable compilando en ~300ms por request
+
+Stage Summary:
+- Landing page expandida de 10 a 16 secciones principales
+- Nuevas funcionalidades interactivas: FAQ con search+filter, contadores animados, scroll progress bar, back-to-top
+- Diseño mantenido coherente con paleta de marca (#A855F7, #EC4899, #F97316)
+- Sección ImpactStats con fondo oscuro (brand-deep) para contraste visual
+- Todas las secciones verificadas con VLM (7-9/10 de calidad)
+- Sin errores de renderizado, lint, ni runtime
+- Server accesible en http://21.0.12.232:3000
+
+Próximos pasos recomendados:
+- Generar imágenes reales de marca para Hero, blog posts y testimonios
+- Implementar páginas de auth (login, register, onboarding wizard)
+- Integrar Prisma para persistencia de becas, mentorías, eventos
+- Añadir más micro-interacciones (hover effects en cards de módulos)
+- Implementar dark mode toggle funcional
+- Crear API endpoints para newsletter signup y contact form
+- Añadir más contenido al blog (artículos completos)

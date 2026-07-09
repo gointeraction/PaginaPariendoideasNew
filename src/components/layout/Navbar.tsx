@@ -8,11 +8,13 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
-  { label: 'Programa Impulso', href: '#impulso' },
-  { label: 'Kit Mujer CEO', href: '#kit-mujer-ceo' },
+  { label: 'Impulso', href: '#impulso' },
+  { label: 'Kit CEO', href: '#kit-mujer-ceo' },
   { label: 'Mentoría', href: '#mentoria' },
-  { label: 'Eventos', href: '#eventos' },
-  { label: 'Comunidad', href: '#comunidad' },
+  { label: 'Proceso', href: '#proceso' },
+  { label: 'Impacto', href: '#impacto' },
+  { label: 'Recursos', href: '#recursos' },
+  { label: 'FAQ', href: '#faq' },
 ]
 
 export function Navbar() {
