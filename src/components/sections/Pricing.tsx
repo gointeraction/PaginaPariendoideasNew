@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 interface PlanFeature {
   text: string
@@ -283,14 +284,22 @@ export function Pricing() {
                     size="lg"
                     className={`group/btn w-full rounded-full h-12 text-sm font-semibold ${plan.gradientBtn}`}
                   >
-                    <Link href="#beca">
+                    <a
+                      href={
+                        plan.priceMonthly === 0
+                          ? ONBOARDING_URLS.becas
+                          : plan.popular
+                            ? ONBOARDING_URLS.kitMujerCeo
+                            : ONBOARDING_URLS.aceleracion
+                      }
+                    >
                       {plan.priceMonthly === 0
-                        ? 'Comenzar gratis'
+                        ? 'Solicitar Beca 100%'
                         : plan.popular
-                          ? 'Elegir PRO'
-                          : 'Elegir ELITE'}
+                          ? 'Activar Kit Mujer CEO'
+                          : 'Comenzar aceleración'}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                    </Link>
+                    </a>
                   </Button>
                 </div>
 

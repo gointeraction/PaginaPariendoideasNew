@@ -2,8 +2,10 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Star, Quote, Sparkles, TrendingUp, Heart, Award } from 'lucide-react'
+import { Star, Quote, Sparkles, TrendingUp, Heart, Award, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { SectionHeading } from './Modules'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 type Testimonial = {
   name: string
@@ -65,17 +67,40 @@ export function Testimonials() {
 
       <div className="mx-auto max-w-7xl px-4">
         <SectionHeading
-          eyebrow="Historias que inspiran"
+          eyebrow="HISTORIAS QUE INSPIRAN"
           title={
             <>
-              Miles de mujeres ya están
-              <span className="gradient-text"> pariendo ideas</span>
+              CONECTA CON MUJERES QUE
+              <span className="gradient-text block"> PARIERON SUS IDEAS… HOY SON EXITOSAS Y RESILIENTES</span>
             </>
           }
-          description="Historias reales de emprendedoras que reconstruyeron su vida y su negocio con el acompañamiento de Pariendo Ideas."
+          description="Historias reales de emprendedoras resilientes que reconstruyeron su vida y negocio hoy cuentan con el acompañamiento de PARIENDO IDEAS."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <Button
+            asChild
+            variant="outline"
+            className="rounded-full border-2 border-brand-border text-brand-deep hover:bg-brand-muted/50 font-semibold text-sm px-6 shadow-soft"
+          >
+            <a href="#historias">
+              <Sparkles className="mr-2 h-4 w-4 text-brand-primary" />
+              Historias que inspiran
+            </a>
+          </Button>
+
+          <Button
+            asChild
+            className="rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 font-semibold text-sm px-7"
+          >
+            <a href={ONBOARDING_URLS.becas}>
+              Únete ya
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
+        </div>
+
+        <div id="historias" className="mt-14 grid gap-6 lg:grid-cols-3">
           {TESTIMONIALS.map((t, i) => (
             <motion.figure
               key={t.name}

@@ -12,116 +12,222 @@ import {
   ArrowRight,
   Quote,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SectionHeading } from './Modules'
+import { ONBOARDING_URLS, getMentorBookingUrl } from '@/lib/constants'
 
 type Mentor = {
+  id: string
   name: string
-  initials: string
   specialty: string
-  rating: number
-  sessions: number
-  gradient: string
-  languages: string[]
-  bio: string
+  image: string
 }
 
 const MENTORS: Mentor[] = [
   {
-    name: 'Carolina Pérez',
-    initials: 'CP',
-    specialty: 'Marketing Digital',
-    rating: 4.9,
-    sessions: 98,
-    gradient: 'from-pink-400 to-rose-500',
-    languages: ['Español', 'Inglés'],
-    bio: 'Estratega digital con 12 años en marketing. Ex-Google LATAM.',
+    id: 'dra-heidy-oropeza',
+    name: 'Dra. Heidy Oropeza',
+    specialty: 'Médica y Asesora de Bienestar Integrativo',
+    image: '/Mentores/1.png',
   },
   {
-    name: 'Valentina Rodríguez',
-    initials: 'VR',
-    specialty: 'Finanzas & Inversión',
-    rating: 5.0,
-    sessions: 124,
-    gradient: 'from-purple-400 to-fuchsia-500',
-    languages: ['Español', 'Portugués'],
-    bio: 'CFO en fintech. Mentora de emprendedoras en levantamiento de capital.',
+    id: 'prof-wolfan-bellorin',
+    name: 'Prof. Wolfan Bellorín',
+    specialty: 'Profesor de Oratoria y Locución',
+    image: '/Mentores/2.png',
   },
   {
-    name: 'Mariana López',
-    initials: 'ML',
-    specialty: 'E-commerce & Retail',
-    rating: 4.8,
-    sessions: 76,
-    gradient: 'from-orange-400 to-amber-500',
-    languages: ['Español'],
-    bio: 'Fundadora de 3 tiendas online. Experta en logística y marketplace.',
+    id: 'ing-carlos-moreno',
+    name: 'Ing. Carlos Moreno',
+    specialty: 'Experto en Blockchain y Criptoactivos',
+    image: '/Mentores/3.png',
   },
   {
-    name: 'Daniela Torres',
-    initials: 'DT',
-    specialty: 'Desarrollo & Producto',
-    rating: 4.9,
-    sessions: 152,
-    gradient: 'from-violet-400 to-purple-500',
-    languages: ['Español', 'Inglés'],
-    bio: 'CTO en startup SaaS. Mentora en producto digital y no-code.',
+    id: 'lic-jose-yvan-bohorquez',
+    name: 'Lic. José Yván Bohórquez',
+    specialty: 'Experto en Inteligencia Artificial (IA)',
+    image: '/Mentores/4.png',
   },
-]
-
-const SPECIALTIES = [
-  'Marketing Digital',
-  'Finanzas',
-  'Legal',
-  'Tecnología',
-  'E-commerce',
-  'Liderazgo',
-  'Branding',
-  'Exportación',
+  {
+    id: 'lic-celsa-moza',
+    name: 'Lic. Celsa Moza',
+    specialty: 'Experta en Programación Neurolingüística (PNL)',
+    image: '/Mentores/5.png',
+  },
+  {
+    id: 'lic-soley-medina',
+    name: 'Lic. Soley Medina',
+    specialty: 'Licenciada en Contaduría y Finanzas',
+    image: '/Mentores/6.png',
+  },
+  {
+    id: 'arq-dioraisa-lomartire',
+    name: 'Arq. Dioraisa Lomartire',
+    specialty: 'Arquitecta Especialista en Diseño de Interiores y Feng Shui',
+    image: '/Mentores/7.png',
+  },
+  {
+    id: 'abg-wendy-mendez',
+    name: 'Abg. Wendy Méndez',
+    specialty: 'Abogada Especialista en Derecho Contractual',
+    image: '/Mentores/8.png',
+  },
 ]
 
 export function Mentorship() {
+  const [isPaused, setIsPaused] = React.useState(false)
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false)
+  const [canScrollRight, setCanScrollRight] = React.useState(true)
+  const scrollRef = React.useRef<HTMLDivElement>(null)
+
+  const checkScroll = () => {
+    if (!scrollRef.current) return
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+    setCanScrollLeft(scrollLeft > 10)
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+  }
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollRef.current) return
+    const container = scrollRef.current
+    const scrollAmount = container.clientWidth * 0.75
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    })
+  }
+
+  // Autoplay sutil del carrusel cuando no está pausado por el cursor o toque
+  React.useEffect(() => {
+    if (isPaused) return
+    const timer = setInterval(() => {
+      if (!scrollRef.current) return
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+      if (scrollLeft + clientWidth >= scrollWidth - 15) {
+        scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' })
+      } else {
+        scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' })
+      }
+    }, 4500)
+    return () => clearInterval(timer)
+  }, [isPaused])
+
   return (
     <section id="mentoria" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-fuchsia-50/30 to-white" />
-      <div className="pointer-events-none absolute top-1/4 -left-32 h-72 w-72 rounded-full bg-fuchsia-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-1/4 -right-32 h-80 w-80 rounded-full bg-purple-200/40 blur-3xl" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-brand-muted/20 to-white" />
+      <div className="pointer-events-none absolute top-1/4 -left-32 h-72 w-72 rounded-full bg-brand-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-1/4 -right-32 h-80 w-80 rounded-full bg-brand-secondary/10 blur-3xl" />
 
       <div className="mx-auto max-w-7xl px-4">
         <SectionHeading
           eyebrow="Mentoría 1:1"
           title={
             <>
-              Aprende de mentoras que
-              <span className="gradient-text-purple-pink"> ya recorrieron el camino</span>
+              Aprende de mentoras y mentores que
+              <span className="gradient-text"> ya recorrieron el camino</span>
             </>
           }
-          description="Matching automático según tu categoría, etapa e idioma. Sesiones por Zoom o Meet con recordatorios automáticos y feedback bidireccional."
+          description="Sesiones estratégicas personalizadas con nuestra red de especialistas para acelerar y consolidar tu emprendimiento."
         />
 
-        {/* Specialties filter chips */}
-        <div className="mt-10 flex flex-wrap justify-center gap-2">
-          {SPECIALTIES.map((s, i) => (
-            <motion.button
-              key={s}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.04 }}
-              className="rounded-full border border-brand-border bg-white/70 px-3.5 py-1.5 text-xs font-medium text-brand-deep/80 hover:border-brand-primary/40 hover:bg-brand-muted/50 hover:text-brand-primary transition-all"
+        {/* Carousel controls header */}
+        <div className="mt-10 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-semibold text-brand-deep">
+              Red de Mentoras y Mentores Pariendo Ideas (8 profesionales)
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => scroll('left')}
+              disabled={!canScrollLeft}
+              className="h-9 w-9 rounded-full border-brand-border bg-white text-brand-deep shadow-sm hover:border-brand-primary hover:text-brand-primary disabled:opacity-40"
+              aria-label="Anterior mentor"
             >
-              {s}
-            </motion.button>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => scroll('right')}
+              disabled={!canScrollRight}
+              className="h-9 w-9 rounded-full border-brand-border bg-white text-brand-deep shadow-sm hover:border-brand-primary hover:text-brand-primary disabled:opacity-40"
+              aria-label="Siguiente mentor"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Mentors Scrollable Carousel */}
+        <div
+          ref={scrollRef}
+          onScroll={checkScroll}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+          className="mt-6 flex gap-5 overflow-x-auto pb-6 pt-2 scroll-smooth no-scrollbar snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {MENTORS.map((m) => (
+            <div
+              key={m.id}
+              className="w-[260px] sm:w-[290px] md:w-[310px] shrink-0 snap-start"
+            >
+              <div className="group relative flex flex-col h-full overflow-hidden rounded-3xl border border-brand-border bg-white shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-lift hover:border-brand-primary/50">
+                {/* Mentor Photo */}
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-brand-muted/20">
+                  <img
+                    src={m.image}
+                    alt={m.name}
+                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-30 group-hover:opacity-10 transition-opacity" />
+                </div>
+
+                {/* Mentor Details - Sin estrellas, limpio y formal */}
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-display text-base sm:text-lg font-bold text-brand-deep group-hover:text-brand-primary transition-colors leading-snug">
+                    {m.name}
+                  </h3>
+                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2 min-h-[2.5rem]">
+                    {m.specialty}
+                  </p>
+
+                  <div className="mt-4 pt-4 border-t border-brand-border/60">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full rounded-full border-2 border-brand-border text-brand-deep hover:border-brand-primary/40 hover:bg-brand-muted/40 text-xs font-semibold group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all shadow-sm"
+                    >
+                      <a href={getMentorBookingUrl(m.name)}>
+                        <Calendar className="mr-1.5 h-3.5 w-3.5" />
+                        Agendar sesión 1:1
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* Mentors grid */}
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {MENTORS.map((m, i) => (
-            <MentorCard key={m.name} mentor={m} index={i} />
-          ))}
+        {/* Mobile Swipe Hint */}
+        <div className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground sm:hidden">
+          <span>Desliza para ver más mentores</span>
+          <ArrowRight className="h-3 w-3" />
         </div>
 
         {/* Process banner */}
@@ -144,25 +250,25 @@ export function Mentorship() {
                   <span className="gradient-text"> en 3 pasos</span>
                 </h3>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Nuestro algoritmo analiza tu categoría, etapa de negocio, idioma y
-                  disponibilidad para sugerirte las mentoras con mejor scoring.
+                  Nuestro algoritmo analiza tu categoría, etapa de negocio, necesidades específicas y
+                  disponibilidad para asignarte las mentorías estratégicas que impulsarán tu crecimiento.
                 </p>
                 <Button
                   asChild
                   className="mt-6 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90"
                 >
-                  <Link href="#beca">
-                    Solicitar mentoría
+                  <a href={ONBOARDING_URLS.aceleracion}>
+                    Comenzar aceleración
                     <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
-                  { n: '1', t: 'Filtra', d: 'Por especialidad, idioma y rating', icon: Sparkles },
-                  { n: '2', t: 'Agenda', d: 'Selecciona fecha y hora disponibles', icon: Calendar },
-                  { n: '3', t: 'Conecta', d: 'Videollamada con recordatorios', icon: Video },
+                  { n: '1', t: 'Postula', d: 'Completa tu diagnóstico en la plataforma', icon: Sparkles },
+                  { n: '2', t: 'Agenda', d: 'Selecciona fecha y hora para tu sesión', icon: Calendar },
+                  { n: '3', t: 'Conecta', d: 'Videollamada 1:1 con mentoría personalizada', icon: Video },
                 ].map((s) => (
                   <div
                     key={s.n}
@@ -184,70 +290,5 @@ export function Mentorship() {
         </motion.div>
       </div>
     </section>
-  )
-}
-
-function MentorCard({ mentor: m, index }: { mentor: Mentor; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="group relative flex flex-col overflow-hidden rounded-3xl border border-brand-border bg-white p-5 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift"
-    >
-      <div className="flex items-start gap-3">
-        <div className="relative">
-          <span
-            className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${m.gradient} text-white font-bold text-base shadow-md`}
-          >
-            {m.initials}
-          </span>
-          <span className="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-emerald-400">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          </span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-display text-base font-bold text-brand-deep truncate">{m.name}</h3>
-          <p className="text-xs text-muted-foreground">{m.specialty}</p>
-          <div className="mt-1 flex items-center gap-1">
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-            <span className="text-xs font-semibold text-brand-deep">{m.rating}</span>
-            <span className="text-xs text-muted-foreground">· {m.sessions} sesiones</span>
-          </div>
-        </div>
-      </div>
-
-      <p className="mt-4 text-xs text-muted-foreground leading-relaxed line-clamp-2 flex-1">
-        {m.bio}
-      </p>
-
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {m.languages.map((l) => (
-          <span
-            key={l}
-            className="inline-flex items-center gap-1 rounded-full bg-brand-muted/60 px-2 py-0.5 text-[10px] font-medium text-brand-deep/70"
-          >
-            <Languages className="h-2.5 w-2.5" />
-            {l}
-          </span>
-        ))}
-        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700">
-          <Award className="h-2.5 w-2.5" />
-          Verificada
-        </span>
-      </div>
-
-      <Button
-        asChild
-        variant="outline"
-        className="mt-4 w-full rounded-full border-2 border-brand-border text-brand-deep hover:border-brand-primary/40 hover:bg-brand-muted/40 text-xs"
-      >
-        <Link href="#beca">
-          <Calendar className="mr-1.5 h-3.5 w-3.5" />
-          Agendar sesión
-        </Link>
-      </Button>
-    </motion.div>
   )
 }

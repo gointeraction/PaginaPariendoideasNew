@@ -1,0 +1,49 @@
+┌─────────────────────────────────────────────────────────────────┐
+│                    ROADMAP DE DESARROLLO                         │
+├──────────┬──────────────────────────────────────────────────────┤
+│ FASE 1   │ MVP — Fundamentos (4 semanas)                       │
+│ Sem 1-4  │ • Setup Firebase + Next.js 16                       │
+│          │ • Autenticación (email + Google)                     │
+│          │ • Onboarding wizard                                   │
+│          │ • Landing page (Hero, About, Services)               │
+│          │ • Perfil de usuaria básico                           │
+│          │ • Firestore schema + security rules                   │
+│          │ • Fix: Hero component ✅                             │
+├──────────┼──────────────────────────────────────────────────────┤
+│ FASE 2   │ Programa IMPULSO (4 semanas)                        │
+│ Sem 5-8  │ • Módulo Psicosocial (agendar + recursos)           │
+│          │ • Módulo Reconstrucción Digital (contenido)          │
+│          │ • Formulario de Beca + flujo aprobación              │
+│          │ • Cloud Functions: onScholarshipRequest/Decision     │
+│          │ • Notificaciones email (SendGrid)                    │
+│          │ • Dashboard de progreso personal                     │
+├──────────┼──────────────────────────────────────────────────────┤
+│ FASE 3   │ KIT MUJER CEO (6 semanas)                           │
+│ Sem 9-14 │ • E-commerce: CRUD productos + tienda pública       │
+│          │ • POS: Interfaz de venta + modo offline              │
+│          │ • Integración MercadoPago/Stripe                     │
+│          │ • Dashboard de ventas y métricas                     │
+│          │ • Cloud Functions: processPayment, syncOfflineData   │
+├──────────┼──────────────────────────────────────────────────────┤
+│ FASE 4   │ Mentoría + Marketplace (4 semanas)                  │
+│ Sem 15-18│ • Perfiles de mentoras + disponibilidad             │
+│          │ • Scheduling de sesiones + videollamadas             │
+│          │ • Matching algorithm (Cloud Function)                │
+│          │ • Marketplace: publicar, buscar, filtrar             │
+│          │ • Sistema de reseñas                                 │
+├──────────┼──────────────────────────────────────────────────────┤
+│ FASE 5   │ Comunidad + Eventos (4 semanas)                     │
+│ Sem 19-22│ • Foro de comunidad + comentarios                   │
+│          │ • Mensajería directa                                 │
+│          │ • P.I. Fest: calendario + registro                   │
+│          │ • Push notifications (FCM)                           │
+│          │ • Analytics dashboard (admin)                        │
+├──────────┼──────────────────────────────────────────────────────┤
+│ FASE 6   │ Polish + Launch (2 semanas)                          │
+│ Sem 23-24│ • Testing E2E completo                               │
+│          │ • Performance optimization                           │
+│          │ • PWA setup + offline                                │
+│          │ • SEO + meta tags                                    │
+│          │ • Deployment a producción                            │
+│          │ • Monitoreo + alerts                                 │
+└──────────┴──────────────────────────────────────────────────────┘

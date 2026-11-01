@@ -2,18 +2,19 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sparkles, ChevronRight } from 'lucide-react'
+import { Menu, X, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { cn } from '@/lib/utils'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 const NAV_LINKS = [
   { label: 'Impulso', href: '#impulso' },
   { label: 'Kit CEO', href: '#kit-mujer-ceo' },
   { label: 'Mentoría', href: '#mentoria' },
   { label: 'Proceso', href: '#proceso' },
-  { label: 'Impacto', href: '#impacto' },
   { label: 'Recursos', href: '#recursos' },
   { label: 'FAQ', href: '#faq' },
 ]
@@ -46,13 +47,20 @@ export function Navbar() {
           )}
         >
           {/* Logo */}
-          <Link href="#top" className="flex items-center gap-2.5 group">
-            <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl gradient-primary text-white shadow-glow transition-transform group-hover:scale-105">
-              <Sparkles className="h-5 w-5" strokeWidth={2.5} />
-              <span className="absolute -inset-1 rounded-xl bg-primary/30 -z-10 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Link href="#top" className="flex items-center gap-3 group">
+            <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/95 dark:bg-white shadow-md border border-brand-border/40 p-1 transition-transform group-hover:scale-105">
+              <Image
+                src="/logo-pariendo-symbol.png"
+                alt="Pariendo Ideas"
+                width={44}
+                height={44}
+                className="h-full w-full object-contain"
+                priority
+              />
+              <span className="absolute -inset-1 rounded-xl bg-brand-primary/20 -z-10 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="font-display text-lg font-bold tracking-tight text-brand-deep">
+              <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-brand-deep">
                 Pariendo
                 <span className="gradient-text-purple-pink"> Ideas</span>
               </span>
@@ -80,19 +88,12 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Button
               asChild
-              variant="ghost"
-              className="hidden sm:inline-flex text-brand-deep hover:bg-brand-muted/60"
-            >
-              <Link href="#login">Iniciar sesión</Link>
-            </Button>
-            <Button
-              asChild
               className="hidden sm:inline-flex gradient-primary text-white border-0 shadow-glow hover:opacity-90 rounded-full px-5"
             >
-              <Link href="#beca">
+              <a href={ONBOARDING_URLS.becas}>
                 Solicitar Beca
                 <ChevronRight className="ml-1 h-4 w-4" />
-              </Link>
+              </a>
             </Button>
 
             <ThemeToggle />
@@ -131,12 +132,9 @@ export function Navbar() {
                   </Link>
                 ))}
                 <div className="h-px bg-brand-border/60 my-2" />
-                <div className="grid grid-cols-2 gap-2">
-                  <Button asChild variant="outline" className="rounded-full border-brand-border">
-                    <Link href="#login" onClick={() => setMobileOpen(false)}>Iniciar sesión</Link>
-                  </Button>
-                  <Button asChild className="gradient-primary text-white border-0 rounded-full">
-                    <Link href="#beca" onClick={() => setMobileOpen(false)}>Solicitar Beca</Link>
+                <div className="pt-1">
+                  <Button asChild className="w-full gradient-primary text-white border-0 rounded-full">
+                    <a href={ONBOARDING_URLS.becas} onClick={() => setMobileOpen(false)}>Solicitar Beca</a>
                   </Button>
                 </div>
               </nav>

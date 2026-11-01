@@ -1,0 +1,238 @@
+┌─────────────────────────────────────────────────────────────────┐
+│                        CLIENT LAYER                              │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │           Next.js 16 (Turbopack) — SSR/SSG              │   │
+│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌──────────────┐  │   │
+│  │  │ Landing │ │ Dashboard│ │ Admin   │ │ Marketplace  │  │   │
+│  │  │ Page    │ │ App     │ │ Panel   │ │ Public       │  │   │
+│  │  └─────────┘ └─────────┘ └─────────┘ └──────────────┘  │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  Firebase SDK   │
+                    │  (Client-side)  │
+                    └────────┬────────┘
+                             │
+┌────────────────────────────▼────────────────────────────────────┐
+│                    FIREBASE SERVICES LAYER                       │
+│                                                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │  Firebase     │  │  Cloud       │  │  Cloud Functions     │  │
+│  │  Auth         │  │  Firestore   │  │  (v2, Node.js 18)   │  │
+│  │              │  │              │  │                      │  │
+│  │ • Email/Pass │  │ • Users      │  │ • onUserCreated      │  │
+│  │ • Google OAuth│ │ • Stores     │  │ • onScholarshipReq   │  │
+│  │ • Role Claims│  │ • Products   │  │ • onNewOrder         │  │
+│  │ • Email Verify│ │ • Orders     │  │ • processPayment     │  │
+│  │              │  │ • Mentorships│  │ • sendNotifications  │  │
+│  │              │  │ • Events     │  │ • generateReports    │  │
+│  │              │  │ • Marketplace│  │ • syncOfflineData    │  │
+│  │              │  │ • Messages   │  │ • matchingAlgorithm  │  │
+│  └──────┬───────┘  └──────┬───────┘  └──────────┬───────────┘  │
+│         │                 │                      │              │
+│  ┌──────▼─────────────────▼──────────────────────▼───────────┐  │
+│  │              Firebase Cloud Messaging (FCM)               │  │
+│  │              • Push notifications                         │  │
+│  │              • Email triggers (via SendGrid)              │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  ┌──────────────────┐  ┌────────────────────────────────────┐   │
+│  │  Firebase Storage │  │  Firebase Hosting (Next.js SSR)   │   │
+│  │  • Product images │  │  • CDN global                     │   │
+│  │  • Profile photos │  │  • SSL automático                 │   │
+│  │  • Event media    │  │  • Preview deployments            │   │
+│  └──────────────────┘  └────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────┘
+                             │
+┌────────────────────────────▼────────────────────────────────────┐
+│                   EXTERNAL INTEGRATIONS                          │
+│  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐   │
+│  │ MercadoPago │  │ SendGrid     │  │ Google Calendar API │   │
+│  │ / Stripe    │  │ (Transactional│ │ (Event sync)        │   │
+│  │ (Payments)  │  │  Email)      │  │                     │   │
+│  └─────────────┘  └──────────────┘  └─────────────────────┘   │
+│  ┌─────────────┐  ┌──────────────┐                             │
+│  │ Zoom/Meet   │  │ WhatsApp     │                             │
+│  │ (Mentoría)  │  │ Business API │                             │
+│  └─────────────┘  └──────────────┘                             │
+└──────────────────────────────────────────────────────────────────┘
+
+
+src/
+├── app/                          # App Router (Next.js 16)
+│   ├── layout.tsx                # Root layout con providers
+│   ├── page.tsx                  # Landing page (SSG)
+│   ├── (auth)/                   # Auth group route
+│   │   ├── login/page.tsx
+│   │   ├── register/page.tsx
+│   │   ├── verify-email/page.tsx
+│   │   └── forgot-password/page.tsx
+│   ├── (dashboard)/              # Protected dashboard group
+│   │   ├── layout.tsx            # Dashboard layout con sidebar
+│   │   ├── dashboard/page.tsx    # Main dashboard
+│   │   ├── impulso/
+│   │   │   ├── page.tsx          # Programa IMPULSO overview
+│   │   │   ├── beca/page.tsx     # Solicitud de beca
+│   │   │   ├── psicosocial/page.tsx
+│   │   │   ├── reconstruccion/page.tsx
+│   │   │   └── mentoria/page.tsx
+│   │   ├── kit-mujer-ceo/
+│   │   │   ├── page.tsx          # Kit overview
+│   │   │   ├── ecommerce/
+│   │   │   │   ├── page.tsx      # E-commerce dashboard
+│   │   │   │   ├── productos/
+│   │   │   │   │   ├── page.tsx  # Lista productos
+│   │   │   │   │   ├── nuevo/page.tsx
+│   │   │   │   │   └── [id]/page.tsx
+│   │   │   │   └── pedidos/page.tsx
+│   │   │   ├── pos/page.tsx      # Punto de Venta
+│   │   │   └── configuracion/page.tsx
+│   │   ├── marketplace/
+│   │   │   ├── page.tsx          # Browse marketplace
+│   │   │   ├── publicar/page.tsx
+│   │   │   └── [listingId]/page.tsx
+│   │   ├── eventos/
+│   │   │   ├── page.tsx          # P.I. Fest calendario
+│   │   │   └── [eventId]/page.tsx
+│   │   ├── comunidad/
+│   │   │   ├── page.tsx          # Foro principal
+│   │   │   └── [threadId]/page.tsx
+│   │   ├── mensajes/page.tsx
+│   │   └── perfil/page.tsx
+│   ├── (admin)/                  # Admin panel
+│   │   ├── layout.tsx
+│   │   ├── admin/
+│   │   │   ├── page.tsx          # Admin dashboard
+│   │   │   ├── usuarios/page.tsx
+│   │   │   ├── becas/page.tsx
+│   │   │   ├── mentoras/page.tsx
+│   │   │   ├── eventos/page.tsx
+│   │   │   ├── contenido/page.tsx
+│   │   │   └── reportes/page.tsx
+│   └── (public)/                 # Public routes
+│       ├── tienda/[storeId]/page.tsx
+│       ├── marketplace/page.tsx
+│       └── eventos/page.tsx
+├── components/
+│   ├── ui/                       # Shadcn/ui base components
+│   ├── layout/
+│   │   ├── Navbar.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── Footer.tsx
+│   │   └── MobileNav.tsx
+│   ├── hero/
+│   │   └── Hero.tsx              # ← EL COMPONENTE FALTANTE
+│   ├── impulso/
+│   │   ├── ProgramCard.tsx
+│   │   ├── ScholarshipForm.tsx
+│   │   ├── ModuleSelector.tsx
+│   │   └── ProgressTracker.tsx
+│   ├── kit/
+│   │   ├── EcommerceDashboard.tsx
+│   │   ├── ProductForm.tsx
+│   │   ├── ProductCard.tsx
+│   │   ├── POSInterface.tsx
+│   │   └── Cart.tsx
+│   ├── marketplace/
+│   │   ├── ListingCard.tsx
+│   │   ├── ListingForm.tsx
+│   │   └── SearchFilters.tsx
+│   ├── mentorship/
+│   │   ├── MentorCard.tsx
+│   │   ├── SessionScheduler.tsx
+│   │   └── FeedbackForm.tsx
+│   └── shared/
+│       ├── AuthGuard.tsx
+│       ├── RoleGuard.tsx
+│       └── NotificationBell.tsx
+├── lib/
+│   ├── firebase/
+│   │   ├── config.ts             # Firebase initialization
+│   │   ├── auth.ts               # Auth helpers
+│   │   ├── firestore.ts          # Firestore helpers
+│   │   ├── storage.ts            # Storage helpers
+│   │   └── messaging.ts          # FCM helpers
+│   ├── hooks/
+│   │   ├── useAuth.ts
+│   │   ├── useFirestore.ts
+│   │   ├── useOffline.ts
+│   │   └── useNotifications.ts
+│   ├── services/
+│   │   ├── userService.ts
+│   │   ├── scholarshipService.ts
+│   │   ├── storeService.ts
+│   │   ├── mentorshipService.ts
+│   │   ├── marketplaceService.ts
+│   │   └── eventService.ts
+│   └── utils/
+│       ├── validators.ts
+│       ├── formatters.ts
+│       └── constants.ts
+├── types/
+│   ├── user.ts
+│   ├── store.ts
+│   ├── scholarship.ts
+│   ├── mentorship.ts
+│   ├── marketplace.ts
+│   └── event.ts
+└── functions/                    # Cloud Functions
+    ├── src/
+    │   ├── index.ts
+    │   ├── auth/
+    │   │   ├── onUserCreated.ts
+    │   │   └── setCustomClaims.ts
+    │   ├── scholarships/
+    │   │   ├── onScholarshipRequest.ts
+    │   │   └── onScholarshipDecision.ts
+    │   ├── stores/
+    │   │   ├── onNewOrder.ts
+    │   │   └── processPayment.ts
+    │   ├── mentorship/
+    │   │   ├── onSessionRequest.ts
+    │   │   ├── onSessionConfirmed.ts
+    │   │   └── matchingAlgorithm.ts
+    │   ├── notifications/
+    │   │   ├── sendPushNotification.ts
+    │   │   └── sendEmail.ts
+    │   └── reports/
+    │       └── generateWeeklyReport.ts
+    └── firebase.json
+
+
+// src/middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+const protectedPaths = ['/dashboard', '/kit-mujer-ceo', '/impulso', '/marketplace/publicar'];
+const adminPaths = ['/admin'];
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  // Verificar token en cookies
+  const token = request.cookies.get('auth-token')?.value;
+  
+  if (protectedPaths.some(path => pathname.startsWith(path))) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+  }
+  
+  if (adminPaths.some(path => pathname.startsWith(path))) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+    // Verificar custom claims de admin
+    // (decodificar token JWT y verificar role)
+  }
+  
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*', '/kit-mujer-ceo/:path*', '/impulso/:path*', '/admin/:path*', '/marketplace/publicar/:path*'],
+};
+
+
+

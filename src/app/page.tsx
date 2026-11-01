@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollUtilities } from '@/components/layout/ScrollUtilities'
+import { MainSlider } from '@/components/sections/MainSlider'
 import { Hero } from '@/components/sections/Hero'
 import { TrustBar } from '@/components/sections/TrustBar'
 import { Modules } from '@/components/sections/Modules'
@@ -24,17 +25,18 @@ export default function Home() {
       <ScrollUtilities />
       <Navbar />
       <main className="flex-1">
-        <Hero />
+        <MainSlider />
+        {/* <Hero /> - Removido por estar duplicado con el MainSlider */}
         <TrustBar />
         <Modules />
         <ImpulsoProgram />
         <KitMujerCEO />
         <Pricing />
         <Mentorship />
-        <Events />
+        {/* <Events /> - Ocultado temporalmente por solicitud */}
         <Community />
         <Journey />
-        <ImpactStats />
+        {/* <ImpactStats /> - Ocultado por solicitud */}
         <Testimonials />
         <Resources />
         <Allies />

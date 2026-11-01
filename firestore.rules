@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Configuración del contenido de la Landing Page (CMS)
+    match /site_content/{document=**} {
+      // Lectura pública para hidratar la landing en tiempo real
+      allow read: if true;
+
+      // Solo el correo único autorizado puede modificar el contenido
+      allow write: if request.auth != null &&
+        request.auth.token.email == "pariendoideass@gmail.com";
+    }
+
+    // Postulaciones a Becas y Respuestas del Diagnóstico Onboarding
+    match /scholarship_applications/{applicationId} {
+      // Cualquier emprendedora puede enviar su postulación desde el onboarding
+      allow create: if true;
+
+      // Lectura y actualización restringida exclusivamente al correo administrativo
+      allow read, update, delete: if request.auth != null &&
+        request.auth.token.email == "pariendoideass@gmail.com";
+    }
+
+    // Regla por defecto para otras colecciones
+    match /{document=**} {
+      allow read, write: if request.auth != null &&
+        request.auth.token.email == "pariendoideass@gmail.com";
+    }
+  }
+}

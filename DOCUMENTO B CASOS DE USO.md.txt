@@ -1,0 +1,203 @@
+                    ┌──────────────┐
+                    │   ADMIN      │
+                    └──────┬───────┘
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+   ┌────┴─────┐     ┌─────┴──────┐    ┌──────┴───────┐
+   │ MENTORA  │     │EMPRENDEDORA│    │  INVITADA    │
+   └──────────┘     └────────────┘    └──────────────┘
+
+
+Caso de Uso:    CU-01 — Registro de Nueva Emprendedora
+Actor:          Invitada / Emprendedora
+Precondición:   La usuaria no tiene cuenta en el sistema
+Flujo Principal:
+  1. Usuaria accede a la página de registro
+  2. Selecciona método: Email/Password o Google OAuth
+  3. Completa datos básicos (nombre, email, país, ciudad)
+  4. Sistema envía email de verificación
+  5. Usuaria verifica email
+  6. Sistema lanza wizard de onboarding:
+     a. Paso 1: Tipo de emprendimiento (categoría)
+     b. Paso 2: Etapa del negocio (idea, lanzamiento, crecimiento)
+     c. Paso 3: Áreas de interés y necesidades
+  7. Sistema crea perfil completo en Firestore
+  8. Sistema redirige al Dashboard personalizado
+
+Flujos Alternativos:
+  3a. Email ya registrado → Mostrar opción de login
+  4a. Email no verificado en 24h → Reenviar verificación
+  6a. Usuaria omite wizard → Perfil incompleto, banner de recordatorio
+
+Postcondición:  Perfil creado, sesión activa, onboarding completo/pendiente
+
+
+Caso de Uso:    CU-02 — Solicitar Beca de Reconstrucción
+Actor:          Emprendedora
+Precondición:   Usuaria autenticada con perfil completo
+Flujo Principal:
+  1. Usuaria navega a Programa IMPULSO
+  2. Visualiza los 3 módulos del programa
+  3. Clic en "Solicitar mi Beca de Reconstrucción"
+  4. Sistema muestra formulario de solicitud:
+     a. Motivación (texto libre, min 200 chars)
+     b. Situación actual (select + texto)
+     c. Módulo de mayor interés (psicosocial/digital/mentoría)
+     d. Disponibilidad horaria
+     e. Ingresos aproximados (rango)
+  5. Usuaria completa y envía solicitud
+  6. Sistema crea registro de solicitud en Firestore (estado: PENDIENTE)
+  7. Sistema envía email de confirmación
+  8. Sistema notifica a admins
+  9. Admin revisa y aprueba/rechaza (CU-07)
+  10. Sistema notifica resultado a la usuaria
+
+Flujos Alternativos:
+  3a. Perfil incompleto → Redirigir a completar perfil
+  5a. Datos inválidos → Mostrar errores inline
+  5b. Ya tiene beca activa → Informar, no permitir duplicado
+
+
+
+Caso de Uso:    CU-03 — Gestionar Tienda E-commerce
+Actor:          Emprendedora
+Precondición:   Usuaria con plan activo que incluye E-commerce
+Flujo Principal:
+  1. Usuaria accede a "Mi Kit Mujer CEO"
+  2. Selecciona "Mi E-commerce"
+  3. Sistema muestra dashboard de tienda:
+     - Productos activos, ventas recientes, métricas
+  4. Usuaria puede:
+     a. Agregar producto (nombre, descripción, precio, fotos, categoría, stock)
+     b. Editar producto existente
+     c. Eliminar/desactivar producto
+     d. Ver pedidos recibidos
+     e. Configurar métodos de pago
+     f. Personalizar apariencia de tienda
+  5. Cada acción persiste en Firestore
+  6. Cambios se reflejan en tienda pública en tiempo real
+
+Flujos Alternativos:
+  4a. Límite de productos según plan → Mostrar upgrade
+  4d. Pedido nuevo → Notificación push + email
+
+
+
+Caso de Uso:    CU-04 — Registrar Venta en POS
+Actor:          Emprendedora
+Precondición:   Usuaria con POS activo en su plan
+Flujo Principal:
+  1. Usuaria accede a "Punto de Venta" desde su Kit
+  2. Sistema carga interfaz POS:
+     - Catálogo rápido de productos
+     - Carrito de venta
+     - Métodos de pago
+  3. Usuaria selecciona productos del catálogo o busca
+  4. Sistema calcula total (subtotal + IVA si aplica)
+  5. Usuaria registra método de pago (efectivo/tarjeta/transferencia)
+  6. Sistema genera transacción en Firestore
+  7. Sistema actualiza inventario
+  8. Sistema muestra recibo (con opción de envío por WhatsApp/email)
+
+Flujos Alternativos:
+  3a. Producto sin stock → Alerta, no permitir agregar
+  2a. Sin conexión → Modo offline, sync al reconectar
+  5a. Pago con tarjeta → Redirigir a pasarela de pago
+
+Postcondición:  Venta registrada, inventario actualizado
+
+
+
+
+Caso de Uso:    CU-05 — Agendar Sesión de Mentoría
+Actor:          Emprendedora, Mentora
+Precondición:   Emprendedora con beca activa; Mentora verificada
+Flujo Principal (Emprendedora):
+  1. Emprendedora accede a "Mentoría 1:1"
+  2. Sistema muestra mentoras disponibles filtradas por:
+     - Especialidad, idioma, disponibilidad, rating
+  3. Emprendedora selecciona mentora
+  4. Sistema muestra calendario de disponibilidad
+  5. Emprendedora selecciona fecha/hora
+  6. Sistema envía solicitud de sesión a mentora
+  7. Mentora acepta/rechaza/repropone horario
+  8. Sistema crea evento con link de videollamada
+  9. Sistema envía recordatorios (24h, 1h antes)
+  10. Post-sesión: Ambas completan feedback
+
+Flujo Principal (Mentora):
+  1. Mentora recibe notificación de solicitud
+  2. Revisa perfil de emprendedora
+  3. Acepta/rechaza con motivo
+  4. Configura link de videollamada (integración Meet/Zoom)
+  5. Post-sesión: Escribe notas de seguimiento
+
+Postcondición:  Sesión agendada, notificaciones enviadas, feedback registrado
+
+
+Caso de Uso:    CU-06 — Publicar Servicio en Marketplace
+Actor:          Emprendedora
+Precondición:   Perfil verificado
+Flujo Principal:
+  1. Usuaria accede a Marketplace
+  2. Clic en "Publicar mi servicio/producto"
+  3. Sistema muestra formulario:
+     - Tipo (servicio/producto)
+     - Título, descripción
+     - Categoría (Gastronomía, Tecnología, etc.)
+     - Precio o rango
+     - Fotos (máx 5)
+     - Ubicación / Remoto
+     - Disponibilidad
+  4. Usuaria completa y publica
+  5. Sistema valida y aprueba (automático o moderado)
+  6. Publicación visible en Marketplace
+
+Postcondición:  Servicio/producto publicado y visible
+
+
+Caso de Uso:    CU-07 — Evaluar y Aprobar Becas
+Actor:          Admin
+Precondición:   Admin autenticado; solicitudes pendientes existen
+Flujo Principal:
+  1. Admin accede al panel de administración
+  2. Selecciona "Solicitudes de Beca"
+  3. Sistema lista solicitudes con filtros (estado, fecha, módulo)
+  4. Admin selecciona solicitud
+  5. Sistema muestra perfil completo + formulario de solicitud
+  6. Admin evalúa y decide:
+     a. Aprobar → Asigna tipo de beca, mentora, duración
+     b. Rechazar → Motivo obligatorio
+     c. Pendiente de info → Solicita más datos a la usuaria
+  7. Sistema actualiza estado y notifica a la usuaria
+  8. Si aprobada: sistema activa módulos correspondientes en el perfil
+
+Postcondición:  Solicitud evaluada, usuaria notificada, módulos activados si aplica
+
+Caso de Uso:    CU-08 — Crear y Gestionar Evento
+Actor:          Admin
+Precondición:   Admin autenticado
+Flujo Principal:
+  1. Admin accede a "Eventos" → "Crear Evento"
+  2. Completa: título, descripción, fecha, hora, modalidad,
+     capacidad, categorías, imagen, ponentes
+  3. Sistema publica evento en calendario
+  4. Sistema notifica a usuarias por segmento
+  5. Usuarias se registran al evento
+  6. Sistema gestiona lista de asistencia
+  7. Dia del evento: sistema envía link/acceso
+  8. Post-evento: encuesta de satisfacción
+
+Postcondición:  Evento creado, registrado, ejecutado con feedback
+
+
+
+
+
+
+
+
+Postcondición:  Tienda actualizada con cambios del usuario
+
+Postcondición:  Solicitud registrada con estado PENDIENTE

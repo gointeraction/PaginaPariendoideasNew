@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Sparkles,
   Instagram,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 const FOOTER_LINKS = [
   {
@@ -24,7 +26,7 @@ const FOOTER_LINKS = [
     links: [
       { label: 'Acompañamiento Psicosocial', href: '#impulso' },
       { label: 'Reconstrucción Digital', href: '#impulso' },
-      { label: 'Becas de Formación', href: '#beca' },
+      { label: 'Becas de Formación', href: ONBOARDING_URLS.becas },
       { label: 'Mentoría 1:1', href: '#mentoria' },
     ],
   },
@@ -34,7 +36,6 @@ const FOOTER_LINKS = [
       { label: 'E-commerce integrado', href: '#kit-mujer-ceo' },
       { label: 'Punto de Venta (POS)', href: '#kit-mujer-ceo' },
       { label: 'Marketplace de Talento', href: '#marketplace' },
-      { label: 'P.I. Fest — Eventos', href: '#eventos' },
     ],
   },
   {
@@ -49,8 +50,6 @@ const FOOTER_LINKS = [
   {
     title: 'Plataforma',
     links: [
-      { label: 'Iniciar sesión', href: '#login' },
-      { label: 'Crear cuenta', href: '#register' },
       { label: 'Soporte', href: '#soporte' },
       { label: 'Términos y privacidad', href: '#legal' },
     ],
@@ -177,11 +176,17 @@ export function Footer() {
         {/* Links grid */}
         <div className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
           <div>
-            <Link href="#top" className="flex items-center gap-2.5">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl gradient-primary text-white shadow-glow">
-                <Sparkles className="h-5 w-5" strokeWidth={2.5} />
+            <Link href="#top" className="flex items-center gap-3 group">
+              <span className="relative inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-md p-1.5 transition-transform group-hover:scale-105">
+                <Image
+                  src="/logo-pariendo-symbol.png"
+                  alt="Pariendo Ideas"
+                  width={48}
+                  height={48}
+                  className="h-full w-full object-contain"
+                />
               </span>
-              <span className="font-display text-xl font-bold">
+              <span className="font-display text-2xl font-bold">
                 Pariendo<span className="gradient-text-purple-pink"> Ideas</span>
               </span>
             </Link>

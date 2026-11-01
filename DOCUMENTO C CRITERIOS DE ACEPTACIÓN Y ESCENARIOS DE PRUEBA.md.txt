@@ -1,0 +1,206 @@
+Feature: Registro de nueva emprendedora
+
+  Background:
+    Given el usuario accede a la plataforma Pariendo Ideas
+
+  @smoke @auth
+  Scenario: Registro exitoso con email y password
+    When el usuario navega a la página de registro
+    And ingresa email "maria@example.com"
+    And ingresa password "Segura123!"
+    And confirma password "Segura123!"
+    And ingresa nombre "María González"
+    And selecciona país "Venezuela"
+    And hace clic en "Registrarse"
+    Then se envía un email de verificación a "maria@example.com"
+    And se crea un documento en la colección "users" con email "maria@example.com"
+    And el campo "role" es "EMPRENDEDORA"
+    And el campo "onboardingComplete" es false
+
+  @auth @negative
+  Scenario: Registro con email ya existente
+    Given existe una cuenta con email "maria@example.com"
+    When el usuario intenta registrarse con email "maria@example.com"
+    Then se muestra el mensaje "Este email ya está registrado"
+    And se ofrece la opción "Iniciar sesión"
+
+  @auth
+  Scenario: Onboarding wizard completado
+    Given el usuario tiene cuenta verificada con onboardingComplete = false
+    When el usuario completa el paso 1 seleccionando categoría "Tecnología"
+    And completa el paso 2 seleccionando etapa "Lanzamiento"
+    And completa el paso 3 marcando intereses ["Marketing", "Finanzas"]
+    And hace clic en "Finalizar"
+    Then el campo "onboardingComplete" se actualiza a true
+    And el usuario es redirigido al Dashboard
+
+  @auth @google
+  Scenario: Registro con Google OAuth
+    When el usuario hace clic en "Continuar con Google"
+    And selecciona la cuenta de Google "maria@gmail.com"
+    And autoriza los permisos
+    Then se crea una cuenta vinculada con provider "google.com"
+    And el usuario inicia sesión automáticamente
+
+
+
+
+Feature: Solicitud de Beca de Reconstrucción
+
+  @beca @critical
+  Scenario: Solicitud exitosa de beca
+    Given "María" está autenticada con perfil completo
+    And no tiene becas activas
+    When navega a "Programa IMPULSO"
+    And hace clic en "Solicitar mi Beca de Reconstrucción"
+    And completa el campo "motivación" con mínimo 200 caracteres
+    And selecciona módulo de interés "Reconstrucción Digital Acelerada"
+    And selecciona disponibilidad "Matutina"
+    And hace clic en "Enviar solicitud"
+    Then se crea un documento en "scholarship_applications" con:
+      | userId       | = María.uid          |
+      | status       | = PENDIENTE          |
+      | module       | = Reconstrucción Digital |
+    Then se envía email de confirmación a María
+    And se envía notificación al panel de admin
+
+  @beca @negative
+  Scenario: Solicitud con perfil incompleto
+    Given "María" está autenticada con perfil incompleto
+    When intenta acceder a "Solicitar mi Beca de Reconstrucción"
+    Then se muestra banner "Completa tu perfil para solicitar la beca"
+    And se redirige a la edición de perfil
+
+  @beca @negative
+  Scenario: Solicitud duplicada con beca activa
+    Given "María" tiene una beca con estado "APROBADA"
+    When navega a "Programa IMPULSO"
+    Then el botón "Solicitar mi Beca" muestra "Beca activa"
+    And está deshabilitado
+
+  @beca @admin
+  Scenario: Admin aprueba beca
+    Given existe una solicitud de beca de "María" con estado "PENDIENTE"
+    And "Admin" está autenticada
+    When "Admin" accede al panel de solicitudes
+    And selecciona la solicitud de "María"
+    And hace clic en "Aprobar"
+    And selecciona mentora asignada "Carolina"
+    And define duración "3 meses"
+    And confirma la aprobación
+    Then la solicitud cambia a estado "APROBADA"
+    And se activan los módulos correspondientes en el perfil de María
+    And se envía email de felicitación a María
+    And se envía notificación a mentora "Carolina"
+
+
+
+
+Feature: Gestión de E-commerce
+
+  @ecommerce @crud
+  Scenario: Agregar producto a la tienda
+    Given "María" tiene plan activo con E-commerce
+    When accede a "Mi E-commerce" → "Agregar Producto"
+    And ingresa nombre "Arepas Artesanales"
+    And ingresa descripción "Arepas de maíz pelado, 6 unidades"
+    And ingresa precio "5.00 USD"
+    And sube 2 fotos del producto
+    And selecciona categoría "Gastronomía"
+    And ingresa stock inicial "50"
+    And hace clic en "Publicar"
+    Then se crea documento en "stores/{storeId}/products"
+    And el producto es visible en la tienda pública de María
+    And el stock se inicializa en 50
+
+  @ecommerce @limit
+  Scenario: Límite de productos alcanzado
+    Given "María" tiene el plan "Básico" con límite de 10 productos
+    And ya tiene 10 productos activos
+    When intenta agregar un nuevo producto
+    Then se muestra "Has alcanzado el límite de productos de tu plan"
+    And se ofrece opción de upgrade de plan
+
+  @pos @offline
+  Scenario: Venta en modo offline
+    Given "María" tiene POS activo
+    And el dispositivo NO tiene conexión a internet
+    When registra una venta de "Arepas Artesanales" x 2
+    Then la venta se almacena localmente en IndexedDB
+    And se muestra confirmación "Venta registrada (se sincronizará al reconectar)"
+    When el dispositivo recupera conexión
+    Then las ventas pendientes se sincronizan con Firestore
+    And el inventario se actualiza correctamente
+
+Feature: Agendar sesión de mentoría
+
+  @mentoria @scheduling
+  Scenario: Emprendedora agenda sesión exitosamente
+    Given "María" tiene beca activa con módulo de mentoría
+    And la mentora "Carolina" tiene disponibilidad los martes 10:00-12:00
+    When "María" accede a "Mentoría 1:1"
+    And selecciona especialidad "Marketing Digital"
+    And filtra mentoras y selecciona "Carolina"
+    And selecciona fecha "2026-07-14" hora "10:00"
+    And hace clic en "Solicitar sesión"
+    Then se crea documento en "mentorship_sessions" con:
+      | menteeId  | = María.uid    |
+      | mentorId  | = Carolina.uid |
+      | status    | = PENDING      |
+      | datetime  | = 2026-07-14T10:00 |
+    And "Carolina" recibe notificación de solicitud
+
+  @mentoria
+  Scenario: Mentora acepta sesión
+    Given existe sesión pendiente de "María" con "Carolina"
+    And "Carolina" está autenticada
+    When "Carolina" accede a "Solicitudes de mentoría"
+    And acepta la sesión de "María"
+    Then la sesión cambia a estado "CONFIRMED"
+    And se genera link de videollamada automático
+    And "María" recibe confirmación con link
+    And se programa recordatorio 24h antes
+    And se programa recordatorio 1h antes
+
+  @mentoria @feedback
+  Scenario: Feedback post-sesión
+    Given la sesión entre "María" y "Carolina" tiene estado "COMPLETED"
+    When "María" recibe prompt de feedback
+    And califica la sesión con 5 estrellas
+    And escribe comentario "Excelente guía en estrategia de contenido"
+    And "Carolina" escribe notas de seguimiento "Enfocarse en Instagram Reels"
+    Then se guarda feedback en "mentorship_feedback"
+    And el rating promedio de "Carolina" se recalcula
+
+
+
+Feature: Publicar en Marketplace
+
+  @marketplace
+  Scenario: Publicación exitosa de servicio
+    Given "María" tiene perfil verificado
+    When accede a "Marketplace" → "Publicar"
+    And selecciona tipo "Servicio"
+    And ingresa título "Consultoría de Marketing Digital"
+    And selecciona categoría "Tecnología"
+    And ingresa precio "30 USD/hora"
+    And marca "Remoto"
+    And sube foto de portada
+    And hace clic en "Publicar"
+    Then se crea documento en "marketplace_listings" con status "APPROVED"
+    And el listing aparece en búsquedas de "Tecnología"
+
+  @marketplace @search
+  Scenario: Búsqueda y filtrado en Marketplace
+    Given existen al menos 20 listings en distintas categorías
+    When una usuaria busca "marketing" en el Marketplace
+    And filtra por categoría "Tecnología"
+    And filtra por "Remoto"
+    Then se muestran listings que coincidan con los 3 criterios
+    And los resultados están ordenados por rating descendente
+
+
+
+
+
+

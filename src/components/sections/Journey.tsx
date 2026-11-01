@@ -8,14 +8,17 @@ import {
   TrendingUp,
   Award,
   CheckCircle2,
+  ArrowRight,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 const STEPS = [
   {
     n: '01',
-    title: 'Postula',
+    title: 'Postulación',
     description:
-      'Completa el formulario de beca en menos de 10 minutos. Cuenta tu historia y tu proyecto.',
+      'Completa el formulario de beca en menos de 10 minutos. Cuéntanos tu historia y tu proyecto.',
     icon: ClipboardCheck,
     color: 'from-purple-500 to-fuchsia-500',
     bg: 'bg-brand-primary/10',
@@ -26,18 +29,18 @@ const STEPS = [
     n: '02',
     title: 'Diagnóstico',
     description:
-      'Una mentora te asigna un nivel y diseña contigo un plan personalizado de 3 meses.',
+      'El sistema te asignará un nivel de arranque y un equipo especializado diseñará tu plan de negocio personalizado para ser ejecutado en tres meses.',
     icon: Rocket,
     color: 'from-pink-500 to-rose-500',
     bg: 'bg-brand-secondary/10',
     text: 'text-brand-secondary',
-    duration: '48 h',
+    duration: 'Personalizado',
   },
   {
     n: '03',
-    title: 'Aceleramos',
+    title: 'Aceleramiento',
     description:
-      'Recorres los 3 pilares: psicosocial, reconstrucción digital y mentoría 1:1 semanal.',
+      'Implementación del Kit Digital Mujer CEO avalado por Cavecom-e para la reconstrucción y aceleramiento de tu emprendimiento o negocio.',
     icon: TrendingUp,
     color: 'from-orange-500 to-amber-500',
     bg: 'bg-brand-accent/10',
@@ -46,24 +49,24 @@ const STEPS = [
   },
   {
     n: '04',
-    title: 'Egresas',
+    title: 'Egreso',
     description:
-      'Obtienes tu certificado, acceso vitalicio a la comunidad y tu Kit Mujer CEO activado.',
+      'Obtendrás tu Certificado de Mujer CEO avalado por Cavecom-e y de acceso vitalicio a la comunidad.',
     icon: Award,
     color: 'from-violet-500 to-purple-500',
     bg: 'bg-brand-primary/10',
     text: 'text-brand-primary',
-    duration: 'Para siempre',
+    duration: 'Vitalicio',
   },
 ]
 
 const CHECKLIST = [
-  'Plan de negocio validado',
-  'Tienda online activa (Kit CEO)',
-  '6 sesiones de mentoría completadas',
-  'Certificado de egresada Renacer',
+  'Plan de negocio personalizado validado',
+  'Tienda online activa (Kit Mujer CEO)',
+  'Acompañamiento y sesiones de mentoría',
+  'Certificado de Mujer CEO avalado por Cavecom-e',
   'Acceso vitalicio a la comunidad',
-  'Networking con +450 mentoras',
+  'Networking con red de mentoras y empresarias',
 ]
 
 export function Journey() {
@@ -160,6 +163,14 @@ export function Journey() {
                   Resultados tangibles y verificables. No es un curso más: es una transformación
                   integral de tu emprendimiento.
                 </p>
+                <div className="mt-6">
+                  <Button asChild className="rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 font-semibold text-sm">
+                    <a href={ONBOARDING_URLS.becas}>
+                      Comenzar mi postulación
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {CHECKLIST.map((item, i) => (

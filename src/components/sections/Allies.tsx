@@ -4,67 +4,114 @@ import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Handshake, Star, ExternalLink } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { useLandingContent } from '@/lib/cms-service'
 
 const ALLIES = [
   {
-    name: 'MercadoPago',
-    category: 'Pagos digitales',
-    description: 'Pasarela de pagos integrada para Venezuela y LATAM.',
-    initial: 'MP',
-    gradient: 'from-cyan-500 to-blue-500',
-  },
-  {
-    name: 'Stripe',
-    category: 'Pagos globales',
-    description: 'Procesamiento internacional para clientes fuera de LATAM.',
-    initial: 'S',
-    gradient: 'from-violet-500 to-purple-500',
-  },
-  {
-    name: 'Google for Startups',
-    category: 'Cloud & Herramientas',
-    description: 'Créditos de Google Cloud y workspace para emprendedoras.',
-    initial: 'G',
-    gradient: 'from-amber-500 to-orange-500',
-  },
-  {
-    name: 'Canva for Education',
-    category: 'Diseño',
-    description: 'Cuenta Canva Pro gratuita para la comunidad.',
-    initial: 'C',
+    name: 'Sellibri',
+    category: 'Comercio & Plataforma',
+    initial: 'SL',
+    logoUrl: '/logosaliados/sellibri.png',
     gradient: 'from-pink-500 to-rose-500',
   },
   {
-    name: 'Meta Emprende',
-    category: 'Marketing',
-    description: 'Créditos publicitarios y formación en WhatsApp Business.',
-    initial: 'M',
-    gradient: 'from-blue-500 to-indigo-500',
+    name: 'Go Interaction Marketing',
+    category: 'Marketing & Crecimiento',
+    initial: 'GI',
+    logoUrl: '/logosaliados/go-interaction.png',
+    gradient: 'from-amber-500 to-orange-500',
   },
   {
-    name: 'UN Women',
-    category: 'Aliado estratégico',
-    description: 'Acompañamiento institucional en empoderamiento femenino.',
-    initial: 'UN',
-    gradient: 'from-emerald-500 to-teal-500',
+    name: 'BBM Intelligent',
+    category: 'Sistemas Inteligentes & IA',
+    initial: 'BBM',
+    logoUrl: '/logosaliados/bbm-intelligent.png',
+    gradient: 'from-blue-600 to-indigo-700',
   },
   {
-    name: 'Banco de Venezuela',
-    category: 'Financiamiento',
-    description: 'Línea de microcréditos para egresadas del programa.',
-    initial: 'BV',
-    gradient: 'from-red-500 to-rose-500',
+    name: 'Cocrea',
+    category: 'Arquitectura & Feng Shui',
+    initial: 'CC',
+    logoUrl: '/logosaliados/cocrea.png',
+    gradient: 'from-emerald-700 to-teal-800',
   },
   {
-    name: 'Hub Caracas',
-    category: 'Coworking',
-    description: 'Espacios físicos gratuitos para sesiones y eventos.',
-    initial: 'HC',
-    gradient: 'from-purple-500 to-fuchsia-500',
+    name: 'Disglobal',
+    category: 'Soluciones Comerciales',
+    initial: 'DG',
+    logoUrl: '/logosaliados/disglobal.png',
+    gradient: 'from-blue-600 to-cyan-600',
+  },
+  {
+    name: 'Dropanas',
+    category: 'Logística & Distribución',
+    initial: 'DP',
+    logoUrl: '/logosaliados/dropanas.png',
+    gradient: 'from-rose-500 to-blue-600',
+  },
+  {
+    name: 'Benflor',
+    category: 'Desarrollo Productivo',
+    initial: 'BF',
+    logoUrl: '/logosaliados/benflor.png',
+    gradient: 'from-rose-600 to-red-700',
+  },
+  {
+    name: 'Renacer Contable',
+    category: 'Asesoría Financiera & Contable',
+    initial: 'RC',
+    logoUrl: '/logosaliados/renacer-contable.png',
+    gradient: 'from-amber-500 to-yellow-600',
+  },
+  {
+    name: 'Arte Medio W3',
+    category: 'Diseño & Creatividad Digital',
+    initial: 'AM',
+    logoUrl: '/logosaliados/arte-medio-w3.png',
+    gradient: 'from-amber-600 to-yellow-700',
+  },
+  {
+    name: 'BestWay Marketing',
+    category: 'Estrategia Digital',
+    initial: 'BW',
+    logoUrl: '/logosaliados/bestway-marketing.png',
+    gradient: 'from-zinc-800 to-zinc-950',
+  },
+  {
+    name: 'Gold Stetic Clinic',
+    category: 'Salud Estética & Bienestar',
+    initial: 'GS',
+    logoUrl: '/logosaliados/gold-stetic-clinic.png',
+    gradient: 'from-amber-500 to-yellow-600',
   },
 ]
 
 export function Allies() {
+  const cms = useLandingContent()
+  const activeAllies = React.useMemo(() => {
+    if (cms.allies && cms.allies.length > 0) {
+      return cms.allies
+        .filter((a) => a.active)
+        .map((a, i) => {
+          const fallback = ALLIES[i % ALLIES.length] || ALLIES[0]
+          const initials = a.name
+            .split(' ')
+            .slice(0, 2)
+            .map((w) => w[0])
+            .join('')
+            .toUpperCase() || 'AL'
+          return {
+            name: a.name,
+            category: a.category || fallback.category,
+            initial: initials,
+            logoUrl: a.logoUrl || fallback.logoUrl,
+            gradient: fallback.gradient,
+          }
+        })
+    }
+    return ALLIES
+  }, [cms.allies])
+
   return (
     <section id="aliados" className="relative py-20 md:py-28 overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white to-brand-muted/40" />
@@ -92,43 +139,53 @@ export function Allies() {
           </p>
         </motion.div>
 
-        {/* Allies grid */}
-        <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {ALLIES.map((ally, i) => (
+        {/* Allies grid - Large showcase cards for logos */}
+        <div className="mt-14 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          {activeAllies.map((ally, i) => (
             <motion.div
-              key={ally.name}
-              initial={{ opacity: 0, y: 20 }}
+              key={ally.name + i}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.4, delay: (i % 4) * 0.06 }}
-              className="group relative overflow-hidden rounded-2xl border border-brand-border bg-white p-5 shadow-soft transition-all hover:shadow-lift hover:-translate-y-1"
+              transition={{ duration: 0.45, delay: (i % 4) * 0.06 }}
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-brand-border bg-white p-5 sm:p-6 shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-lift hover:border-brand-primary/50"
             >
-              <div className="flex items-start gap-3">
-                <span
-                  className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${ally.gradient} text-white text-sm font-bold shadow-soft transition-transform group-hover:scale-110`}
-                >
-                  {ally.initial}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-1">
-                    <h3 className="truncate font-display text-sm font-bold text-brand-deep">
-                      {ally.name}
-                    </h3>
-                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className="mt-1 bg-brand-muted text-brand-primary border-0 text-[9px] font-semibold uppercase tracking-wide"
+              {/* Large Logo Showcase Container (5x+ larger than before) */}
+              <div className="relative flex h-36 sm:h-44 w-full items-center justify-center rounded-2xl bg-brand-muted/20 p-4 transition-colors group-hover:bg-brand-muted/40">
+                {ally.logoUrl ? (
+                  <img
+                    src={ally.logoUrl}
+                    alt={ally.name}
+                    className="max-h-full max-w-full object-contain rounded-xl transition-transform duration-500 group-hover:scale-110 drop-shadow-sm"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <span
+                    className={`inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br ${ally.gradient} text-white text-2xl font-bold shadow-soft`}
                   >
-                    {ally.category}
-                  </Badge>
-                </div>
+                    {ally.initial}
+                  </span>
+                )}
               </div>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{ally.description}</p>
+
+              {/* Ally Name & Category */}
+              <div className="mt-4 flex flex-1 flex-col items-center justify-center text-center">
+                <h3 className="font-display text-base sm:text-lg font-bold text-brand-deep group-hover:text-brand-primary transition-colors line-clamp-1">
+                  {ally.name}
+                </h3>
+                {ally.category && (
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                    {ally.category}
+                  </p>
+                )}
+              </div>
 
               {/* Hover accent */}
               <div
-                className={`absolute bottom-0 left-0 h-0.5 w-full origin-left scale-x-0 bg-gradient-to-r ${ally.gradient} transition-transform duration-500 group-hover:scale-x-100`}
+                className={`absolute bottom-0 left-0 h-1 w-full origin-left scale-x-0 bg-gradient-to-r ${ally.gradient} transition-transform duration-500 group-hover:scale-x-100`}
               />
             </motion.div>
           ))}

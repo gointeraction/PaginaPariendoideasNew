@@ -1,19 +1,25 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useLandingContent } from '@/lib/cms-service'
 
 const PARTNERS = [
-  'MercadoPago',
-  'Google Workspace',
-  'SendGrid',
-  'Stripe',
-  'Zoom',
-  'WhatsApp Business',
+  'Google Cloud',
   'Firebase',
-  'Notion',
+  'Cloudflare',
+  'WhatsApp Business',
+  'Radar',
+  'LandiaAI',
+  'Sellibri',
+  'Avila Pay',
+  'GoAgente IA',
+  'BBM Intelligent',
 ]
 
 export function TrustBar() {
+  const cms = useLandingContent()
+  const tools = (cms.trustBar && cms.trustBar.length > 0) ? cms.trustBar : PARTNERS
+
   return (
     <section className="relative border-y border-brand-border/60 bg-brand-muted/30 py-10">
       <div className="mx-auto max-w-7xl px-4">
@@ -23,7 +29,7 @@ export function TrustBar() {
           </p>
           <div className="relative w-full overflow-hidden mask-fade-r">
             <div className="flex gap-10 animate-marquee">
-              {[...PARTNERS, ...PARTNERS].map((p, i) => (
+              {[...tools, ...tools].map((p, i) => (
                 <motion.span
                   key={i}
                   whileHover={{ scale: 1.05 }}

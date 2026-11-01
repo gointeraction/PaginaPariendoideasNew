@@ -38,13 +38,27 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Pariendo Ideas" }],
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      { url: "/logo-pariendo-symbol.png", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
+  metadataBase: new URL('https://pariendoideas.com'),
   openGraph: {
     title: "Pariendo Ideas — Hub de Aceleramiento Femenino",
     description:
       "Acompañamiento psicosocial, reconstrucción digital acelerada y mentoría 1:1 para mujeres emprendedoras en Venezuela y LATAM.",
+    url: "https://pariendoideas.com",
     siteName: "Pariendo Ideas",
+    images: [
+      {
+        url: "/logo-pariendo-full.png",
+        width: 1618,
+        height: 1261,
+        alt: "Pariendo Ideas — Hub de Aceleramiento Femenino",
+      },
+    ],
     type: "website",
     locale: "es_VE",
   },
@@ -53,6 +67,7 @@ export const metadata: Metadata = {
     title: "Pariendo Ideas — Hub de Aceleramiento Femenino",
     description:
       "Acompañamiento psicosocial, reconstrucción digital acelerada y mentoría 1:1 para mujeres emprendedoras.",
+    images: ["/og-image.jpg"],
   },
 };
 

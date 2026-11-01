@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 type Module = {
   id: string
@@ -47,7 +48,7 @@ const MODULES: Module[] = [
       'Seguimiento emocional semanal',
     ],
     cta: 'Solicitar Beca de Reconstrucción',
-    href: '#beca',
+    href: ONBOARDING_URLS.becas,
     highlight: true,
   },
   {
@@ -67,7 +68,7 @@ const MODULES: Module[] = [
       'Eventos P.I. Fest y networking',
     ],
     cta: 'Activar mi Kit Mujer CEO',
-    href: '#kit-mujer-ceo',
+    href: ONBOARDING_URLS.kitMujerCeo,
   },
   {
     id: 'aceleracion-digital',
@@ -86,7 +87,7 @@ const MODULES: Module[] = [
       'Certificación al completar',
     ],
     cta: 'Comenzar aceleración',
-    href: '#aceleracion',
+    href: ONBOARDING_URLS.aceleracion,
   },
 ]
 

@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SectionHeading } from './Modules'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 const SUBMODULES = [
   {
@@ -28,6 +29,7 @@ const SUBMODULES = [
     text: 'text-rose-700',
     description:
       'Sesiones con psicólogas y terapeutas especializadas, recursos de bienestar y seguimiento emocional semanal.',
+    href: ONBOARDING_URLS.psicosocial,
     items: [
       { icon: Headphones, label: 'Agenda sesiones 1:1 con psicólogas' },
       { icon: BookOpen, label: 'Biblioteca de meditaciones y ejercicios' },
@@ -43,6 +45,7 @@ const SUBMODULES = [
     text: 'text-purple-700',
     description:
       'KIT de formación personalizado, contenido secuencial de digitalización y tracker de progreso por módulo.',
+    href: ONBOARDING_URLS.reconstruccionDigital,
     items: [
       { icon: Sparkles, label: 'Solicita tu KIT de formación' },
       { icon: BookOpen, label: 'Contenido secuencial de digitalización' },
@@ -58,6 +61,7 @@ const SUBMODULES = [
     text: 'text-orange-700',
     description:
       'Catálogo de becas, matching automático mentora-emprendedora y sesiones de mentoría con scheduling.',
+    href: ONBOARDING_URLS.mentoriaBecas,
     items: [
       { icon: BookOpen, label: 'Catálogo de becas disponibles' },
       { icon: Sparkles, label: 'Matching automático con mentora' },
@@ -69,52 +73,53 @@ const SUBMODULES = [
 const STEPS = [
   {
     step: '01',
-    title: 'Solicita tu beca',
-    description: 'Completa un formulario sencillo contándonos tu historia y necesidades.',
+    title: 'Registro en el portal',
+    description: 'Completar tu registro en nuestro portal oficial.',
   },
   {
     step: '02',
     title: 'Evaluación personalizada',
-    description: 'Nuestro equipo revisa tu solicitud y te asigna el módulo ideal.',
+    description: 'Participar en la evaluación personalizada de tu emprendimiento.',
   },
   {
     step: '03',
-    title: 'Comienza tu aceleración',
-    description: 'Accede al programa, mentoras, recursos y comunidad de inmediato.',
+    title: 'Beca o financiamiento',
+    description: 'Postular a la beca o financiamiento ideal para tu modelo de negocio.',
   },
 ]
 
 export function ImpulsoProgram() {
   return (
-    <section id="impulso" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-rose-50/40 via-white to-white" />
-      <div className="pointer-events-none absolute top-20 -left-32 h-72 w-72 rounded-full bg-rose-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-20 -right-32 h-72 w-72 rounded-full bg-purple-200/40 blur-3xl" />
+    <section id="impulso" className="relative py-20 md:py-28 overflow-hidden bg-brand-muted/30">
+      <div className="absolute inset-0 -z-10 bg-dots opacity-[0.2]" />
 
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="relative mx-auto max-w-7xl px-4">
         <SectionHeading
-          eyebrow="Programa Renacer · IMPULSO"
+          eyebrow="Programa IMPULSO · Renacer 2025"
           title={
             <>
-              Reconstruye tu vida y tu emprendimiento,
-              <span className="gradient-text-purple-pink"> paso a paso</span>
+              Tres pilares para tu
+              <span className="gradient-text"> reconstrucción integral</span>
             </>
           }
-          description="Un programa integral de acompañamiento que combina bienestar emocional, formación digital y mentoría experta para mujeres en proceso de reconversión."
+          description="Diseñado para acompañarte desde el bienestar emocional hasta la digitalización y el crecimiento de tu negocio."
         />
 
-        {/* Submodules grid */}
+        {/* 3 Submodules */}
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {SUBMODULES.map((s, i) => (
             <motion.div
               key={s.id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.55, delay: i * 0.1 }}
-              className="group relative flex flex-col rounded-3xl border border-brand-border bg-white p-6 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              whileHover={{ y: -6 }}
+              className="group relative flex flex-col rounded-3xl border border-brand-border bg-white p-7 shadow-soft hover:shadow-lift transition-all"
             >
-              <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${s.bg} ${s.text} transition-transform duration-500 group-hover:scale-110`}>
+              <div
+                className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${s.color} text-white shadow-md`}
+              >
                 <s.icon className="h-6 w-6" />
               </div>
 
@@ -134,13 +139,13 @@ export function ImpulsoProgram() {
                 ))}
               </ul>
 
-              <Link
-                href="#beca"
-                className={`mt-6 inline-flex items-center gap-1 text-sm font-semibold ${s.text} hover:gap-2 transition-all`}
+              <a
+                href={s.href}
+                className={`mt-6 inline-flex items-center gap-1.5 text-sm font-semibold ${s.text} hover:gap-2.5 transition-all`}
               >
                 Conocer más
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
             </motion.div>
           ))}
         </div>
@@ -153,20 +158,23 @@ export function ImpulsoProgram() {
                 ¿Cómo funciona?
               </Badge>
               <h3 className="mt-4 font-display text-2xl md:text-3xl font-bold text-brand-deep leading-tight">
-                Tres pasos para iniciar tu
-                <span className="gradient-text"> reconstrucción</span>
+                Reconstruye y fortalece la estructura de tu negocio
+                <span className="gradient-text block"> con Pariendo Ideas</span>
               </h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Diseñamos un proceso simple y humano. Te acompañamos en cada etapa.
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                Te acompañamos en el proceso de optimización empresarial sin barreras de entrada. Implementamos nuestra tecnología sin costo y ponemos a tu disposición sistemas de financiamiento flexible.
+              </p>
+              <p className="mt-3 text-xs font-semibold text-brand-deep">
+                Para iniciar, solo debes:
               </p>
               <Button
                 asChild
-                className="mt-6 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90"
+                className="mt-5 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90"
               >
-                <Link href="#beca">
+                <a href={ONBOARDING_URLS.becas}>
                   Solicitar mi Beca
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </a>
               </Button>
             </div>
 

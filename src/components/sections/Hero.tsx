@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { ONBOARDING_URLS } from '@/lib/constants'
 
 const STATS = [
   { value: '12K+', label: 'Emprendedoras activas', icon: Users },
@@ -123,11 +124,11 @@ export function Hero() {
                 size="lg"
                 className="group h-13 w-full sm:w-auto rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 px-7 py-3.5 text-base"
               >
-                <Link href="#beca">
+                <a href={ONBOARDING_URLS.becas}>
                   <Sparkles className="mr-2 h-5 w-5" />
                   Solicita tu Beca de Reconstrucción
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                </a>
               </Button>
               <Button
                 asChild
