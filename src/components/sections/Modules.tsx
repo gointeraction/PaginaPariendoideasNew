@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ONBOARDING_URLS } from '@/lib/constants'
+import { useSubscribeModal } from '@/components/layout/SubscribeModalProvider'
 
 type Module = {
   id: string
@@ -34,20 +35,20 @@ const MODULES: Module[] = [
   {
     id: 'impulso',
     name: 'IMPULSO',
-    tagline: 'Programa Renacer',
+    tagline: 'Becas del 100%',
     description:
       'Acompañamiento integral para reconstruir tu vida y tu emprendimiento. Psicosocial, digital y mentoría.',
     icon: Heart,
-    gradient: 'from-pink-500 via-rose-500 to-fuchsia-500',
-    glow: 'shadow-glow-pink',
-    accentText: 'text-rose-600',
+    gradient: 'from-fucsia to-violeta-osc',
+    glow: 'shadow-glow-salmon',
+    accentText: 'text-salmon-900 dark:text-salmon-300',
     features: [
       'Acompañamiento psicosocial y bienestar',
       'Reconstrucción Digital Acelerada',
       'Becas de formación y mentoría 1:1',
       'Seguimiento emocional semanal',
     ],
-    cta: 'Solicitar Beca de Reconstrucción',
+    cta: 'Solicitar Beca',
     href: ONBOARDING_URLS.becas,
     highlight: true,
   },
@@ -58,9 +59,9 @@ const MODULES: Module[] = [
     description:
       'Todo lo que necesitas para gestionar y hacer crecer tu negocio: e-commerce, POS, marketplace y eventos.',
     icon: ShoppingBag,
-    gradient: 'from-purple-500 via-fuchsia-500 to-violet-500',
+    gradient: 'from-fucsia to-violeta-osc',
     glow: 'shadow-glow',
-    accentText: 'text-purple-600',
+    accentText: 'text-salmon-900 dark:text-salmon-300',
     features: [
       'E-commerce integrado con pagos',
       'Punto de Venta (POS) offline-ready',
@@ -77,9 +78,9 @@ const MODULES: Module[] = [
     description:
       'Programa intensivo de reconversión digital con contenido secuencial, mentoría experta y certificación.',
     icon: Rocket,
-    gradient: 'from-orange-500 via-amber-500 to-yellow-500',
-    glow: 'shadow-glow-orange',
-    accentText: 'text-orange-600',
+    gradient: 'from-fucsia to-violeta-osc',
+    glow: 'shadow-lift',
+    accentText: 'text-salmon-900 dark:text-salmon-300',
     features: [
       'KIT Digital personalizado',
       'Contenido secuencial por módulos',
@@ -95,6 +96,7 @@ export function Modules() {
   return (
     <section id="modulos" className="relative py-20 md:py-28">
       <div className="absolute inset-0 -z-10 bg-dots opacity-40" />
+      <img src="/decor/confeti.svg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-16 right-6 -z-10 w-24 rotate-6 opacity-75 md:w-32" />
 
       <div className="mx-auto max-w-7xl px-4">
         <SectionHeading
@@ -119,6 +121,7 @@ export function Modules() {
 }
 
 function ModuleCard({ module: m, index }: { module: Module; index: number }) {
+  const { openSubscribeModal } = useSubscribeModal()
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -126,7 +129,7 @@ function ModuleCard({ module: m, index }: { module: Module; index: number }) {
       viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.55, delay: index * 0.1 }}
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-3xl border bg-white p-6 transition-all duration-500 hover:-translate-y-1',
+        'group relative flex flex-col overflow-hidden rounded-3xl border bg-card p-6 transition-all duration-500 hover:-translate-y-1',
         m.highlight
           ? 'border-brand-border shadow-glow'
           : 'border-brand-border/70 shadow-soft hover:shadow-lift'
@@ -142,7 +145,7 @@ function ModuleCard({ module: m, index }: { module: Module; index: number }) {
 
       {/* Highlight badge */}
       {m.highlight && (
-        <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full gradient-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-glow">
+        <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full gradient-primary-strong px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-glow">
           <Sparkles className="h-3 w-3" />
           Más solicitado
         </span>
@@ -173,7 +176,7 @@ function ModuleCard({ module: m, index }: { module: Module; index: number }) {
       {/* Features */}
       <ul className="mt-6 space-y-2.5 flex-1">
         {m.features.map((f) => (
-          <li key={f} className="flex items-start gap-2.5 text-sm text-brand-deep/85">
+          <li key={f} className="flex items-start gap-2.5 text-sm text-brand-deep">
             <span
               className={cn(
                 'mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white',
@@ -190,13 +193,17 @@ function ModuleCard({ module: m, index }: { module: Module; index: number }) {
       {/* CTA */}
       <Button
         asChild
-        variant="outline"
         className={cn(
-          'mt-7 w-full rounded-full border-2 bg-white hover:bg-brand-muted/40 group/cta',
-          m.highlight ? 'border-brand-primary/40 text-brand-primary' : 'border-brand-border text-brand-deep'
+          'mt-7 w-full rounded-full btn-brand shadow-glow font-semibold group/cta'
         )}
       >
-        <Link href={m.href}>
+        <Link
+          href={m.href}
+          onClick={(ev) => {
+            ev.preventDefault()
+            openSubscribeModal({ originUrl: m.href })
+          }}
+        >
           {m.cta}
           <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
         </Link>
@@ -228,7 +235,7 @@ export function SectionHeading({
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-2 rounded-full bg-brand-muted px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand-primary"
+          className="inline-flex items-center gap-2 rounded-full bg-brand-muted px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary-ink"
         >
           <span className="h-1.5 w-1.5 rounded-full gradient-primary" />
           {eyebrow}

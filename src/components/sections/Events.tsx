@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import * as React from 'react'
 import Link from 'next/link'
@@ -46,7 +46,7 @@ const EVENTS: Event[] = [
     category: 'Festival',
     registered: 842,
     capacity: 1000,
-    gradient: 'from-pink-500 to-rose-500',
+    gradient: 'from-fucsia to-violeta',
     speakers: [
       { name: 'Carolina Pérez', role: 'CMO LATAM', initials: 'CP' },
       { name: 'Valentina Rodríguez', role: 'CFO Fintech', initials: 'VR' },
@@ -63,7 +63,7 @@ const EVENTS: Event[] = [
     category: 'Workshop',
     registered: 320,
     capacity: 500,
-    gradient: 'from-purple-500 to-fuchsia-500',
+    gradient: 'from-fucsia to-violeta',
     speakers: [
       { name: 'Mariana López', role: 'Founder RetailCo', initials: 'ML' },
     ],
@@ -79,7 +79,7 @@ const EVENTS: Event[] = [
     category: 'Mentoría',
     registered: 156,
     capacity: 200,
-    gradient: 'from-orange-500 to-amber-500',
+    gradient: 'from-fucsia to-violeta',
     speakers: [
       { name: 'Daniela Torres', role: 'CTO SaaS', initials: 'DT' },
       { name: 'Carolina Pérez', role: 'CMO LATAM', initials: 'CP' },
@@ -90,14 +90,14 @@ const EVENTS: Event[] = [
 const MODALITY_STYLES = {
   VIRTUAL: { label: 'Virtual', icon: Video, className: 'bg-blue-50 text-blue-700' },
   PRESENCIAL: { label: 'Presencial', icon: MapPin, className: 'bg-emerald-50 text-emerald-700' },
-  HIBRIDO: { label: 'Híbrido', icon: Users, className: 'bg-purple-50 text-purple-700' },
+  HIBRIDO: { label: 'Híbrido', icon: Users, className: 'bg-salmon-100 text-salmon-900' },
 }
 
 export function Events() {
   return (
     <section id="eventos" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-orange-50/40 via-white to-white" />
-      <div className="pointer-events-none absolute top-20 -right-32 h-72 w-72 rounded-full bg-orange-200/40 blur-3xl" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-fucsia/25 via-background to-background dark:from-fucsia/10" />
+      <div className="pointer-events-none absolute top-20 -right-32 h-72 w-72 rounded-full bg-brand-border/40 blur-3xl" />
 
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -136,14 +136,14 @@ export function Events() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55 }}
-          className="mt-12 rounded-3xl border border-brand-border bg-gradient-to-br from-brand-deep to-purple-900 p-8 md:p-10 overflow-hidden relative"
+          className="mt-12 rounded-3xl border border-brand-border bg-gradient-to-br from-brand-surface to-teal-900 p-8 md:p-10 overflow-hidden relative"
         >
           <div className="pointer-events-none absolute top-0 right-0 h-64 w-64 rounded-full bg-brand-secondary/20 blur-3xl" />
-          <div className="pointer-events-none absolute bottom-0 left-1/3 h-48 w-48 rounded-full bg-brand-accent/20 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-0 left-1/3 h-48 w-48 rounded-full bg-brand-border/40 blur-3xl" />
 
           <div className="relative grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-center">
             <div>
-              <Badge className="bg-white/10 text-white border-0 hover:bg-white/10 backdrop-blur">
+              <Badge className="bg-card/10 text-white border-0 hover:bg-card/10 backdrop-blur">
                 <PartyPopper className="h-3 w-3 mr-1" />
                 Ecosistema Festivo
               </Badge>
@@ -164,9 +164,9 @@ export function Events() {
               ].map((f) => (
                 <div
                   key={f.title}
-                  className="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-4"
+                  className="rounded-2xl bg-card/5 backdrop-blur border border-white/10 p-4"
                 >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg gradient-primary text-white">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg gradient-primary-strong text-white">
                     <f.icon className="h-4.5 w-4.5" />
                   </span>
                   <div className="mt-2.5 font-semibold text-white text-sm">{f.title}</div>
@@ -191,12 +191,12 @@ function EventCard({ event: e, index }: { event: Event; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.55, delay: index * 0.1 }}
-      className="group relative overflow-hidden rounded-3xl border border-brand-border bg-white shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift"
+      className="group relative overflow-hidden rounded-3xl border border-brand-border bg-card shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift"
     >
       {/* Cover */}
       <div className={`relative h-32 bg-gradient-to-br ${e.gradient} overflow-hidden`}>
         <div className="absolute inset-0 bg-dots opacity-30" />
-        <div className="absolute top-3 left-3 rounded-2xl bg-white/95 backdrop-blur px-3 py-2 text-center shadow-md">
+        <div className="absolute top-3 left-3 rounded-2xl bg-background/95 backdrop-blur px-3 py-2 text-center shadow-md">
           <div className="font-display text-xl font-bold text-brand-deep leading-none">{e.day}</div>
           <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{e.month}</div>
         </div>
@@ -205,7 +205,7 @@ function EventCard({ event: e, index }: { event: Event; index: number }) {
           {modalityStyle.label}
         </Badge>
         <div className="absolute bottom-3 left-3 text-white">
-          <Badge className="bg-white/20 text-white border-0 backdrop-blur hover:bg-white/20">
+          <Badge className="bg-card/20 text-white border-0 backdrop-blur hover:bg-card/20">
             <Sparkles className="h-3 w-3 mr-1" />
             {e.category}
           </Badge>
@@ -219,11 +219,11 @@ function EventCard({ event: e, index }: { event: Event; index: number }) {
 
         <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5 text-brand-primary" />
+            <Clock className="h-3.5 w-3.5 text-brand-secondary-ink" />
             {e.date} · {e.time}
           </div>
           <div className="flex items-center gap-1.5">
-            <MapPin className="h-3.5 w-3.5 text-brand-primary" />
+            <MapPin className="h-3.5 w-3.5 text-brand-secondary-ink" />
             {e.location}
           </div>
         </div>
@@ -235,7 +235,7 @@ function EventCard({ event: e, index }: { event: Event; index: number }) {
               <span
                 key={s.name}
                 title={`${s.name} · ${s.role}`}
-                className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-purple-400 to-fuchsia-500 text-white text-[10px] font-bold ring-2 ring-white"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-fucsia to-violeta text-white text-[10px] font-bold ring-2 ring-white"
               >
                 {s.initials}
               </span>
@@ -262,7 +262,7 @@ function EventCard({ event: e, index }: { event: Event; index: number }) {
 
         <Button
           asChild
-          className="mt-4 w-full rounded-full gradient-primary text-white border-0 shadow-soft hover:opacity-90 text-xs"
+          className="mt-4 w-full rounded-full btn-brand shadow-soft text-xs"
         >
           <Link href="#eventos">
             <Calendar className="mr-1.5 h-3.5 w-3.5" />

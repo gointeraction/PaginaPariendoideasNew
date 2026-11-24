@@ -6,9 +6,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-montserrat);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-display);
+  --font-display: var(--font-lora);
+  --font-serif: var(--font-lora);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -44,6 +45,9 @@
   --color-brand-muted: var(--brand-muted);
   --color-brand-border: var(--brand-border);
   --color-brand-deep: var(--brand-deep);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-secondary-ink: var(--brand-secondary-ink);
+  --color-brand-accent-ink: var(--brand-accent-ink);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -52,85 +56,219 @@
   --radius-3xl: calc(var(--radius) + 20px);
 }
 
+/* =====================================================================
+   PALETA DE MARCA — Manual de Marca Pariendo Ideas
+   Principales: #1E575B (teal) · #E8A89A (salmon) · #F8B400 (gold)
+   Secundarias: #E5D3B3 (arena) · #A7876B (marrón) · #FFFFFF (blanco)
+   ===================================================================== */
+@theme {
+  /* --- Teal #1E575B: color primario --- */
+  --color-teal-50: #eaf2f2;
+  --color-teal-100: #cfe0e1;
+  --color-teal-200: #a9c5c7;
+  --color-teal-300: #7aa5a8;
+  --color-teal-400: #4a8286;
+  --color-teal-500: #1e575b;
+  --color-teal-600: #19494d;
+  --color-teal-700: #143c40;
+  --color-teal-800: #102f32;
+  --color-teal-900: #0b2225;
+  --color-teal-950: #061618;
+
+  /* --- Marrón #A7876B: títulos, marcos e iconos sólidos --- */
+  --color-brown-50: #f7f2ec;
+  --color-brown-100: #efe5da;
+  --color-brown-200: #e0cdb9;
+  --color-brown-300: #cfb399;
+  --color-brown-400: #bc9878;
+  --color-brown-500: #a7876b;
+  --color-brown-600: #8f7259;
+  --color-brown-700: #755c47;
+  --color-brown-800: #5f4b3a;
+  --color-brown-900: #4e3e31;
+  --color-brown-950: #2b211a;
+
+  /* --- Salmon #E8A89A: color secundario cálido --- */
+  --color-salmon-50: #fdf8f6;
+  --color-salmon-100: #fbeeeb;
+  --color-salmon-200: #f6dbd4;
+  --color-salmon-300: #f0c3ba;
+  --color-salmon-400: #eeb3a8;
+  --color-salmon-500: #e8a89a;
+  --color-salmon-600: #d9897a;
+  --color-salmon-700: #ae5344;
+  --color-salmon-800: #a35a4b;
+  --color-salmon-900: #7f4639;
+  --color-salmon-950: #552e26;
+
+  /* --- Gold #F8B400: color de acento --- */
+  --color-gold-50: #fffaeb;
+  --color-gold-100: #fef3c8;
+  --color-gold-200: #fde692;
+  --color-gold-300: #fdd654;
+  --color-gold-400: #fbc621;
+  --color-gold-500: #f8b400;
+  --color-gold-600: #b88000;
+  --color-gold-700: #966900;
+  --color-gold-800: #7d5700;
+  --color-gold-900: #5c4000;
+  --color-gold-950: #3a2800;
+
+  /* --- Multicolor vibrante (decisión 2026-11-18: reemplaza al marrón oscuro
+         en la UI, "más color y dinamismo" — fuera del manual original).
+         fucsia/violeta: aptos para iconos/texto blanco (≥4.5:1).
+         coral/lila: SOLO decoración (sin texto encima, <4.5:1 con blanco). --- */
+  --color-fucsia: #d6336c;
+  --color-fucsia-osc: #b02a5b;
+  --color-violeta: #7c3aed;
+  --color-violeta-osc: #5b21b6;
+  --color-coral: #ff6b6b;
+  --color-lila: #a855f7;
+
+  /* --- Neutros cálidos (derivados de arena #E5D3B3 / marrón #A7876B) --- */
+  --color-slate-50: #fbf9f5;
+  --color-slate-100: #f4f0e8;
+  --color-slate-200: #eae3d6;
+  --color-slate-300: #d9cfbc;
+  --color-slate-400: #bfb19a;
+  --color-slate-500: #a7876b;
+  --color-slate-600: #8a7059;
+  --color-slate-700: #6b5647;
+  --color-slate-800: #4a3e33;
+  --color-slate-900: #2b241e;
+  --color-slate-950: #1a1512;
+
+  --color-zinc-50: #fbf9f5;
+  --color-zinc-100: #f4f0e8;
+  --color-zinc-200: #eae3d6;
+  --color-zinc-300: #d9cfbc;
+  --color-zinc-400: #bfb19a;
+  --color-zinc-500: #a7876b;
+  --color-zinc-600: #8a7059;
+  --color-zinc-700: #6b5647;
+  --color-zinc-800: #4a3e33;
+  --color-zinc-900: #2b241e;
+  --color-zinc-950: #1a1512;
+
+  --color-neutral-50: #fbf9f5;
+  --color-neutral-100: #f4f0e8;
+  --color-neutral-200: #eae3d6;
+  --color-neutral-300: #d9cfbc;
+  --color-neutral-400: #bfb19a;
+  --color-neutral-500: #a7876b;
+  --color-neutral-600: #8a7059;
+  --color-neutral-700: #6b5647;
+  --color-neutral-800: #4a3e33;
+  --color-neutral-900: #2b241e;
+  --color-neutral-950: #1a1512;
+
+  --color-gray-50: #fbf9f5;
+  --color-gray-100: #f4f0e8;
+  --color-gray-200: #eae3d6;
+  --color-gray-300: #d9cfbc;
+  --color-gray-400: #bfb19a;
+  --color-gray-500: #a7876b;
+  --color-gray-600: #8a7059;
+  --color-gray-700: #6b5647;
+  --color-gray-800: #4a3e33;
+  --color-gray-900: #2b241e;
+  --color-gray-950: #1a1512;
+}
+
 :root {
   --radius: 0.875rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.21 0.04 290);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.04 290);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.04 290);
-  --primary: oklch(0.58 0.25 295);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.96 0.02 295);
-  --secondary-foreground: oklch(0.21 0.04 290);
-  --muted: oklch(0.97 0.015 295);
-  --muted-foreground: oklch(0.52 0.04 290);
-  --accent: oklch(0.65 0.24 16);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.91 0.03 295);
-  --input: oklch(0.91 0.03 295);
-  --ring: oklch(0.58 0.25 295);
+  --background: #ffffff;
+  --foreground: #1e2b2c;
+  --card: #ffffff;
+  --card-foreground: #1e2b2c;
+  --popover: #ffffff;
+  --popover-foreground: #1e2b2c;
+  --primary: #d6336c;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f0e8;
+  --secondary-foreground: #1e2b2c;
+  --muted: #f5f1e9;
+  --muted-foreground: #6b6154;
+  --accent: #e8a89a;
+  --accent-foreground: #2b241e;
+  --destructive: #dc2626;
+  --border: #e7dfd3;
+  --input: #e7dfd3;
+  --ring: #d6336c;
 
   /* Brand colors */
-  --brand-primary: #a855f7;   /* Púrpura */
-  --brand-secondary: #ec4899; /* Rosa */
-  --brand-accent: #f97316;    /* Naranja */
-  --brand-muted: #f5f3ff;     /* Gris claro púrpura */
-  --brand-border: #e9d5ff;    /* Borde púrpura claro */
-  --brand-deep: #2d2640;      /* Gris oscuro púrpura */
+  --brand-primary: #d6336c;        /* Fucsia principal (2026-11-18: el verde queda solo en hover de botones y footer) */
+  --brand-secondary: #e8a89a;      /* Salmon secundario */
+  --brand-accent: #f8b400;         /* Gold acento */
+  --brand-muted: #f7f2e9;          /* Crema cálida */
+  --brand-border: #e5d3b3;         /* Arena */
+  --brand-deep: #b04a5c;           /* Rosa legible #B04A5C (5.3:1 con blanco): texto pequeño y fuerte. Los TÍTULOS usan var(--title-ink) (#8E2936 claro / #e9ab9e oscuro; auditoría 2026-11-24) */
+  --brand-surface: #144044;        /* Superficie oscura estable (no cambia en dark) */
+  --brand-secondary-ink: #a94b3c;  /* Salmon legible sobre claro (subtítulos/acento) */
+  --brand-accent-ink: #9a6100;     /* Gold legible sobre claro */
+  --title-ink: #8e2936;            /* Títulos display modo claro: vino #8E2936 (≥4.5:1 sobre crema; auditoría 2026-11-24) */
 
-  --chart-1: oklch(0.62 0.24 295);
-  --chart-2: oklch(0.66 0.23 350);
-  --chart-3: oklch(0.7 0.19 45);
-  --chart-4: oklch(0.55 0.2 200);
-  --chart-5: oklch(0.65 0.22 160);
+  --chart-1: #d6336c;
+  --chart-2: #e8a89a;
+  --chart-3: #f8b400;
+  --chart-4: #a7876b;
+  --chart-5: #e5d3b3;
 
-  --sidebar: oklch(0.985 0.005 295);
-  --sidebar-foreground: oklch(0.21 0.04 290);
-  --sidebar-primary: oklch(0.58 0.25 295);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.96 0.02 295);
-  --sidebar-accent-foreground: oklch(0.21 0.04 290);
-  --sidebar-border: oklch(0.91 0.03 295);
-  --sidebar-ring: oklch(0.58 0.25 295);
+  --sidebar: #fbf9f5;
+  --sidebar-foreground: #1e2b2c;
+  --sidebar-primary: #d6336c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4f0e8;
+  --sidebar-accent-foreground: #1e2b2c;
+  --sidebar-border: #e7dfd3;
+  --sidebar-ring: #d6336c;
 }
 
 .dark {
-  --background: oklch(0.16 0.02 290);
-  --foreground: oklch(0.97 0.01 295);
-  --card: oklch(0.21 0.025 290);
-  --card-foreground: oklch(0.97 0.01 295);
-  --popover: oklch(0.21 0.025 290);
-  --popover-foreground: oklch(0.97 0.01 295);
-  --primary: oklch(0.68 0.22 295);
-  --primary-foreground: oklch(0.16 0.02 290);
-  --secondary: oklch(0.27 0.03 290);
-  --secondary-foreground: oklch(0.97 0.01 295);
-  --muted: oklch(0.27 0.03 290);
-  --muted-foreground: oklch(0.72 0.02 295);
-  --accent: oklch(0.7 0.22 25);
-  --accent-foreground: oklch(0.16 0.02 290);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.68 0.22 295);
+  --background: #0f1a1b;
+  --foreground: #f2efe9;
+  --card: #162122;
+  --card-foreground: #f2efe9;
+  --popover: #162122;
+  --popover-foreground: #f2efe9;
+  --primary: #e9ab9e;
+  --primary-foreground: #0b1516;
+  --secondary: #1e2b2c;
+  --secondary-foreground: #f2efe9;
+  --muted: #1a2526;
+  --muted-foreground: #a9b5b3;
+  --accent: #e8a89a;
+  --accent-foreground: #2b241e;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.12);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #e9ab9e;
 
-  --chart-1: oklch(0.68 0.22 295);
-  --chart-2: oklch(0.7 0.2 350);
-  --chart-3: oklch(0.72 0.19 45);
-  --chart-4: oklch(0.6 0.2 200);
-  --chart-5: oklch(0.7 0.2 160);
+  --brand-primary: #e9ab9e;        /* Rosa pastel: legible sobre fondo oscuro */
+  --brand-secondary: #e8a89a;
+  --brand-accent: #f8b400;
+  --brand-muted: #1a2526;
+  --brand-border: #3d4b47;
+  --brand-deep: #e9ab9e;           /* Rosa pastel #E9AB9E: títulos en modo oscuro (legible sobre fondo oscuro) */
+  --title-ink: #e9ab9e;            /* Títulos display modo oscuro: pastel legible sobre fondo oscuro */
+  --brand-surface: #144044;        /* Se mantiene oscuro en modo dark */
+  --brand-secondary-ink: #f0bfb4;
+  --brand-accent-ink: #ffcd4d;
 
-  --sidebar: oklch(0.21 0.025 290);
-  --sidebar-foreground: oklch(0.97 0.01 295);
-  --sidebar-primary: oklch(0.68 0.22 295);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.27 0.03 290);
-  --sidebar-accent-foreground: oklch(0.97 0.01 295);
-  --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.68 0.22 295);
+  --chart-1: #e9ab9e;
+  --chart-2: #f0bfb4;
+  --chart-3: #ffcd4d;
+  --chart-4: #c9a886;
+  --chart-5: #efe1c8;
+
+  --sidebar: #162122;
+  --sidebar-foreground: #f2efe9;
+  --sidebar-primary: #e9ab9e;
+  --sidebar-primary-foreground: #0b1516;
+  --sidebar-accent: #1e2b2c;
+  --sidebar-accent-foreground: #f2efe9;
+  --sidebar-border: rgba(255, 255, 255, 0.12);
+  --sidebar-ring: #e9ab9e;
 }
 
 @layer base {
@@ -139,44 +277,93 @@
   }
   html {
     scroll-behavior: smooth;
+    /* Los anclajes no deben quedar bajo la cabecera sticky (auditoría 2026-11-24:
+       "la barra flotante choca con los textos al hacer scroll") */
+    scroll-padding-top: 6rem;
   }
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "cv01", "cv11";
   }
   ::selection {
-    background-color: oklch(0.58 0.25 295 / 0.25);
+    background-color: rgba(214, 51, 108, 0.25);
     color: var(--brand-deep);
   }
+}
+
+/* ===== Botón de marca =====
+   GOLD sólido como color principal + hover en VERDE teal (decisión 2026-11-18:
+   "el verde solo en hover de botones y el footer").
+   Está fuera de @layer para poder sobrescribir las utilidades de Tailwind
+   (bg-primary, border-0, hover:bg-*, hover:opacity-*). */
+.btn-brand {
+  background-color: #f8b400;
+  border: 1px solid #b88000;
+  color: #3a2800;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.btn-brand:hover:not(:disabled) {
+  background-color: #1e575b;
+  border-color: #144044;
+  color: #ffffff;
+}
+.btn-brand:active:not(:disabled) {
+  background-color: #19494d;
+  border-color: #144044;
+  color: #ffffff;
 }
 
 /* ===== Brand Utilities ===== */
 @layer utilities {
   .gradient-primary {
-    background-image: linear-gradient(to right, #a855f7, #ec4899, #f97316);
+    /* Salmon -> fucsia: degradado principal rosa (2026-11-18: sin verde).
+       Solo DECORACIÓN (barras, bordes, brillos): con contenido blanco solo
+       alcanza 1.9:1, por eso los chips/iconos con blanco usan -strong. */
+    background-image: linear-gradient(to right, #e8a89a 0%, #e8a89a 55%, #d6336c 100%);
+  }
+  .gradient-primary-strong {
+    /* Salmon-700 -> fucsia: chips/pasos/iconos con contenido BLANCO.
+       Contraste mínimo del blanco en todo el degradado: 4.6:1 (AA, 2026-11-18). */
+    background-image: linear-gradient(to right, #ae5344 0%, #ae5344 55%, #d6336c 100%);
   }
   .gradient-primary-soft {
-    background-image: linear-gradient(to right, rgba(168, 85, 247, 0.12), rgba(236, 72, 153, 0.12), rgba(249, 115, 22, 0.12));
+    background-image: linear-gradient(to right, rgba(232, 168, 154, 0.12), rgba(214, 51, 108, 0.12), rgba(217, 198, 247, 0.12));
   }
   .gradient-hero {
     background-image:
-      radial-gradient(60% 50% at 80% 0%, rgba(236, 72, 153, 0.18), transparent 60%),
-      radial-gradient(50% 40% at 10% 20%, rgba(168, 85, 247, 0.22), transparent 60%),
-      radial-gradient(40% 35% at 70% 90%, rgba(249, 115, 22, 0.18), transparent 60%);
+      radial-gradient(60% 50% at 80% 0%, rgba(232, 168, 154, 0.18), transparent 60%),
+      radial-gradient(50% 40% at 10% 20%, rgba(214, 51, 108, 0.14), transparent 60%),
+      radial-gradient(40% 35% at 70% 90%, rgba(248, 180, 0, 0.22), transparent 60%);
   }
   .gradient-text {
-    background-image: linear-gradient(120deg, #a855f7 0%, #ec4899 50%, #f97316 100%);
+    /* Modo claro: vino #8E2936 → salmon #A94B3C (≥4.5:1 sobre crema; auditoría 2026-11-24).
+       Modo oscuro y banda del footer conservan el pastel (reglas más abajo). */
+    background-image: linear-gradient(120deg, #8e2936 0%, #a94b3c 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
-  .gradient-text-purple-pink {
-    background-image: linear-gradient(120deg, #a855f7, #ec4899);
+  .gradient-text-brand {
+    background-image: linear-gradient(120deg, #b04a5c, #a94b3c);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+  }
+  /* Variantes claras para fondos oscuros: banda del footer (siempre oscura)
+     y modo oscuro general. Stops luminosos mantienen contraste WCAG ≥ 4.5. */
+  .dark .gradient-text,
+  footer .gradient-text {
+    background-image: linear-gradient(120deg, #e8a89a 0%, #f0bfb4 55%, #e8a89a 100%);
+  }
+  .dark .gradient-text-brand,
+  footer .gradient-text-brand {
+    background-image: linear-gradient(120deg, #e8a89a, #f0bfb4);
   }
   .gradient-border {
     position: relative;
@@ -188,7 +375,8 @@
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+    /* Borde decorativo vibrante: gold -> fucsia (sin texto encima; 2026-11-18) */
+    background: linear-gradient(135deg, #f8b400, #d6336c);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -200,33 +388,34 @@
     -webkit-backdrop-filter: blur(16px) saturate(180%);
   }
   .glass-dark {
-    background-color: rgba(45, 38, 64, 0.6);
+    background-color: rgba(15, 26, 27, 0.6);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
   }
+  /* En modo oscuro el vidrio pasa a oscuro para que el texto de marca (claro) se lea */
+  .dark .glass {
+    background-color: rgba(15, 26, 27, 0.72);
+  }
   .shadow-glow {
-    box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.1), 0 18px 40px -12px rgba(168, 85, 247, 0.35);
+    box-shadow: 0 0 0 1px rgba(214, 51, 108, 0.1), 0 18px 40px -12px rgba(214, 51, 108, 0.35);
   }
-  .shadow-glow-pink {
-    box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.1), 0 18px 40px -12px rgba(236, 72, 153, 0.35);
-  }
-  .shadow-glow-orange {
-    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.1), 0 18px 40px -12px rgba(249, 115, 22, 0.35);
+  .shadow-glow-salmon {
+    box-shadow: 0 0 0 1px rgba(232, 168, 154, 0.1), 0 18px 40px -12px rgba(232, 168, 154, 0.35);
   }
   .shadow-soft {
-    box-shadow: 0 1px 2px rgba(45, 38, 64, 0.04), 0 8px 24px -8px rgba(45, 38, 64, 0.08);
+    box-shadow: 0 1px 2px rgba(30, 43, 44, 0.04), 0 8px 24px -8px rgba(30, 43, 44, 0.08);
   }
   .shadow-lift {
-    box-shadow: 0 1px 2px rgba(45, 38, 64, 0.04), 0 24px 48px -16px rgba(45, 38, 64, 0.12);
+    box-shadow: 0 1px 2px rgba(30, 43, 44, 0.04), 0 24px 48px -16px rgba(30, 43, 44, 0.12);
   }
   .bg-grid {
     background-image:
-      linear-gradient(to right, rgba(168, 85, 247, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(168, 85, 247, 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgba(214, 51, 108, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(214, 51, 108, 0.06) 1px, transparent 1px);
     background-size: 48px 48px;
   }
   .bg-dots {
-    background-image: radial-gradient(rgba(168, 85, 247, 0.18) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(214, 51, 108, 0.14) 1px, transparent 1px);
     background-size: 22px 22px;
   }
   .text-balance {
@@ -239,6 +428,53 @@
     -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
     mask-image: linear-gradient(to right, black 70%, transparent 100%);
   }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+
+  /* ===== Títulos display: var(--title-ink) — vino #8E2936 en claro / pastel #e9ab9e en oscuro =====
+      Auditoría 2026-11-24: el rosa pálido #e9ab9e daba 2.1:1 sobre fondo crema
+      (mínimo exigido 4.5:1) → en modo claro los títulos pasan a #8E2936; en
+      modo oscuro se conserva el pastel (legible sobre fondo oscuro).
+      Especificidad: TODAS las selectores de esta regla = (0,1,1) — gananle a
+      .text-brand-deep (0,1,0) sin depender del orden, y PIERDEN ante el hover
+      de Tailwind v4 ".group-hover\\:x:is(:where(.group):hover *)" = (0,2,0),
+      así el hover de tarjetas sigue funcionando. Ojo: si alguna vuelve a (0,2,0)
+      (p. ej. sumando .font-display sin :where) empata con el hover y al ir
+      después en la capa utilities lo rompe — mantener (0,1,1). */
+  :is(h1, h2, h3, h4, h5, h6):where(.text-brand-deep):is(
+    [class*="text-lg"],
+    [class*="text-xl"],
+    [class*="text-2xl"],
+    [class*="text-3xl"],
+    [class*="text-4xl"],
+    [class*="text-5xl"],
+    [class*="text-6xl"],
+    [class*="text-[4.2rem]"]
+  ),
+  :is(h1, h2, h3, h4, h5, h6, span, div, p, a, strong, em, small, label, li, blockquote, button, figcaption, dt, dd, summary, cite, time, b, i, code, kbd, mark):where(.font-display):where(.text-brand-deep):is(
+    [class*="text-lg"],
+    [class*="text-xl"],
+    [class*="text-2xl"],
+    [class*="text-3xl"],
+    [class*="text-4xl"],
+    [class*="text-5xl"],
+    [class*="text-6xl"],
+    [class*="text-[4.2rem]"]
+  ),
+  :is(h1, h2, h3, h4, h5, h6):where(
+    [class*="text-lg"],
+    [class*="text-xl"],
+    [class*="text-2xl"],
+    [class*="text-3xl"],
+    [class*="text-4xl"],
+    [class*="text-5xl"],
+    [class*="text-6xl"],
+    [class*="text-[4.2rem]"]
+  ) > :where(.text-brand-deep):not([class*="text-xs"], [class*="text-sm"], [class*="text-base"]) {
+    color: var(--title-ink);
+  }
 }
 
 /* ===== Custom Scrollbar ===== */
@@ -250,13 +486,13 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #a855f7, #ec4899);
+  background: linear-gradient(180deg, #d6336c, #e8a89a);
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #9333ea, #db2777);
+  background: linear-gradient(180deg, #b02a5b, #d9897a);
   background-clip: padding-box;
   border: 2px solid transparent;
 }
@@ -271,8 +507,8 @@
   50% { transform: translateY(-20px) translateX(10px); }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
-  50% { box-shadow: 0 0 0 20px rgba(168, 85, 247, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(214, 51, 108, 0.4); }
+  50% { box-shadow: 0 0 0 20px rgba(214, 51, 108, 0); }
 }
 @keyframes shimmer {
   0% { background-position: -200% 0; }

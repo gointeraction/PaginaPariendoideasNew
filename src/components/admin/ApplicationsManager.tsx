@@ -162,7 +162,7 @@ export function ApplicationsManager() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-border/60">
         <div>
           <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Users className="w-5 h-5 text-brand-primary" />
+            <Users className="w-5 h-5 text-brand-secondary-ink" />
             Bandeja de Postulaciones & Diagnósticos
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -190,9 +190,9 @@ export function ApplicationsManager() {
           <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase">Becas Aprobadas</p>
           <p className="text-2xl font-bold font-serif text-emerald-600 mt-1">{stats.aprobadas}</p>
         </div>
-        <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5">
-          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase">En Evaluación</p>
-          <p className="text-2xl font-bold font-serif text-amber-600 mt-1">{stats.evaluacion}</p>
+        <div className="p-4 rounded-xl border border-salmon-500/30 bg-salmon-500/5">
+          <p className="text-xs font-semibold text-salmon-900 dark:text-salmon-400 uppercase">En Evaluación</p>
+          <p className="text-2xl font-bold font-serif text-salmon-900 dark:text-salmon-300 mt-1">{stats.evaluacion}</p>
         </div>
         <div className="p-4 rounded-xl border border-blue-500/30 bg-blue-500/5">
           <p className="text-xs font-semibold text-blue-700 dark:text-blue-400 uppercase">Pendientes</p>
@@ -233,21 +233,21 @@ export function ApplicationsManager() {
         {filtered.map((app) => (
           <div
             key={app.id}
-            className="p-4 sm:p-5 rounded-xl border border-brand-border/70 bg-card hover:border-brand-primary/40 transition shadow-sm"
+            className="p-4 sm:p-5 rounded-xl border border-brand-border/70 bg-card hover:border-brand-secondary-ink/40 transition shadow-sm"
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h4 className="font-bold text-base text-foreground">{app.fullName}</h4>
                   <span className="text-xs text-muted-foreground">•</span>
-                  <span className="font-medium text-xs text-brand-primary">{app.businessName}</span>
+                  <span className="font-medium text-xs text-brand-secondary-ink">{app.businessName}</span>
                   <Badge
                     variant="outline"
                     className={`text-[10px] capitalize ${
                       app.status === 'aprobada'
                         ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30'
                         : app.status === 'evaluacion'
-                        ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30'
+                        ? 'bg-salmon-500/10 text-salmon-900 dark:text-salmon-400 border-salmon-500/30'
                         : 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30'
                     }`}
                   >
@@ -283,7 +283,7 @@ export function ApplicationsManager() {
                     type="button"
                     size="sm"
                     onClick={() => handleStatusChange(app.id, 'aprobada')}
-                    className="h-8 text-xs bg-brand-primary text-white hover:bg-brand-primary/90"
+                    className="h-8 text-xs btn-brand"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Aprobar Beca
                   </Button>
@@ -295,7 +295,7 @@ export function ApplicationsManager() {
                     size="sm"
                     variant="outline"
                     onClick={() => handleStatusChange(app.id, 'evaluacion')}
-                    className="h-8 text-xs border-amber-500/40 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10"
+                    className="h-8 text-xs border-salmon-500/40 text-salmon-900 dark:text-salmon-400 hover:bg-salmon-500/10"
                   >
                     <Clock className="w-3.5 h-3.5 mr-1" /> En Evaluación
                   </Button>

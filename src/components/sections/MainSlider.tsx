@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Sparkles,
   ArrowRight,
@@ -10,102 +10,99 @@ import {
   ChevronRight,
   Pause,
   Play,
-  Heart,
   ShoppingBag,
   Star,
-  Users,
-  Award,
-  Zap,
-  CheckCircle2,
-  TrendingUp,
-  MessageSquareText,
+  Instagram,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ONBOARDING_URLS } from '@/lib/constants'
+import { ONBOARDING_BASE_URL } from '@/lib/constants'
 import { useLandingContent } from '@/lib/cms-service'
+import { useSubscribeModal } from '@/components/layout/SubscribeModalProvider'
 
 const SLIDES = [
   {
     id: 1,
-    tag: 'Programa Renacer 2025',
+    image: '/slider1.jpeg',
+    tag: 'Programa Impulso 2026',
     badge: 'Becas del 100% abiertas',
-    title: '¡Acelera tu negocio',
-    titleHighlight: 'con nuestra red sin barreras!',
+    title: 'Deja de ser una emprendedora invisible:',
+    titleHighlight: 'conviértete en la dueña del mercado que te pertenece…',
     description:
-      'Únete hoy, accede a becas de hasta el 100 % y descubre todos los beneficios que tenemos para ti.',
-    primaryCta: { text: 'Solicitar Beca', href: ONBOARDING_URLS.becas, icon: Sparkles },
-    secondaryCta: { text: 'Ver Programa Impulso', href: '#impulso' },
+      'Porque el talento ya lo tienes; solo necesitas la estructura, la fuerza y la red del Primer Hub de Aceleramiento femenino de Latinoamérica para escalar sin techos ni excusas.',
+    primaryCta: { text: 'Quiero ser parte', href: ONBOARDING_BASE_URL, icon: Sparkles },
+    contentAlign: 'left' as const,
     theme: {
-      gradient: 'from-pink-500/20 via-purple-500/10 to-transparent',
-      badgeColor: 'bg-pink-500/10 text-pink-700 dark:text-pink-300 border-pink-500/20',
-      highlightColor: 'from-pink-500 via-purple-500 to-rose-500',
-      glow: 'shadow-[0_0_50px_-12px_rgba(236,72,153,0.3)]',
-      cardBorder: 'border-pink-500/30',
+      badgeColor:
+        'border-[#e8a89a]/60 bg-[#e8a89a]/15 text-white',
+      glow: 'shadow-[0_0_50px_-12px_rgba(232,168,154,0.45)]',
     },
-    metrics: [
-      { label: 'Emprendedoras', value: '12K+' },
-      { label: 'Becas Entregadas', value: '3,200+' },
-      { label: 'Tasa de Éxito', value: '94%' },
-    ],
-    visual: 'hero_program',
   },
   {
     id: 2,
+    image: '/slider2.jpeg',
     tag: 'Kit Mujer CEO',
     badge: 'E-commerce & Marca Digital',
-    title: 'Construye tu imperio digital',
-    titleHighlight: 'sin complicaciones técnicas',
+    title: 'Haz realidad tu sueño de Parir tu Gran Idea',
+    titleHighlight: 'con un equipo que te acompaña y cree en tu potencial…',
     description:
-      'Todo lo que necesitas en un solo lugar: tienda online responsiva, pasarelas de pago integradas, catálogo digital interactivo y gestión automatizada de pedidos.',
-    primaryCta: { text: 'Activar mi Kit Mujer CEO', href: ONBOARDING_URLS.kitMujerCeo, icon: ShoppingBag },
-    secondaryCta: { text: 'Ver Precios y Planes', href: '#pricing' },
+      'Nunca te sentirás sola. Te acompañamos paso a paso en la estructuración, el diseño y tu modelo de negocio para escalar en el mercado digital.',
+    primaryCta: { text: 'Quiero ser parte', href: ONBOARDING_BASE_URL, icon: ShoppingBag },
+    contentAlign: 'left' as const,
     theme: {
-      gradient: 'from-purple-500/20 via-fuchsia-500/10 to-transparent',
-      badgeColor: 'bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20',
-      highlightColor: 'from-purple-500 via-fuchsia-500 to-indigo-500',
-      glow: 'shadow-[0_0_50px_-12px_rgba(168,85,247,0.3)]',
-      cardBorder: 'border-purple-500/30',
+      badgeColor:
+        'border-[#e8a89a]/60 bg-[#e8a89a]/15 text-white',
+      glow: 'shadow-[0_0_50px_-12px_rgba(232,168,154,0.35)]',
     },
-    metrics: [
-      { label: 'Ventas Generadas', value: '$1.8M+' },
-      { label: 'Tiendas Activas', value: '1,450' },
-      { label: 'Tiempo de Setup', value: '< 24h' },
-    ],
-    visual: 'ecommerce_kit',
   },
   {
     id: 3,
+    image: '/slider3.jpeg',
     tag: 'Red de Mentorías 1:1',
     badge: '+450 Mentoras Certificadas',
-    title: 'Aprende de expertas',
-    titleHighlight: 'que ya recorrieron el camino',
+    title: 'Convierte tu idea en un negocio rentable y formalizado',
+    titleHighlight: 'sin perderte en el camino.',
     description:
-      'Conexión directa con mujeres líderes en finanzas, marketing digital, estrategia legal y modelos de negocio. Sesiones personalizadas adaptadas a la etapa de tu idea.',
-    primaryCta: { text: 'Comenzar aceleración', href: ONBOARDING_URLS.aceleracion, icon: Star },
-    secondaryCta: { text: 'Conocer Mentoras', href: '#mentoria' },
+      'Porque tener una gran visión no basta; te damos la estructura, el acompañamiento estratégico y las herramientas del comercio digital para que tu emprendimiento despegue con bases sólidas desde el primer día.',
+    primaryCta: { text: 'Quiero ser parte', href: ONBOARDING_BASE_URL, icon: Star },
+    // Texto a la derecha: en esta foto las caras están alineadas a la izquierda
+    contentAlign: 'right' as const,
     theme: {
-      gradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
-      badgeColor: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20',
-      highlightColor: 'from-amber-500 via-orange-500 to-rose-500',
-      glow: 'shadow-[0_0_50px_-12px_rgba(245,158,11,0.3)]',
-      cardBorder: 'border-amber-500/30',
+      badgeColor:
+        'border-[#e8a89a]/60 bg-[#e8a89a]/15 text-white',
+      glow: 'shadow-[0_0_50px_-12px_rgba(248,180,0,0.4)]',
     },
-    metrics: [
-      { label: 'Mentoras', value: '450+' },
-      { label: 'Horas Guía', value: '18,500' },
-      { label: 'Calificación', value: '4.9/5' },
-    ],
-    visual: 'mentorship_network',
+  },
+  {
+    id: 4,
+    image: '/slider4.jpeg',
+    tag: 'Emprendedora del Año',
+    badge: '🚀 Del 19 de nov. 2026 al 19 de mar. 2027',
+    title: 'Por el Día Internacional de la Mujer Emprendedora, en Pariendo Ideas celebramos tu talento.',
+    titleHighlight: 'Postúlate como la Emprendedora del Año.',
+    description:
+      'Gana premios, becas y potencia tu negocio. Porque juntas somos más.',
+    // CTA externo a Instagram (NO abre el modal de suscripción)
+    primaryCta: { text: '¡Postúlate ya!', href: 'https://instagram.com/pariendoideas_', icon: Instagram },
+    // Texto a la derecha: no debe tapar las caras del grupo
+    contentAlign: 'right' as const,
+    theme: {
+      badgeColor:
+        'border-[#e8a89a]/60 bg-[#e8a89a]/15 text-white',
+      glow: 'shadow-[0_0_50px_-12px_rgba(214,51,108,0.4)]',
+    },
   },
 ]
 
 export function MainSlider() {
   const cms = useLandingContent()
+  const { openSubscribeModal } = useSubscribeModal()
   const activeSlides = React.useMemo(() => {
     return SLIDES.map((s, index) => {
       const cmsSlide = cms.slides?.[index]
-      if (!cmsSlide) return s
+      // Sin entrada en el CMS: se conserva el slide local (activo por defecto).
+      // (sin este "active: true" el filter de abajo descartaría el slide 4)
+      if (!cmsSlide) return { ...s, active: true }
       return {
         ...s,
         tag: cmsSlide.tag || s.tag,
@@ -118,12 +115,7 @@ export function MainSlider() {
           text: cmsSlide.primaryCtaText || s.primaryCta.text,
           href: cmsSlide.primaryCtaHref || s.primaryCta.href,
         },
-        secondaryCta: {
-          ...s.secondaryCta,
-          text: cmsSlide.secondaryCtaText || s.secondaryCta.text,
-          href: cmsSlide.secondaryCtaHref || s.secondaryCta.href,
-        },
-        imageUrl: cmsSlide.imageUrl || undefined,
+        image: cmsSlide.imageUrl || s.image,
         active: cmsSlide.active !== false,
       }
     }).filter((s) => s.active)
@@ -131,7 +123,6 @@ export function MainSlider() {
 
   const [current, setCurrent] = React.useState(0)
   const [isAutoplay, setIsAutoplay] = React.useState(true)
-  const reduce = useReducedMotion()
 
   const safeLength = activeSlides.length || 1
 
@@ -153,6 +144,14 @@ export function MainSlider() {
 
   const slide = activeSlides[current % safeLength] || SLIDES[0]
 
+  // Slides 3 y 4: el bloque de texto va a la derecha para no tapar las caras
+  const isTextRight = slide.contentAlign === 'right'
+
+  // CTA externo (p. ej. Instagram): se abre en pestaña nueva y NO pasa por el modal
+  const slideHref = slide.primaryCta.href
+  const isExternalCta =
+    slideHref.startsWith('http') && !slideHref.startsWith(ONBOARDING_BASE_URL)
+
   return (
     <section
       id="slider-principal"
@@ -162,19 +161,119 @@ export function MainSlider() {
     >
       {/* Background Ambient Layers */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-muted/60 via-background to-background" />
-      <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${slide.theme.gradient} transition-colors duration-1000`} />
-      <div className="absolute inset-0 -z-10 bg-grid opacity-30 mask-fade-r" />
+      <div className="absolute inset-0 -z-10 bg-grid opacity-20 mask-fade-r" />
 
       {/* Decorative Blur Blobs */}
-      <div className="pointer-events-none absolute -top-20 right-10 h-80 w-80 rounded-full bg-brand-primary/20 blur-3xl animate-blob" />
+      <div className="pointer-events-none absolute -top-20 right-10 h-80 w-80 rounded-full bg-brand-border/40 blur-3xl animate-blob" />
       <div
         className="pointer-events-none absolute bottom-10 -left-10 h-72 w-72 rounded-full bg-brand-secondary/20 blur-3xl animate-blob"
         style={{ animationDelay: '3s' }}
       />
 
       <div className="relative mx-auto max-w-7xl px-4">
-        {/* Top Control Bar / Slide Indicators Header */}
-        <div className="mb-6 flex items-center justify-between">
+        {/* H1 único de la página (SEO: jerarquía H1 > H2 > H3) */}
+        <h1 className="sr-only">
+          Pariendo Ideas — Primer Hub de Aceleramiento Femenino de Latinoamérica para mujeres emprendedoras
+        </h1>
+
+        {/* Main Animated Slide Content */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={slide.id}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="relative overflow-hidden rounded-3xl border border-brand-border shadow-lift bg-white md:rounded-[2rem] min-h-[480px] sm:min-h-[460px] md:min-h-[520px]"
+          >
+            {/* Background image */}
+            <img
+              src={slide.image}
+              alt=""
+              aria-hidden="true"
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+
+            {/* Sin veladuras blancas: las fotos tienen tono oscuro y se ven a su
+                color natural (decisión de la usuaria 2026-11-18) */}
+
+            {/* Content — left column (slides 1-2) / right column (slides 3-4).
+                min-h idéntico en TODOS los slides para que las fotos se vean
+                con el mismo tamaño (medido: máx. 696px @375 · 557 @640 ·
+                654 @768 · 684 @1024 · 654 @1360 → 720/580/700/700 cubre). */}
+            <div
+              className={`relative flex min-h-[720px] items-center px-6 py-12 sm:min-h-[580px] sm:px-10 md:min-h-[700px] md:px-14 lg:min-h-[700px] lg:px-16 ${
+                isTextRight ? 'justify-end' : ''
+              }`}
+            >
+              <div className={`w-full max-w-2xl ${isTextRight ? 'text-right' : ''}`}>
+                {/* Badge & Tag */}
+                <div className="inline-flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className={`px-3 py-1 text-xs font-semibold backdrop-blur ${slide.theme.badgeColor}`}>
+                    <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                    {slide.tag}
+                  </Badge>
+                  <span className="rounded-full border border-[#e8a89a]/60 bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+                    {slide.badge}
+                  </span>
+                </div>
+
+                {/* Slide Title */}
+                <h2 className="mt-4 font-display text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+                  {slide.title}{' '}
+                  <span className="block text-white">
+                    {slide.titleHighlight}
+                  </span>
+                </h2>
+
+                {/* Description */}
+                <p
+                  className={`mt-4 max-w-xl text-base leading-relaxed text-white md:text-lg ${
+                    isTextRight ? 'ml-auto' : ''
+                  }`}
+                >
+                  {slide.description}
+                </p>
+
+                {/* Single CTA */}
+                <div
+                  className={`mt-8 flex flex-col gap-3 sm:flex-row ${
+                    isTextRight ? 'items-end sm:justify-end' : 'items-start lg:justify-start'
+                  }`}
+                >
+                  <Button
+                    asChild
+                    size="lg"
+                    className={`group h-12 rounded-full btn-brand ${slide.theme.glow} px-7 text-base`}
+                  >
+                    <Link
+                      href={slideHref}
+                      target={isExternalCta ? '_blank' : undefined}
+                      rel={isExternalCta ? 'noopener noreferrer' : undefined}
+                      onClick={(e) => {
+                        // Los CTAs de onboarding abren el modal de suscripción;
+                        // cualquier otra URL configurada en el CMS navega normal.
+                        if (slideHref.startsWith(ONBOARDING_BASE_URL)) {
+                          e.preventDefault()
+                          openSubscribeModal({ originUrl: slideHref })
+                        }
+                      }}
+                    >
+                      <slide.primaryCta.icon className="mr-2 h-5 w-5" />
+                      {slide.primaryCta.text}
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Control Bar (bajo el slider): indicador + autoplay + flechas */}
+        <div className="mt-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="flex h-2.5 w-2.5 items-center justify-center">
               <span className="h-2 w-2 rounded-full bg-brand-primary animate-ping" />
@@ -199,14 +298,14 @@ export function MainSlider() {
               <button
                 onClick={prevSlide}
                 aria-label="Diapositiva anterior"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-border bg-white/80 dark:bg-slate-900/80 text-brand-deep dark:text-white hover:bg-brand-muted transition shadow-soft"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-border bg-white/80 dark:bg-slate-900/80 text-[#a94b3c] dark:text-white hover:bg-brand-muted transition shadow-soft"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={nextSlide}
                 aria-label="Diapositiva siguiente"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-border bg-white/80 dark:bg-slate-900/80 text-brand-deep dark:text-white hover:bg-brand-muted transition shadow-soft"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-border bg-white/80 dark:bg-slate-900/80 text-[#a94b3c] dark:text-white hover:bg-brand-muted transition shadow-soft"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -214,101 +313,8 @@ export function MainSlider() {
           </div>
         </div>
 
-        {/* Main Animated Slide Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slide.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]"
-          >
-            {/* Left Content Column */}
-            <div className="text-center lg:text-left">
-              {/* Badge & Tag */}
-              <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2">
-                <Badge variant="outline" className={`px-3 py-1 text-xs font-semibold ${slide.theme.badgeColor}`}>
-                  <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                  {slide.tag}
-                </Badge>
-                <span className="rounded-full bg-white/80 dark:bg-slate-900/80 px-3 py-1 text-xs font-medium text-muted-foreground border border-brand-border shadow-soft backdrop-blur">
-                  {slide.badge}
-                </span>
-              </div>
-
-              {/* Slide Title */}
-              <h2 className="mt-4 font-display text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-                {slide.title}{' '}
-                <span className={`block bg-gradient-to-r ${slide.theme.highlightColor} bg-clip-text text-transparent`}>
-                  {slide.titleHighlight}
-                </span>
-              </h2>
-
-              {/* Description */}
-              <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-muted-foreground lg:mx-0">
-                {slide.description}
-              </p>
-
-              {/* CTAs */}
-              <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
-                <Button
-                  asChild
-                  size="lg"
-                  className={`group h-12 rounded-full gradient-primary text-white border-0 ${slide.theme.glow} hover:opacity-95 px-7 text-base`}
-                >
-                  <Link href={slide.primaryCta.href}>
-                    <slide.primaryCta.icon className="mr-2 h-5 w-5" />
-                    {slide.primaryCta.text}
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="h-12 rounded-full border-2 border-brand-border bg-white/80 dark:bg-slate-900/80 text-foreground hover:bg-brand-muted px-6 text-base backdrop-blur"
-                >
-                  <Link href={slide.secondaryCta.href}>{slide.secondaryCta.text}</Link>
-                </Button>
-              </div>
-
-              {/* Quick Metrics Bar */}
-              <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl border border-brand-border/80 bg-white/60 dark:bg-slate-900/60 p-3.5 shadow-soft backdrop-blur">
-                {slide.metrics.map((m, i) => (
-                  <div key={i} className="text-center lg:text-left px-2">
-                    <div className="font-display text-xl md:text-2xl font-bold text-foreground">{m.value}</div>
-                    <div className="text-[11px] md:text-xs text-muted-foreground font-medium">{m.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Interactive Visual Card */}
-            <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-              <div className={`rounded-3xl border ${slide.theme.cardBorder} bg-white/90 dark:bg-slate-900/90 p-4 sm:p-6 shadow-lift backdrop-blur relative overflow-hidden`}>
-                {(slide as any).imageUrl ? (
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-inner bg-brand-muted/20">
-                    <img
-                      src={(slide as any).imageUrl}
-                      alt={slide.title}
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
-                ) : (
-                  <>
-                    {slide.visual === 'hero_program' && <VisualProgram reduce={reduce} />}
-                    {slide.visual === 'ecommerce_kit' && <VisualEcommerce reduce={reduce} />}
-                    {slide.visual === 'mentorship_network' && <VisualMentorship reduce={reduce} />}
-                  </>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
         {/* Bottom Pagination Dots & Progress Bar */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-brand-border/60 pt-4">
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-brand-border/60 pt-4">
           <div className="flex items-center gap-3">
             {SLIDES.map((s, idx) => (
               <button
@@ -346,167 +352,5 @@ export function MainSlider() {
         </div>
       </div>
     </section>
-  )
-}
-
-function VisualProgram({ reduce }: { reduce: boolean | null }) {
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-pink-500/10 text-pink-500 font-bold">
-            <Heart className="h-5 w-5" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm text-foreground">Beca Impulso Mujer</h4>
-            <p className="text-xs text-muted-foreground">Estado: Convocatoria Activa</p>
-          </div>
-        </div>
-        <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
-          Aprobación 98%
-        </Badge>
-      </div>
-
-      <div className="rounded-2xl bg-brand-muted/50 p-4 space-y-3">
-        <div className="flex justify-between text-xs font-medium">
-          <span className="text-muted-foreground">Progreso de Cohorte 2025</span>
-          <span className="text-foreground font-semibold">1,240 / 1,500 Becas Asignadas</span>
-        </div>
-        <div className="h-2 w-full rounded-full bg-brand-border overflow-hidden">
-          <div className="h-full w-[82%] gradient-primary rounded-full" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-brand-border p-3 flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5 text-pink-500" />
-          <div>
-            <div className="text-xs font-bold text-foreground">Apoyo Psicosocial</div>
-            <div className="text-[10px] text-muted-foreground">Sesiones semanales</div>
-          </div>
-        </div>
-        <div className="rounded-xl border border-brand-border p-3 flex items-center gap-3">
-          <Zap className="h-5 w-5 text-purple-500" />
-          <div>
-            <div className="text-xs font-bold text-foreground">Formación Digital</div>
-            <div className="text-[10px] text-muted-foreground">4 Módulos intensivos</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-pink-500/10 to-purple-500/10 p-3 border border-pink-500/20">
-        <Users className="h-5 w-5 text-brand-primary" />
-        <p className="text-xs text-foreground font-medium">
-          "Pariendo Ideas me dio la confianza y las herramientas para lanzar mi negocio."
-        </p>
-      </div>
-    </div>
-  )
-}
-
-function VisualEcommerce({ reduce }: { reduce: boolean | null }) {
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500 font-bold">
-            <ShoppingBag className="h-5 w-5" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm text-foreground">Panel de Ventas CEO</h4>
-            <p className="text-xs text-muted-foreground">Tienda: "Moda Sustentable VZ"</p>
-          </div>
-        </div>
-        <Badge className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
-          En Línea
-        </Badge>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-2xl bg-purple-500/5 border border-purple-500/20 p-3.5">
-          <span className="text-[11px] font-medium text-muted-foreground">Ingresos Hoy</span>
-          <div className="text-2xl font-bold font-display text-foreground mt-0.5">$480.00</div>
-          <span className="inline-flex items-center text-[10px] font-semibold text-emerald-600 mt-1">
-            <TrendingUp className="h-3 w-3 mr-0.5" /> +32% vs ayer
-          </span>
-        </div>
-        <div className="rounded-2xl bg-fuchsia-500/5 border border-fuchsia-500/20 p-3.5">
-          <span className="text-[11px] font-medium text-muted-foreground">Pedidos Procesados</span>
-          <div className="text-2xl font-bold font-display text-foreground mt-0.5">24 Ordenes</div>
-          <span className="text-[10px] text-muted-foreground mt-1 block">100% Pagos verificados</span>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <div className="text-xs font-semibold text-muted-foreground">Últimas transacciones</div>
-        {[
-          { title: 'Vestido Artesanal Lino', amount: '+$85.00', status: 'Pagado por PagoMóvil' },
-          { title: 'Kit Accesorios Eco', amount: '+$42.50', status: 'Pagado por Zelle' },
-        ].map((item, idx) => (
-          <div key={idx} className="flex items-center justify-between rounded-xl border border-brand-border p-2.5">
-            <div>
-              <div className="text-xs font-semibold text-foreground">{item.title}</div>
-              <div className="text-[10px] text-muted-foreground">{item.status}</div>
-            </div>
-            <span className="text-xs font-bold text-emerald-600">{item.amount}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function VisualMentorship({ reduce }: { reduce: boolean | null }) {
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500 font-bold">
-            <Star className="h-5 w-5" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm text-foreground">Sesión de Mentoría 1:1</h4>
-            <p className="text-xs text-muted-foreground">Confirmada · Próximo Martes</p>
-          </div>
-        </div>
-        <Badge className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20">
-          En Vivo
-        </Badge>
-      </div>
-
-      <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white font-bold text-sm shadow-md">
-          CP
-        </div>
-        <div className="flex-1 min-w-0">
-          <h5 className="font-semibold text-sm text-foreground truncate">Dra. Carolina Pérez</h5>
-          <p className="text-xs text-muted-foreground truncate">Especialista en Estrategia Financiera & Scaling</p>
-          <div className="flex items-center gap-1 mt-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
-            ))}
-            <span className="text-[11px] font-bold text-foreground ml-1">5.0 (140 reseñas)</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-xl border border-brand-border p-3 space-y-2">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-semibold text-foreground flex items-center gap-1.5">
-            <MessageSquareText className="h-3.5 w-3.5 text-amber-500" /> Tema de la sesión:
-          </span>
-          <span className="text-[10px] bg-brand-muted px-2 py-0.5 rounded-md font-medium text-muted-foreground">
-            60 Minutos
-          </span>
-        </div>
-        <p className="text-xs text-muted-foreground pl-5">
-          "Optimización de margen bruto y estrategia de precios para internacionalización de servicios."
-        </p>
-      </div>
-
-      <Button className="w-full h-10 rounded-xl gradient-primary text-white text-xs font-semibold">
-        <Award className="mr-1.5 h-4 w-4" /> Reservar cupo con tu Mentora
-      </Button>
-    </div>
   )
 }

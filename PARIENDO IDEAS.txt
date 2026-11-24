@@ -1,0 +1,12 @@
+PARIENDO IDEAS
+
+
+https://github.com/gointeraction/PaginaPariendoideasNew.git
+fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
+fnm use 20.19.4
+1. npm run dev        →  editar y probar en localhost:3000
+2. npm run build      →  genera la web estática en /out
+3. npm run deploy     →  build + sube a Firebase Hosting
+4. git push           →  guardas los cambios en el repo
+
+local (editar) → npm run dev (probar) → git push → npm run deploy → web actualizada

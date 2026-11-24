@@ -8,11 +8,8 @@ import {
   CreditCard,
   Store,
   Calendar,
-  Users,
-  BookOpen,
   TrendingUp,
   Wallet,
-  Globe,
   Star,
   ArrowUpRight,
   Package,
@@ -24,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SectionHeading } from './Modules'
 import { ONBOARDING_URLS } from '@/lib/constants'
+import { useSubscribeModal } from '@/components/layout/SubscribeModalProvider'
 
 const ECOSYSTEM = [
   {
@@ -31,7 +29,7 @@ const ECOSYSTEM = [
     stage: 'Etapa Semilla',
     title: 'Análisis Psicosocial y Formación Personal',
     icon: Heart,
-    color: 'from-pink-500 to-rose-500',
+    color: 'from-salmon-700 to-fucsia',
     description:
       'Fortalecemos tu base personal para potenciar tu liderazgo profesional con el respaldo de especialistas.',
     features: [
@@ -60,7 +58,7 @@ const ECOSYSTEM = [
     stage: 'Etapa Temprana',
     title: 'e-Commerce Integrado (Tu Tienda Online)',
     icon: ShoppingBag,
-    color: 'from-purple-500 to-fuchsia-500',
+    color: 'from-salmon-700 to-fucsia',
     description:
       'Te ofrecemos tu tienda online equipada con todos los elementos necesarios para que tu negocio crezca y se consolide en la economía digital. Incluye la Certificación KYC y Dominio propio avalado por Cavecom-e.',
     features: [
@@ -89,7 +87,7 @@ const ECOSYSTEM = [
     stage: 'Canales & Marketplace',
     title: 'Canales de Venta y Marketplace Multiplataforma',
     icon: Store,
-    color: 'from-orange-500 to-amber-500',
+    color: 'from-salmon-700 to-fucsia',
     description:
       'Te ofrecemos exposición estratégica en los principales canales de venta y redes sociales, incluyendo nuestra plataforma comercial exclusiva: Marketplace Pariendo Ideas.',
     features: [
@@ -115,23 +113,18 @@ const ECOSYSTEM = [
   },
 ]
 
-const CATEGORIES = [
-  { name: 'Educación', icon: BookOpen, color: 'bg-blue-50 text-blue-600' },
-  { name: 'Comunidad', icon: Users, color: 'bg-purple-50 text-purple-600' },
-  { name: 'Mentores', icon: Sparkles, color: 'bg-pink-50 text-pink-600' },
-  { name: 'Gastronomía', icon: Package, color: 'bg-orange-50 text-orange-600' },
-  { name: 'Turismo', icon: Globe, color: 'bg-emerald-50 text-emerald-600' },
-  { name: 'Moda', icon: ShoppingBag, color: 'bg-fuchsia-50 text-fuchsia-600' },
-  { name: 'Tecnología', icon: TrendingUp, color: 'bg-cyan-50 text-cyan-600' },
-  { name: 'Salud', icon: Heart, color: 'bg-rose-50 text-rose-600' },
-]
+/* Auditoría 2026-11-24: "Categorías del ecosistema" se fusionó en el bloque
+   "Red de Mujeres Líderes" de abajo (chips de sector), eliminando la rejilla
+   duplicada — los sectores únicos (Tecnología, Comunidad) se agregaron allí. */
 
 export function KitMujerCEO() {
+  const { openSubscribeModal } = useSubscribeModal()
   return (
     <section id="kit-mujer-ceo" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-purple-50/40 via-white to-white" />
-      <div className="pointer-events-none absolute top-40 -right-32 h-80 w-80 rounded-full bg-purple-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 -left-32 h-72 w-72 rounded-full bg-fuchsia-200/40 blur-3xl" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-salmon-50/40 via-white to-white dark:from-salmon-50/10 dark:via-background dark:to-background" />
+      <div className="pointer-events-none absolute top-40 -right-32 h-80 w-80 rounded-full bg-brand-border/40 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 -left-32 h-72 w-72 rounded-full bg-salmon-200/40 blur-3xl" />
+      <img src="/decor/arco.svg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-24 left-4 -z-10 w-28 -rotate-6 opacity-80 md:w-40" />
 
       <div className="mx-auto max-w-7xl px-4">
         <SectionHeading
@@ -154,7 +147,7 @@ export function KitMujerCEO() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.55, delay: i * 0.1 }}
-              className="group relative overflow-hidden rounded-3xl border border-brand-border bg-white shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift"
+              className="group relative overflow-hidden rounded-3xl border border-brand-border bg-card shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift"
             >
               {/* Top gradient strip */}
               <div className={`h-1.5 w-full bg-gradient-to-r ${e.color}`} />
@@ -166,12 +159,12 @@ export function KitMujerCEO() {
                       <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${e.color} text-white shadow-md transition-transform duration-500 group-hover:scale-110`}>
                         <e.icon className="h-6 w-6" />
                       </div>
-                      <span className="inline-flex rounded-full bg-brand-muted px-2.5 py-1 text-[11px] font-bold text-brand-primary uppercase tracking-wider">
+                      <span className="inline-flex rounded-full bg-brand-muted px-2.5 py-1 text-[11px] font-bold text-brand-secondary-ink uppercase tracking-wider">
                         {e.stage}
                       </span>
                     </div>
                     <div className="text-right">
-                      <div className={`font-display text-lg font-bold bg-gradient-to-br ${e.color} bg-clip-text text-transparent`}>
+                      <div className="font-display text-lg font-bold text-brand-deep">
                         {e.stat.value}
                       </div>
                       <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
@@ -204,9 +197,13 @@ export function KitMujerCEO() {
                 <div className="mt-6 pt-4 border-t border-brand-border/60">
                   <a
                     href={e.href}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:gap-2.5 transition-all"
+                    onClick={(ev) => {
+                      ev.preventDefault()
+                      openSubscribeModal({ originUrl: e.href })
+                    }}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-secondary-ink hover:gap-2.5 transition-all"
                   >
-                    Activar en Onboarding
+                    Activar en Registro
                     <ArrowUpRight className="h-4 w-4" />
                   </a>
                 </div>
@@ -215,59 +212,16 @@ export function KitMujerCEO() {
           ))}
         </div>
 
-        {/* Categories */}
-        <div className="mt-12 rounded-3xl border border-brand-border bg-gradient-to-br from-white to-brand-muted/40 p-8 shadow-soft">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="max-w-md">
-              <Badge className="bg-brand-muted text-brand-primary border-0 hover:bg-brand-muted">
-                Categorías del ecosistema
-              </Badge>
-              <h3 className="mt-3 font-display text-2xl font-bold text-brand-deep">
-                Encuentra oportunidades en cada sector
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Conecta con emprendedoras de tu industria y descubre productos, servicios y colaboraciones.
-              </p>
-            </div>
-
-            <div className="grid flex-1 grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {CATEGORIES.map((c) => {
-                const categorySlug = c.name
-                  .toLowerCase()
-                  .normalize('NFD')
-                  .replace(/[\u0300-\u036f]/g, '')
-                  .replace(/\s+/g, '-')
-                const categoryUrl = `${ONBOARDING_URLS.kitMujerCeo}&sector=${categorySlug}`
-
-                return (
-                  <a
-                    key={c.name}
-                    href={categoryUrl}
-                    className="group flex items-center gap-2 rounded-xl border border-brand-border bg-white p-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-soft hover:border-brand-primary/40"
-                  >
-                    <span className={`inline-flex h-8 w-8 items-center justify-center rounded-lg ${c.color} group-hover:scale-110 transition-transform`}>
-                      <c.icon className="h-4 w-4" />
-                    </span>
-                    <span className="text-xs font-semibold text-brand-deep group-hover:text-brand-primary transition-colors">
-                      {c.name}
-                    </span>
-                  </a>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Network & Strategic Sectors */}
+{/* Network & Strategic Sectors */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55 }}
-          className="mt-14 rounded-3xl border border-brand-border bg-gradient-to-br from-white via-fuchsia-50/20 to-purple-50/30 p-8 md:p-10 shadow-soft"
+          className="mt-14 rounded-3xl border border-brand-border bg-gradient-to-br from-background via-salmon-50/20 to-salmon-50/30 dark:via-salmon-50/10 dark:to-salmon-50/10 p-8 md:p-10 shadow-soft"
         >
           <div className="max-w-3xl">
-            <Badge className="bg-brand-muted text-brand-primary border-0 font-semibold px-3 py-1">
+            <Badge className="bg-brand-muted text-brand-secondary-ink border-0 font-semibold px-3 py-1">
               <Sparkles className="h-3.5 w-3.5 mr-1.5" />
               Red de Mujeres Líderes
             </Badge>
@@ -282,10 +236,10 @@ export function KitMujerCEO() {
 
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {/* Cluster 1 */}
-            <div className="flex flex-col justify-between rounded-2xl border border-brand-border/70 bg-white p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
+            <div className="flex flex-col justify-between rounded-2xl border border-brand-border/70 bg-card p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
               <div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 text-white shadow-md">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-fucsia-osc to-violeta text-white shadow-md">
                     <Heart className="h-5 w-5" />
                   </span>
                   <h4 className="font-display text-base font-bold text-brand-deep">
@@ -297,7 +251,13 @@ export function KitMujerCEO() {
                     <a
                       key={item}
                       href={`${ONBOARDING_URLS.kitMujerCeo}&sector=${encodeURIComponent(item.toLowerCase())}`}
-                      className="rounded-lg bg-pink-50/80 px-2.5 py-1 text-xs font-medium text-pink-700 hover:bg-pink-100 hover:text-pink-900 transition-colors"
+                      onClick={(ev) => {
+                        ev.preventDefault()
+                        openSubscribeModal({
+                          originUrl: `${ONBOARDING_URLS.kitMujerCeo}&sector=${encodeURIComponent(item.toLowerCase())}`,
+                        })
+                      }}
+                      className="rounded-lg bg-salmon-100 px-2.5 py-1 text-xs font-medium text-salmon-900 hover:bg-salmon-200 hover:text-salmon-950 transition-colors"
                     >
                       {item}
                     </a>
@@ -307,10 +267,10 @@ export function KitMujerCEO() {
             </div>
 
             {/* Cluster 2 */}
-            <div className="flex flex-col justify-between rounded-2xl border border-brand-border/70 bg-white p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
+            <div className="flex flex-col justify-between rounded-2xl border border-brand-border/70 bg-card p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
               <div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-md">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-fucsia-osc to-violeta text-white shadow-md">
                     <Package className="h-5 w-5" />
                   </span>
                   <h4 className="font-display text-base font-bold text-brand-deep">
@@ -322,7 +282,13 @@ export function KitMujerCEO() {
                     <a
                       key={item}
                       href={`${ONBOARDING_URLS.kitMujerCeo}&sector=${encodeURIComponent(item.toLowerCase())}`}
-                      className="rounded-lg bg-orange-50/80 px-2.5 py-1 text-xs font-medium text-orange-700 hover:bg-orange-100 hover:text-orange-900 transition-colors"
+                      onClick={(ev) => {
+                        ev.preventDefault()
+                        openSubscribeModal({
+                          originUrl: `${ONBOARDING_URLS.kitMujerCeo}&sector=${encodeURIComponent(item.toLowerCase())}`,
+                        })
+                      }}
+                      className="rounded-lg bg-salmon-100 px-2.5 py-1 text-xs font-medium text-salmon-900 hover:bg-salmon-200 hover:text-salmon-950 transition-colors"
                     >
                       {item}
                     </a>
@@ -332,10 +298,10 @@ export function KitMujerCEO() {
             </div>
 
             {/* Cluster 3 */}
-            <div className="flex flex-col justify-between rounded-2xl border border-brand-border/70 bg-white p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
+            <div className="flex flex-col justify-between rounded-2xl border border-brand-border/70 bg-card p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
               <div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 text-white shadow-md">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-fucsia-osc to-violeta text-white shadow-md">
                     <TrendingUp className="h-5 w-5" />
                   </span>
                   <h4 className="font-display text-base font-bold text-brand-deep">
@@ -343,11 +309,17 @@ export function KitMujerCEO() {
                   </h4>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {['Educación y Mentoría', 'Startups', 'Comercio Minorista'].map((item) => (
+                  {['Educación y Mentoría', 'Startups', 'Comercio Minorista', 'Tecnología', 'Comunidad'].map((item) => (
                     <a
                       key={item}
                       href={`${ONBOARDING_URLS.kitMujerCeo}&sector=${encodeURIComponent(item.toLowerCase())}`}
-                      className="rounded-lg bg-purple-50/80 px-2.5 py-1 text-xs font-medium text-purple-700 hover:bg-purple-100 hover:text-purple-900 transition-colors"
+                      onClick={(ev) => {
+                        ev.preventDefault()
+                        openSubscribeModal({
+                          originUrl: `${ONBOARDING_URLS.kitMujerCeo}&sector=${encodeURIComponent(item.toLowerCase())}`,
+                        })
+                      }}
+                      className="rounded-lg bg-salmon-100 px-2.5 py-1 text-xs font-medium text-salmon-900 hover:bg-salmon-200 hover:text-salmon-950 transition-colors"
                     >
                       {item}
                     </a>
@@ -358,7 +330,7 @@ export function KitMujerCEO() {
           </div>
 
           {/* Bottom call to action banner */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white p-6 border border-brand-border/80 shadow-soft">
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-card p-6 border border-brand-border/80 shadow-soft">
             <div>
               <div className="font-display text-lg font-bold text-brand-deep">
                 Encuentra tu comunidad y posiciona tu negocio.
@@ -367,8 +339,14 @@ export function KitMujerCEO() {
                 Accede a la red de colaboración exclusiva y acelera el crecimiento de tu emprendimiento.
               </p>
             </div>
-            <Button asChild className="rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 px-6 shrink-0">
-              <a href={ONBOARDING_URLS.kitMujerCeo}>
+            <Button asChild className="rounded-full btn-brand shadow-glow px-6 shrink-0">
+              <a
+                href={ONBOARDING_URLS.kitMujerCeo}
+                onClick={(ev) => {
+                  ev.preventDefault()
+                  openSubscribeModal({ originUrl: ONBOARDING_URLS.kitMujerCeo })
+                }}
+              >
                 Activar mi Kit Mujer CEO
                 <ArrowUpRight className="ml-2 h-4 w-4" />
               </a>

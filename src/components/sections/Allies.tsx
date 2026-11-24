@@ -2,38 +2,50 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Handshake, Star, ExternalLink } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { Handshake, Star } from 'lucide-react'
 import { useLandingContent } from '@/lib/cms-service'
+import { cn } from '@/lib/utils'
 
-const ALLIES = [
+type Ally = {
+  name: string
+  category: string
+  initial: string
+  logoUrl: string
+  gradient: string
+  /** Fondo de la caja uniforme del logo: 'dark' si el PNG trae fondo oscuro incrustado, 'light' si trae fondo claro (auditoría 2026-11-24: cajas de igual tamaño con fondo adaptado a cada logo) */
+  boxBg?: 'dark' | 'light'
+}
+
+const ALLIES: Ally[] = [
   {
     name: 'Sellibri',
     category: 'Comercio & Plataforma',
     initial: 'SL',
     logoUrl: '/logosaliados/sellibri.png',
-    gradient: 'from-pink-500 to-rose-500',
+    gradient: 'from-violeta to-fucsia',
   },
   {
     name: 'Go Interaction Marketing',
     category: 'Marketing & Crecimiento',
     initial: 'GI',
     logoUrl: '/logosaliados/go-interaction.png',
-    gradient: 'from-amber-500 to-orange-500',
+    gradient: 'from-salmon-700 to-fucsia',
   },
   {
     name: 'BBM Intelligent',
     category: 'Sistemas Inteligentes & IA',
     initial: 'BBM',
     logoUrl: '/logosaliados/bbm-intelligent.png',
-    gradient: 'from-blue-600 to-indigo-700',
+    boxBg: 'dark',
+    gradient: 'from-violeta to-fucsia',
   },
   {
     name: 'Cocrea',
     category: 'Arquitectura & Feng Shui',
     initial: 'CC',
     logoUrl: '/logosaliados/cocrea.png',
-    gradient: 'from-emerald-700 to-teal-800',
+    boxBg: 'dark',
+    gradient: 'from-fucsia to-violeta-osc',
   },
   {
     name: 'Disglobal',
@@ -47,42 +59,44 @@ const ALLIES = [
     category: 'Logística & Distribución',
     initial: 'DP',
     logoUrl: '/logosaliados/dropanas.png',
-    gradient: 'from-rose-500 to-blue-600',
+    gradient: 'from-salmon-700 to-fucsia',
   },
   {
     name: 'Benflor',
     category: 'Desarrollo Productivo',
     initial: 'BF',
     logoUrl: '/logosaliados/benflor.png',
-    gradient: 'from-rose-600 to-red-700',
+    gradient: 'from-violeta to-fucsia',
   },
   {
     name: 'Renacer Contable',
     category: 'Asesoría Financiera & Contable',
     initial: 'RC',
     logoUrl: '/logosaliados/renacer-contable.png',
-    gradient: 'from-amber-500 to-yellow-600',
+    gradient: 'from-violeta-osc to-fucsia-osc',
   },
   {
     name: 'Arte Medio W3',
     category: 'Diseño & Creatividad Digital',
     initial: 'AM',
     logoUrl: '/logosaliados/arte-medio-w3.png',
-    gradient: 'from-amber-600 to-yellow-700',
+    gradient: 'from-violeta to-fucsia',
   },
   {
     name: 'BestWay Marketing',
     category: 'Estrategia Digital',
     initial: 'BW',
     logoUrl: '/logosaliados/bestway-marketing.png',
-    gradient: 'from-zinc-800 to-zinc-950',
+    boxBg: 'dark',
+    gradient: 'from-fucsia-osc to-violeta-osc',
   },
   {
     name: 'Gold Stetic Clinic',
     category: 'Salud Estética & Bienestar',
     initial: 'GS',
     logoUrl: '/logosaliados/gold-stetic-clinic.png',
-    gradient: 'from-amber-500 to-yellow-600',
+    boxBg: 'dark',
+    gradient: 'from-fucsia to-violeta',
   },
 ]
 
@@ -106,6 +120,7 @@ export function Allies() {
             initial: initials,
             logoUrl: a.logoUrl || fallback.logoUrl,
             gradient: fallback.gradient,
+            boxBg: fallback.boxBg || 'light',
           }
         })
     }
@@ -114,7 +129,7 @@ export function Allies() {
 
   return (
     <section id="aliados" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white to-brand-muted/40" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background to-brand-muted/40" />
 
       <div className="relative mx-auto max-w-7xl px-4">
         {/* Header */}
@@ -126,7 +141,7 @@ export function Allies() {
           className="text-center"
         >
           <span className="inline-flex items-center gap-2 rounded-full glass border border-brand-border/80 px-4 py-1.5 text-xs font-semibold text-brand-deep shadow-soft">
-            <Handshake className="h-3.5 w-3.5 text-brand-primary" />
+            <Handshake className="h-3.5 w-3.5 text-brand-secondary-ink" />
             Nuestros Aliados
           </span>
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-brand-deep text-balance sm:text-4xl">
@@ -139,56 +154,51 @@ export function Allies() {
           </p>
         </motion.div>
 
-        {/* Allies grid - Large showcase cards for logos */}
-        <div className="mt-14 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-          {activeAllies.map((ally, i) => (
-            <motion.div
-              key={ally.name + i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.45, delay: (i % 4) * 0.06 }}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-brand-border bg-white p-5 sm:p-6 shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-lift hover:border-brand-primary/50"
-            >
-              {/* Large Logo Showcase Container (5x+ larger than before) */}
-              <div className="relative flex h-36 sm:h-44 w-full items-center justify-center rounded-2xl bg-brand-muted/20 p-4 transition-colors group-hover:bg-brand-muted/40">
-                {ally.logoUrl ? (
-                  <img
-                    src={ally.logoUrl}
-                    alt={ally.name}
-                    className="max-h-full max-w-full object-contain rounded-xl transition-transform duration-500 group-hover:scale-110 drop-shadow-sm"
-                    loading="lazy"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
-                ) : (
-                  <span
-                    className={`inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br ${ally.gradient} text-white text-2xl font-bold shadow-soft`}
-                  >
-                    {ally.initial}
-                  </span>
-                )}
-              </div>
-
-              {/* Ally Name & Category */}
-              <div className="mt-4 flex flex-1 flex-col items-center justify-center text-center">
-                <h3 className="font-display text-base sm:text-lg font-bold text-brand-deep group-hover:text-brand-primary transition-colors line-clamp-1">
-                  {ally.name}
-                </h3>
-                {ally.category && (
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                    {ally.category}
-                  </p>
-                )}
-              </div>
-
-              {/* Hover accent */}
+        {/* Allies marquee - logos deslizantes (mismo esquema que la barra superior) */}
+        <div className="relative mt-14 overflow-hidden mask-fade-x">
+          <div className="flex w-max animate-marquee">
+            {[...activeAllies, ...activeAllies].map((ally, i) => (
               <div
-                className={`absolute bottom-0 left-0 h-1 w-full origin-left scale-x-0 bg-gradient-to-r ${ally.gradient} transition-transform duration-500 group-hover:scale-x-100`}
-              />
-            </motion.div>
-          ))}
+                key={ally.name + i}
+                aria-hidden={i >= activeAllies.length}
+                className="group mr-5 w-[170px] shrink-0 sm:w-[200px]"
+              >
+                <div className="flex min-h-[112px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-brand-border bg-card px-4 py-4 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:border-brand-secondary-ink/50 hover:shadow-lift">
+                  {/* Caja uniforme para todos los logos (auditoría 2026-11-24):
+                      mismo tamaño para todos; el fondo se adapta a cada PNG
+                      (oscuro → caja #141414, claro → caja blanca) para que los
+                      logotipos con fondo incrustado integren sin bordes raros. */}
+                  <div
+                    className={cn(
+                      'flex h-14 w-full items-center justify-center rounded-xl border border-brand-border/40',
+                      ally.boxBg === 'dark' ? 'bg-[#141414]' : 'bg-white'
+                    )}
+                  >
+                    {ally.logoUrl ? (
+                      <img
+                        src={ally.logoUrl}
+                        alt={ally.name}
+                        className="max-h-12 max-w-full object-contain transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <span
+                        className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${ally.gradient} text-white text-lg font-bold shadow-soft`}
+                      >
+                        {ally.initial}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="w-full truncate text-center font-display text-xs font-bold text-brand-deep group-hover:text-brand-secondary-ink transition-colors">
+                    {ally.name}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Bottom stat strip */}
@@ -197,21 +207,21 @@ export function Allies() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-10 flex flex-col items-center justify-center gap-4 rounded-2xl border border-brand-border bg-white p-6 text-center shadow-soft sm:flex-row sm:gap-8 sm:text-left"
+          className="mt-10 flex flex-col items-center justify-center gap-4 rounded-2xl border border-brand-border bg-card p-6 text-center shadow-soft sm:flex-row sm:gap-8 sm:text-left"
         >
-          <div className="flex items-center gap-2">
-            <Star className="h-5 w-5 fill-brand-accent text-brand-accent" />
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <Star className="h-5 w-5 text-brand-secondary-ink" />
             <span className="font-display text-lg font-bold text-brand-deep">+38 aliados</span>
             <span className="text-sm text-muted-foreground">activos</span>
           </div>
           <div className="hidden h-8 w-px bg-brand-border sm:block" />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 whitespace-nowrap">
             <span className="font-display text-lg font-bold gradient-text">$2.4M</span>
             <span className="text-sm text-muted-foreground">en herramientas gratuitas distribuidas</span>
           </div>
           <div className="hidden h-8 w-px bg-brand-border sm:block" />
-          <div className="flex items-center gap-2">
-            <span className="font-display text-lg font-bold text-brand-secondary">12</span>
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <span className="font-display text-lg font-bold text-brand-secondary-ink">12</span>
             <span className="text-sm text-muted-foreground">países con aliados locales</span>
           </div>
         </motion.div>

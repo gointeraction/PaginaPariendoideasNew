@@ -93,7 +93,7 @@ export function MediaManager() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-brand-border/60">
         <div>
           <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <FolderOpen className="w-5 h-5 text-brand-primary" />
+            <FolderOpen className="w-5 h-5 text-brand-secondary-ink" />
             Galería y Banco de Medios
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -105,7 +105,7 @@ export function MediaManager() {
       {/* Zona de Subida de Nueva Imagen */}
       <div className="p-6 rounded-2xl border border-brand-border/80 bg-card/60 shadow-sm space-y-4">
         <h3 className="font-semibold text-sm text-foreground flex items-center gap-2">
-          <Plus className="w-4 h-4 text-brand-primary" />
+          <Plus className="w-4 h-4 text-brand-secondary-ink" />
           Subir Nuevo Recurso a la Galería
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
@@ -137,7 +137,7 @@ export function MediaManager() {
         {mediaList.map((item) => (
           <div
             key={item.id}
-            className="group rounded-xl border border-brand-border/70 bg-card overflow-hidden shadow-sm hover:border-brand-primary/50 transition flex flex-col justify-between"
+            className="group rounded-xl border border-brand-border/70 bg-card overflow-hidden shadow-sm hover:border-brand-secondary-ink/50 transition flex flex-col justify-between"
           >
             <div className="relative aspect-video w-full bg-brand-muted/30 flex items-center justify-center p-2 overflow-hidden">
               <img

@@ -3,14 +3,11 @@ import { Footer } from '@/components/layout/Footer'
 import { ScrollUtilities } from '@/components/layout/ScrollUtilities'
 import { MainSlider } from '@/components/sections/MainSlider'
 import { Hero } from '@/components/sections/Hero'
-import { TrustBar } from '@/components/sections/TrustBar'
 import { Modules } from '@/components/sections/Modules'
-import { ImpulsoProgram } from '@/components/sections/ImpulsoProgram'
 import { KitMujerCEO } from '@/components/sections/KitMujerCEO'
 import { Pricing } from '@/components/sections/Pricing'
 import { Mentorship } from '@/components/sections/Mentorship'
 import { Events } from '@/components/sections/Events'
-import { Community } from '@/components/sections/Community'
 import { Journey } from '@/components/sections/Journey'
 import { ImpactStats } from '@/components/sections/ImpactStats'
 import { Testimonials } from '@/components/sections/Testimonials'
@@ -27,14 +24,13 @@ export default function Home() {
       <main className="flex-1">
         <MainSlider />
         {/* <Hero /> - Removido por estar duplicado con el MainSlider */}
-        <TrustBar />
         <Modules />
-        <ImpulsoProgram />
+        {/* <ImpulsoProgram /> - Eliminado por auditoría 2026-11-24: pasos y pilares duplicados (un solo flujo = Journey; pilares = tarjeta IMPULSO de Modules) */}
         <KitMujerCEO />
         <Pricing />
         <Mentorship />
         {/* <Events /> - Ocultado temporalmente por solicitud */}
-        <Community />
+        {/* <Community /> - Eliminado por solicitud (foro, mensajería, grupos, tablón, actividad, directorio) */}
         <Journey />
         {/* <ImpactStats /> - Ocultado por solicitud */}
         <Testimonials />

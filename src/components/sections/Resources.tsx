@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import * as React from 'react'
 import Link from 'next/link'
@@ -25,9 +25,9 @@ const RESOURCES = [
       'Un manual completo de 48 páginas con el paso a paso para relanzar tu negocio en el mundo digital tras una crisis.',
     duration: '48 págs',
     category: 'E-book',
-    color: 'from-purple-500 to-fuchsia-500',
-    accent: 'text-brand-primary',
-    bg: 'bg-brand-primary/10',
+    color: 'from-salmon-700 to-fucsia',
+    accent: 'text-brand-secondary-ink',
+    bg: 'bg-salmon-100',
     featured: true,
   },
   {
@@ -38,9 +38,9 @@ const RESOURCES = [
       'Workshop grabado con Carolina Pérez sobre validación rápida de ideas usando Instagram y encuestas.',
     duration: '45 min',
     category: 'Workshop',
-    color: 'from-pink-500 to-rose-500',
-    accent: 'text-brand-secondary',
-    bg: 'bg-brand-secondary/10',
+    color: 'from-salmon-700 to-fucsia',
+    accent: 'text-brand-secondary-ink',
+    bg: 'bg-salmon-100',
     featured: false,
   },
   {
@@ -51,9 +51,9 @@ const RESOURCES = [
       'Template editable en Canva con ejemplos reales de emprendedoras de la comunidad Pariendo Ideas.',
     duration: 'Editable',
     category: 'Recurso',
-    color: 'from-orange-500 to-amber-500',
-    accent: 'text-brand-accent',
-    bg: 'bg-brand-accent/10',
+    color: 'from-salmon-700 to-fucsia',
+    accent: 'text-brand-secondary-ink',
+    bg: 'bg-salmon-100',
     featured: false,
   },
 ]
@@ -61,44 +61,45 @@ const RESOURCES = [
 const BLOG_POSTS = [
   {
     title: '5 estrategias de Instagram Reels que triplicaron mis ventas',
-    excerpt: 'María González, egresada del Programa Renacer, comparte cómo pasó de $200 a $3,400 mensuales.',
+    excerpt: 'María González, egresada del Programa Impulso, comparte cómo pasó de $200 a $3,400 mensuales.',
     author: 'María González',
     authorInitials: 'MG',
-    authorGradient: 'from-pink-400 to-rose-500',
+    authorGradient: 'from-violeta to-fucsia',
     date: '12 Jul 2025',
     readTime: '6 min',
     category: 'Marketing Digital',
-    tag: 'from-pink-500 to-rose-500',
+    tag: 'from-salmon-500 to-fucsia',
   },
   {
     title: 'Punto de venta vs. E-commerce: ¿cuál necesito primero?',
     excerpt: 'Guía práctica para decidir qué herramienta del Kit Mujer CEO implementar según tu etapa.',
     author: 'Carolina Pérez',
     authorInitials: 'CP',
-    authorGradient: 'from-purple-400 to-fuchsia-500',
+    authorGradient: 'from-violeta to-fucsia',
     date: '08 Jul 2025',
     readTime: '8 min',
     category: 'Kit CEO',
-    tag: 'from-purple-500 to-fuchsia-500',
+    tag: 'from-salmon-500 to-fucsia',
   },
   {
     title: 'Mentalidad financiera: cómo salir de deudas como emprendedora',
-    excerpt: 'Acompañamiento psicosocial aplicado a finanzas personales. Casos reales del Programa Renacer.',
+    excerpt: 'Acompañamiento psicosocial aplicado a finanzas personales. Casos reales del Programa Impulso.',
     author: 'Ana Rodríguez',
     authorInitials: 'AR',
-    authorGradient: 'from-orange-400 to-amber-500',
+    authorGradient: 'from-violeta to-fucsia',
     date: '02 Jul 2025',
     readTime: '5 min',
     category: 'Bienestar',
-    tag: 'from-orange-500 to-amber-500',
+    tag: 'from-salmon-500 to-fucsia',
   },
 ]
 
 export function Resources() {
   return (
     <section id="recursos" className="relative py-24 md:py-32 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-brand-muted/40 to-white" />
-      <div className="pointer-events-none absolute top-40 right-0 h-72 w-72 rounded-full bg-brand-secondary/10 blur-3xl" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-brand-muted/40 to-background" />
+      <div className="pointer-events-none absolute top-40 right-0 h-72 w-72 rounded-full bg-salmon-100 blur-3xl" />
+      <img src="/decor/hojas.svg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute bottom-10 left-6 -z-10 w-24 -rotate-6 opacity-80 md:w-32" />
 
       <div className="relative mx-auto max-w-7xl px-4">
         {/* Header */}
@@ -111,7 +112,7 @@ export function Resources() {
         >
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full glass border border-brand-border/80 px-4 py-1.5 text-xs font-semibold text-brand-deep shadow-soft">
-              <BookOpen className="h-3.5 w-3.5 text-brand-primary" />
+              <BookOpen className="h-3.5 w-3.5 text-brand-secondary-ink" />
               Recursos & Blog
             </span>
             <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-brand-deep text-balance sm:text-4xl md:text-5xl">
@@ -126,7 +127,7 @@ export function Resources() {
           <Button
             asChild
             variant="outline"
-            className="shrink-0 rounded-full border-brand-border bg-white/70 text-brand-deep hover:bg-brand-muted/60 backdrop-blur"
+            className="shrink-0 rounded-full border-brand-border bg-background/70 text-brand-deep hover:bg-brand-muted/60 backdrop-blur"
           >
             <Link href="#blog">
               Ver todos los recursos
@@ -144,14 +145,14 @@ export function Resources() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className={`group relative overflow-hidden rounded-3xl border border-brand-border bg-white p-6 shadow-soft transition-all hover:shadow-lift hover:-translate-y-1 ${
+              className={`group relative overflow-hidden rounded-3xl border border-brand-border bg-card p-6 shadow-soft transition-all hover:shadow-lift hover:-translate-y-1 ${
                 resource.featured ? 'lg:col-span-1' : ''
               }`}
             >
               {/* Featured badge */}
               {resource.featured && (
                 <div className="absolute right-4 top-4 z-10">
-                  <span className="inline-flex items-center gap-1 rounded-full gradient-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-glow">
+                  <span className="inline-flex items-center gap-1 rounded-full gradient-primary-strong px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-glow">
                     <TrendingUp className="h-3 w-3" />
                     Destacado
                   </span>
@@ -178,7 +179,7 @@ export function Resources() {
                 </span>
               </div>
 
-              <h3 className="mt-3 font-display text-lg font-bold text-brand-deep group-hover:text-brand-primary transition-colors">
+              <h3 className="mt-3 font-display text-lg font-bold text-brand-deep group-hover:text-brand-secondary-ink transition-colors">
                 {resource.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -189,7 +190,7 @@ export function Resources() {
                 <span className="text-xs font-medium text-muted-foreground">{resource.category}</span>
                 <Link
                   href="#download"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-brand-primary hover:gap-2 transition-all"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-brand-secondary-ink hover:gap-2 transition-all"
                 >
                   Descargar
                   <ArrowRight className="h-4 w-4" />
@@ -207,7 +208,7 @@ export function Resources() {
         {/* Blog posts */}
         <div className="mt-16">
           <div className="flex items-center gap-3">
-            <PenTool className="h-5 w-5 text-brand-primary" />
+            <PenTool className="h-5 w-5 text-brand-secondary-ink" />
             <h3 className="font-display text-2xl font-bold text-brand-deep">Último del blog</h3>
             <div className="ml-2 h-px flex-1 bg-gradient-to-r from-brand-border to-transparent" />
           </div>
@@ -220,18 +221,18 @@ export function Resources() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="group cursor-pointer overflow-hidden rounded-3xl border border-brand-border bg-white shadow-soft transition-all hover:shadow-lift hover:-translate-y-1"
+                className="group cursor-pointer overflow-hidden rounded-3xl border border-brand-border bg-card shadow-soft transition-all hover:shadow-lift hover:-translate-y-1"
               >
                 {/* Image placeholder with gradient */}
                 <div className={`relative h-40 bg-gradient-to-br ${post.tag} overflow-hidden`}>
                   <div className="absolute inset-0 bg-grid opacity-20" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   <div className="absolute bottom-3 left-3">
-                    <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-brand-deep shadow-soft backdrop-blur">
+                    <span className="rounded-full bg-background px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-brand-deep shadow-soft backdrop-blur">
                       {post.category}
                     </span>
                   </div>
-                  <div className="absolute -bottom-4 -right-4 h-20 w-20 rounded-full bg-white/20 blur-xl" />
+                  <div className="absolute -bottom-4 -right-4 h-20 w-20 rounded-full bg-card/20 blur-xl" />
                 </div>
 
                 <div className="p-5">
@@ -243,7 +244,7 @@ export function Resources() {
                       {post.readTime}
                     </span>
                   </div>
-                  <h4 className="mt-2 font-display text-base font-bold leading-snug text-brand-deep group-hover:text-brand-primary transition-colors">
+                  <h4 className="mt-2 font-display text-base font-bold leading-snug text-brand-deep group-hover:text-brand-secondary-ink transition-colors">
                     {post.title}
                   </h4>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
@@ -257,7 +258,7 @@ export function Resources() {
                       {post.authorInitials}
                     </span>
                     <span className="text-xs font-medium text-brand-deep">{post.author}</span>
-                    <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-brand-primary" />
+                    <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-brand-secondary-ink" />
                   </div>
                 </div>
               </motion.article>

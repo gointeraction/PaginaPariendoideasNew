@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { firestore } from './firebase'
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
-import { ONBOARDING_URLS } from './constants'
+import { ONBOARDING_BASE_URL, ONBOARDING_URLS } from './constants'
 
 export interface SlideItem {
   id: number
@@ -14,8 +14,6 @@ export interface SlideItem {
   description: string
   primaryCtaText: string
   primaryCtaHref: string
-  secondaryCtaText: string
-  secondaryCtaHref: string
   imageUrl?: string
   active?: boolean
 }
@@ -29,9 +27,11 @@ export interface AllyItem {
 }
 
 export interface LandingPageContent {
+  /** Versión del contenido local. Si Firestore tiene una versión anterior,
+   *  se ignoran sus slides para no pisar los textos vigentes. */
+  contentVersion?: number
   slides: SlideItem[]
   allies: AllyItem[]
-  trustBar: string[]
   announcement?: {
     enabled: boolean
     text: string
@@ -47,47 +47,53 @@ export const ADMIN_EMAILS = [
 ]
 
 export const DEFAULT_CMS_CONTENT: LandingPageContent = {
+  contentVersion: 2,
   slides: [
     {
       id: 1,
-      tag: 'Programa Renacer 2025',
+      tag: 'Programa Impulso 2026',
       badge: 'Becas del 100% abiertas',
-      title: '¡Acelera tu negocio',
-      titleHighlight: 'con nuestra red sin barreras!',
+      title: 'Deja de ser una emprendedora invisible:',
+      titleHighlight: 'conviértete en la dueña del mercado que te pertenece…',
       description:
-        'Únete hoy, accede a becas de hasta el 100 % y descubre todos los beneficios que tenemos para ti.',
-      primaryCtaText: 'Solicitar Beca',
-      primaryCtaHref: ONBOARDING_URLS.becas,
-      secondaryCtaText: 'Ver Programa Impulso',
-      secondaryCtaHref: '#impulso',
+        'Porque el talento ya lo tienes; solo necesitas la estructura, la fuerza y la red del Primer Hub de Aceleramiento femenino de Latinoamérica para escalar sin techos ni excusas.',
+      primaryCtaText: 'Quiero ser parte',
+      primaryCtaHref: ONBOARDING_BASE_URL,
       active: true,
     },
     {
       id: 2,
       tag: 'Kit Mujer CEO',
       badge: 'E-commerce & Marca Digital',
-      title: 'Construye tu imperio digital',
-      titleHighlight: 'sin complicaciones técnicas',
+      title: 'Haz realidad tu sueño de Parir tu Gran Idea',
+      titleHighlight: 'con un equipo que te acompaña y cree en tu potencial…',
       description:
-        'Todo lo que necesitas en un solo lugar: tienda online responsiva, pasarelas de pago integradas, catálogo digital interactivo y gestión automatizada de pedidos.',
-      primaryCtaText: 'Activar mi Kit Mujer CEO',
-      primaryCtaHref: ONBOARDING_URLS.kitMujerCeo,
-      secondaryCtaText: 'Ver Precios y Planes',
-      secondaryCtaHref: '#pricing',
+        'Nunca te sentirás sola. Te acompañamos paso a paso en la estructuración, el diseño y tu modelo de negocio para escalar en el mercado digital.',
+      primaryCtaText: 'Quiero ser parte',
+      primaryCtaHref: ONBOARDING_BASE_URL,
       active: true,
     },
     {
       id: 3,
-      tag: 'Aceleración & Mentorías',
-      badge: 'Acompañamiento 1:1',
-      title: 'Crece de la mano de quienes',
-      titleHighlight: 'ya recorrieron el camino',
+      tag: 'Red de Mentorías 1:1',
+      badge: '+450 Mentoras Certificadas',
+      title: 'Convierte tu idea en un negocio rentable y formalizado',
+      titleHighlight: 'sin perderte en el camino.',
       description:
-        'Mentorías personalizadas con empresarias líderes que te guiarán en estrategia de negocio, finanzas, marketing digital y escalabilidad.',
-      primaryCtaText: 'Comenzar Aceleración',
-      primaryCtaHref: ONBOARDING_URLS.aceleracion,
-      secondaryCtaText: 'Conoce las Mentoras',
-      secondaryCtaHref: '#mentorship',
+        'Porque tener una gran visión no basta; te damos la estructura, el acompañamiento estratégico y las herramientas del comercio digital para que tu emprendimiento despegue con bases sólidas desde el primer día.',
+      primaryCtaText: 'Quiero ser parte',
+      primaryCtaHref: ONBOARDING_BASE_URL,
+      active: true,
+    },
+    {
+      id: 4,
+      tag: 'Emprendedora del Año',
+      badge: '🚀 Del 19 de nov. 2026 al 19 de mar. 2027',
+      title: 'Por el Día Internacional de la Mujer Emprendedora, en Pariendo Ideas celebramos tu talento.',
+      titleHighlight: 'Postúlate como la Emprendedora del Año.',
+      description: 'Gana premios, becas y potencia tu negocio. Porque juntas somos más.',
+      primaryCtaText: '¡Postúlate ya!',
+      primaryCtaHref: 'https://instagram.com/pariendoideas_',
       active: true,
     },
   ],
@@ -170,18 +176,6 @@ export const DEFAULT_CMS_CONTENT: LandingPageContent = {
       active: true,
     },
   ],
-  trustBar: [
-    'Google Cloud',
-    'Firebase',
-    'Cloudflare',
-    'WhatsApp Business',
-    'Radar',
-    'LandiaAI',
-    'Sellibri',
-    'Avila Pay',
-    'GoAgente IA',
-    'BBM Intelligent',
-  ],
   announcement: {
     enabled: false,
     text: 'Convocatoria abierta para la nueva cohorte del Programa Impulso.',
@@ -195,6 +189,29 @@ const FIRESTORE_COLLECTION = 'site_content'
 const FIRESTORE_DOC = 'landing_page_config'
 
 /**
+ * Fusiona lo almacenado (Firestore / localStorage) con los defaults vigentes.
+ * Si la versión guardada es anterior a la actual, se conservan los slides
+ * locales para que una actualización de textos no quede tapada por datos viejos.
+ */
+function mergeWithDefaults(stored: Partial<LandingPageContent> | null | undefined): LandingPageContent {
+  const data = (stored || {}) as LandingPageContent
+  const isCurrentVersion = data.contentVersion === DEFAULT_CMS_CONTENT.contentVersion
+  return {
+    ...DEFAULT_CMS_CONTENT,
+    ...data,
+    contentVersion: DEFAULT_CMS_CONTENT.contentVersion,
+    slides:
+      isCurrentVersion && Array.isArray(data.slides) && data.slides.length > 0
+        ? data.slides
+        : DEFAULT_CMS_CONTENT.slides,
+    allies:
+      Array.isArray(data.allies) && data.allies.length > 0
+        ? data.allies
+        : DEFAULT_CMS_CONTENT.allies,
+  }
+}
+
+/**
  * Hook reactivo para consumir el contenido de la landing con fallback inmediato y sincronización en tiempo real
  */
 export function useLandingContent() {
@@ -203,7 +220,7 @@ export function useLandingContent() {
       try {
         const cached = localStorage.getItem(STORAGE_KEY)
         if (cached) {
-          return { ...DEFAULT_CMS_CONTENT, ...JSON.parse(cached) }
+          return mergeWithDefaults(JSON.parse(cached))
         }
       } catch (e) {
         console.warn('Error reading CMS cache:', e)
@@ -219,8 +236,7 @@ export function useLandingContent() {
         docRef,
         (snapshot) => {
           if (snapshot.exists()) {
-            const data = snapshot.data() as LandingPageContent
-            const merged = { ...DEFAULT_CMS_CONTENT, ...data }
+            const merged = mergeWithDefaults(snapshot.data() as LandingPageContent)
             setContent(merged)
             try {
               localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
@@ -246,6 +262,7 @@ export function useLandingContent() {
 export async function saveLandingContent(newContent: LandingPageContent, userEmail?: string): Promise<boolean> {
   const payload: LandingPageContent = {
     ...newContent,
+    contentVersion: DEFAULT_CMS_CONTENT.contentVersion,
     updatedAt: new Date().toISOString(),
     updatedBy: userEmail || 'admin',
   }
@@ -279,7 +296,7 @@ export async function fetchCurrentLandingContent(): Promise<LandingPageContent> 
     const docRef = doc(firestore, FIRESTORE_COLLECTION, FIRESTORE_DOC)
     const snapshot = await getDoc(docRef)
     if (snapshot.exists()) {
-      return { ...DEFAULT_CMS_CONTENT, ...(snapshot.data() as LandingPageContent) }
+      return mergeWithDefaults(snapshot.data() as LandingPageContent)
     }
   } catch (err) {
     console.warn('Failed to fetch from Firestore, using cache or defaults:', err)
@@ -289,7 +306,7 @@ export async function fetchCurrentLandingContent(): Promise<LandingPageContent> 
     try {
       const cached = localStorage.getItem(STORAGE_KEY)
       if (cached) {
-        return { ...DEFAULT_CMS_CONTENT, ...JSON.parse(cached) }
+        return mergeWithDefaults(JSON.parse(cached))
       }
     } catch {}
   }

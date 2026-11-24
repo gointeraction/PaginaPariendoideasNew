@@ -9,9 +9,10 @@ import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { cn } from '@/lib/utils'
 import { ONBOARDING_URLS } from '@/lib/constants'
+import { useSubscribeModal } from './SubscribeModalProvider'
 
 const NAV_LINKS = [
-  { label: 'Impulso', href: '#impulso' },
+  { label: 'Impulso', href: '#modulos' },
   { label: 'Kit CEO', href: '#kit-mujer-ceo' },
   { label: 'Mentoría', href: '#mentoria' },
   { label: 'Proceso', href: '#proceso' },
@@ -22,6 +23,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const { openSubscribeModal } = useSubscribeModal()
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16)
@@ -38,14 +40,7 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto max-w-7xl px-4">
-        <div
-          className={cn(
-            'flex items-center justify-between rounded-2xl transition-all duration-500',
-            scrolled
-              ? 'glass shadow-soft border border-brand-border/60 px-4 py-2.5'
-              : 'bg-transparent px-2 py-2'
-          )}
-        >
+        <div className="flex items-center justify-between rounded-2xl border border-brand-border/60 shadow-soft bg-[#FAF7F2] px-4 py-2.5 transition-all duration-500 dark:bg-[#0F1A1B]">
           {/* Logo */}
           <Link href="#top" className="flex items-center gap-3 group">
             <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/95 dark:bg-white shadow-md border border-brand-border/40 p-1 transition-transform group-hover:scale-105">
@@ -62,7 +57,7 @@ export function Navbar() {
             <span className="flex flex-col leading-none">
               <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-brand-deep">
                 Pariendo
-                <span className="gradient-text-purple-pink"> Ideas</span>
+                <span className="gradient-text-brand"> Ideas</span>
               </span>
               <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground font-medium">
                 Hub de Aceleramiento Femenino
@@ -76,7 +71,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative px-3.5 py-2 text-sm font-medium text-brand-deep/80 hover:text-brand-deep transition-colors rounded-lg hover:bg-brand-muted/60 group"
+                className="relative px-3.5 py-2 text-sm font-medium text-brand-deep hover:text-brand-deep transition-colors rounded-lg hover:bg-brand-muted/60 group"
               >
                 {link.label}
                 <span className="pointer-events-none absolute inset-x-3.5 -bottom-0.5 h-px gradient-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
@@ -88,9 +83,15 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Button
               asChild
-              className="hidden sm:inline-flex gradient-primary text-white border-0 shadow-glow hover:opacity-90 rounded-full px-5"
+              className="hidden sm:inline-flex btn-brand shadow-glow rounded-full px-5"
             >
-              <a href={ONBOARDING_URLS.becas}>
+              <a
+                href={ONBOARDING_URLS.becas}
+                onClick={(e) => {
+                  e.preventDefault()
+                  openSubscribeModal({ originUrl: ONBOARDING_URLS.becas })
+                }}
+              >
                 Solicitar Beca
                 <ChevronRight className="ml-1 h-4 w-4" />
               </a>
@@ -102,7 +103,7 @@ export function Navbar() {
             <button
               aria-label="Abrir menú"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-border bg-white/70 text-brand-deep hover:bg-brand-muted/60 transition"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-border bg-background text-brand-deep hover:bg-brand-muted/60 transition"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -117,7 +118,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
-              className="lg:hidden mt-2 glass rounded-2xl shadow-lift border border-brand-border/60 p-3"
+              className="lg:hidden mt-2 rounded-2xl border border-brand-border/60 bg-[#FAF7F2] p-3 shadow-lift dark:bg-[#0F1A1B]"
             >
               <nav className="flex flex-col">
                 {NAV_LINKS.map((link) => (
@@ -125,7 +126,7 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="px-3 py-3 text-base font-medium text-brand-deep/90 rounded-xl hover:bg-brand-muted/60 transition flex items-center justify-between"
+                    className="px-3 py-3 text-base font-medium text-brand-deep rounded-xl hover:bg-brand-muted/60 transition flex items-center justify-between"
                   >
                     {link.label}
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -133,8 +134,17 @@ export function Navbar() {
                 ))}
                 <div className="h-px bg-brand-border/60 my-2" />
                 <div className="pt-1">
-                  <Button asChild className="w-full gradient-primary text-white border-0 rounded-full">
-                    <a href={ONBOARDING_URLS.becas} onClick={() => setMobileOpen(false)}>Solicitar Beca</a>
+                  <Button asChild className="w-full btn-brand rounded-full">
+                    <a
+                      href={ONBOARDING_URLS.becas}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        setMobileOpen(false)
+                        openSubscribeModal({ originUrl: ONBOARDING_URLS.becas })
+                      }}
+                    >
+                      Solicitar Beca
+                    </a>
                   </Button>
                 </div>
               </nav>

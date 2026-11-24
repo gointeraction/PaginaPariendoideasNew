@@ -21,10 +21,12 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ONBOARDING_URLS } from '@/lib/constants'
+import { useSubscribeModal } from '@/components/layout/SubscribeModalProvider'
 
 export default function DashboardPage() {
   const [searchEmail, setSearchEmail] = React.useState('')
   const [isConsulted, setIsConsulted] = React.useState(true)
+  const { openSubscribeModal } = useSubscribeModal()
 
   // Datos de demostración de la usuaria activa
   const userData = {
@@ -34,7 +36,7 @@ export default function DashboardPage() {
     program: 'Programa IMPULSO & Kit Mujer CEO',
     status: 'aprobada', // 'aprobada' | 'evaluacion' | 'pendiente'
     scholarshipPercentage: '100%',
-    cohort: 'Cohorte Renacer 2026',
+    cohort: 'Cohorte Impulso 2026',
     mentorName: 'Carolina Pérez',
     mentorSpecialty: 'Estrategia de Negocios y Finanzas',
     nextSession: 'Jueves 10 de Septiembre · 4:00 PM (VET)',
@@ -62,7 +64,7 @@ export default function DashboardPage() {
                 Pariendo Ideas
               </span>
             </Link>
-            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-brand-primary/10 text-brand-primary text-xs font-semibold">
+            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-salmon-100 text-brand-secondary-ink text-xs font-semibold">
               Portal Emprendedora
             </span>
           </div>
@@ -114,9 +116,15 @@ export default function DashboardPage() {
             <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
               <Button
                 asChild
-                className="w-full sm:w-auto h-11 px-6 rounded-full gradient-primary text-white shadow-glow hover:opacity-90 font-semibold text-sm"
+                className="w-full sm:w-auto h-11 px-6 rounded-full btn-brand shadow-glow font-semibold text-sm"
               >
-                <a href={ONBOARDING_URLS.becas}>
+                <a
+                  href={ONBOARDING_URLS.becas}
+                  onClick={(ev) => {
+                    ev.preventDefault()
+                    openSubscribeModal({ originUrl: ONBOARDING_URLS.becas })
+                  }}
+                >
                   <Sparkles className="w-4 h-4 mr-2" />
                   Continuar Diagnóstico
                 </a>
@@ -130,10 +138,10 @@ export default function DashboardPage() {
           {/* Tarjeta 1: Mi Camino & Progreso */}
           <div className="rounded-2xl border border-brand-border/70 bg-card p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-600 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-salmon-500/10 text-salmon-900 dark:text-salmon-300 flex items-center justify-center font-bold">
                 <Award className="w-5 h-5" />
               </div>
-              <span className="text-xs font-semibold text-brand-primary">Paso 3 de 4</span>
+              <span className="text-xs font-semibold text-brand-secondary-ink">Paso 3 de 4</span>
             </div>
             <div>
               <h3 className="font-bold text-lg text-foreground">Tu Ruta de Aceleración</h3>
@@ -154,7 +162,7 @@ export default function DashboardPage() {
                 Asignación de Beca 100%
               </li>
               <li className="flex items-center gap-2 text-foreground font-medium">
-                <Clock className="w-4 h-4 text-brand-primary shrink-0" />
+                <Clock className="w-4 h-4 text-brand-secondary-ink shrink-0" />
                 Activación del Kit Mujer CEO (En curso)
               </li>
               <li className="flex items-center gap-2 opacity-60">
@@ -167,10 +175,10 @@ export default function DashboardPage() {
           {/* Tarjeta 2: Kit Mujer CEO */}
           <div className="rounded-2xl border border-brand-border/70 bg-card p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-300 flex items-center justify-center font-bold">
                 <ShoppingBag className="w-5 h-5" />
               </div>
-              <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-600">
+              <Badge variant="outline" className="text-xs border-teal-500/30 text-teal-600 dark:text-teal-300">
                 Herramientas
               </Badge>
             </div>
@@ -191,11 +199,17 @@ export default function DashboardPage() {
               </div>
               <div className="p-2.5 rounded-lg border border-brand-border/50 bg-brand-muted/20 flex items-center justify-between text-xs">
                 <span className="font-medium text-foreground">Pasarelas de Pago</span>
-                <span className="text-brand-primary font-semibold">Configurado</span>
+                <span className="text-brand-secondary-ink font-semibold">Configurado</span>
               </div>
             </div>
-            <Button asChild variant="outline" className="w-full text-xs h-9">
-              <a href={ONBOARDING_URLS.kitMujerCeo}>
+            <Button asChild className="w-full text-xs h-9 btn-brand">
+              <a
+                href={ONBOARDING_URLS.kitMujerCeo}
+                onClick={(ev) => {
+                  ev.preventDefault()
+                  openSubscribeModal({ originUrl: ONBOARDING_URLS.kitMujerCeo })
+                }}
+              >
                 <span>Configurar Catálogo</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </a>
@@ -205,10 +219,10 @@ export default function DashboardPage() {
           {/* Tarjeta 3: Mentoría 1:1 */}
           <div className="rounded-2xl border border-brand-border/70 bg-card p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-salmon-500/10 text-salmon-900 dark:text-salmon-300 flex items-center justify-center font-bold">
                 <Calendar className="w-5 h-5" />
               </div>
-              <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600">
+              <Badge variant="outline" className="text-xs border-salmon-500/30 text-salmon-900 dark:text-salmon-300">
                 Agendada
               </Badge>
             </div>
@@ -221,12 +235,18 @@ export default function DashboardPage() {
             <div className="p-3 rounded-xl border border-brand-border/60 bg-brand-muted/20 space-y-1">
               <p className="text-xs font-bold text-foreground">{userData.mentorName}</p>
               <p className="text-[11px] text-muted-foreground">{userData.mentorSpecialty}</p>
-              <p className="text-[11px] text-brand-primary font-medium pt-1 flex items-center gap-1">
+              <p className="text-[11px] text-brand-secondary-ink font-medium pt-1 flex items-center gap-1">
                 <Clock className="w-3 h-3" /> {userData.nextSession}
               </p>
             </div>
-            <Button asChild className="w-full text-xs h-9 bg-brand-primary text-white hover:bg-brand-primary/90">
-              <a href={ONBOARDING_URLS.aceleracion}>
+            <Button asChild className="w-full text-xs h-9 btn-brand">
+              <a
+                href={ONBOARDING_URLS.aceleracion}
+                onClick={(ev) => {
+                  ev.preventDefault()
+                  openSubscribeModal({ originUrl: ONBOARDING_URLS.aceleracion })
+                }}
+              >
                 <span>Acceder a Sesión Virtual</span>
                 <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
               </a>
@@ -237,7 +257,7 @@ export default function DashboardPage() {
         {/* Recursos & Soporte Directo */}
         <div className="p-6 rounded-2xl border border-brand-border/70 bg-card flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-salmon-100 text-brand-secondary-ink flex items-center justify-center">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
@@ -250,7 +270,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <Button asChild variant="outline" size="sm" className="text-xs shrink-0">
-            <Link href="/#impulso">Explorar Recursos</Link>
+            <Link href="/#recursos">Explorar Recursos</Link>
           </Button>
         </div>
       </main>

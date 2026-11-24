@@ -35,9 +35,9 @@ export function ThemeToggle() {
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       {theme === 'dark' ? (
-        <Sun className="h-4 w-4 text-amber-400 transition-transform duration-300 rotate-0 scale-100" />
+        <Sun className="h-4 w-4 text-brand-secondary-ink dark:text-salmon-400 transition-transform duration-300 rotate-0 scale-100" />
       ) : (
-        <Moon className="h-4 w-4 text-brand-deep/70 transition-transform duration-300 rotate-0 scale-100" />
+        <Moon className="h-4 w-4 text-brand-deep transition-transform duration-300 rotate-0 scale-100" />
       )}
     </Button>
   )

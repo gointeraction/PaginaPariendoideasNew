@@ -28,7 +28,7 @@ const FAQS = [
     category: 'Becas',
     question: '¿Las becas y el programa tienen algún costo?',
     answer:
-      'No. Las Becas de Reconstrucción Digital cubren el 100% del programa: acompañamiento psicosocial, formación digital, mentoría 1:1 y acceso al KIT Digital. El Programa Renacer (IMPULSO) es 100% gratuito gracias a nuestros aliados y donantes.',
+      'No. Las Becas de Reconstrucción Digital cubren el 100% del programa: acompañamiento psicosocial, formación digital, mentoría 1:1 y acceso al KIT Digital. El Programa Impulso es 100% gratuito gracias a nuestros aliados y donantes.',
   },
   {
     category: 'Mentoría',
@@ -40,7 +40,7 @@ const FAQS = [
     category: 'Mentoría',
     question: '¿Cuántas sesiones de mentoría incluye el programa?',
     answer:
-      'El Programa Renacer incluye 6 sesiones de mentoría 1:1 distribuidas en 3 meses. Las emprendedoras con Kit Mujer CEO PRO tienen acceso ilimitado a sesiones de mentoría especializada según disponibilidad. Cada sesión dura 50 minutos y queda grabada en tu dashboard.',
+      'El Programa Impulso incluye 6 sesiones de mentoría 1:1 distribuidas en 3 meses. Las emprendedoras con Kit Mujer CEO PRO tienen acceso ilimitado a sesiones de mentoría especializada según disponibilidad. Cada sesión dura 50 minutos y queda grabada en tu dashboard.',
   },
   {
     category: 'Kit CEO',
@@ -88,10 +88,11 @@ export function FAQ() {
   return (
     <section id="faq" className="relative py-24 md:py-32 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-brand-muted/30 to-white" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-brand-muted/30 to-background" />
       <div className="absolute inset-0 -z-10 bg-dots opacity-40 mask-fade-r" />
-      <div className="pointer-events-none absolute top-20 -right-20 h-72 w-72 rounded-full bg-brand-primary/15 blur-3xl" />
+      <div className="pointer-events-none absolute top-20 -right-20 h-72 w-72 rounded-full bg-brand-border/30 blur-3xl" />
       <div className="pointer-events-none absolute bottom-20 -left-20 h-80 w-80 rounded-full bg-brand-secondary/15 blur-3xl" />
+      <img src="/decor/confeti.svg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute bottom-10 left-6 -z-10 w-24 rotate-6 opacity-75 md:w-32" />
 
       <div className="relative mx-auto max-w-5xl px-4">
         {/* Header */}
@@ -103,7 +104,7 @@ export function FAQ() {
           className="text-center"
         >
           <span className="inline-flex items-center gap-2 rounded-full glass border border-brand-border/80 px-4 py-1.5 text-xs font-semibold text-brand-deep shadow-soft">
-            <MessageCircleQuestion className="h-3.5 w-3.5 text-brand-primary" />
+            <MessageCircleQuestion className="h-3.5 w-3.5 text-brand-secondary-ink" />
             Preguntas Frecuentes
           </span>
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-brand-deep text-balance sm:text-4xl md:text-5xl">
@@ -129,7 +130,7 @@ export function FAQ() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Busca una pregunta…"
-              className="h-12 rounded-full border-brand-border bg-white/80 pl-11 pr-4 text-base shadow-soft backdrop-blur focus-visible:ring-brand-primary"
+              className="h-12 rounded-full border-brand-border bg-background/80 pl-11 pr-4 text-base shadow-soft backdrop-blur focus-visible:ring-brand-primary"
             />
           </div>
           <div className="flex flex-wrap justify-center gap-2">
@@ -139,8 +140,8 @@ export function FAQ() {
                 onClick={() => setActiveCategory(cat)}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                   activeCategory === cat
-                    ? 'gradient-primary text-white shadow-glow'
-                    : 'border border-brand-border bg-white/70 text-brand-deep hover:bg-brand-muted/60 backdrop-blur'
+                    ? 'bg-fucsia border border-brand-secondary text-white shadow-glow'
+                    : 'border border-brand-border bg-background/70 text-brand-deep hover:bg-brand-muted/60 backdrop-blur'
                 }`}
               >
                 {cat}
@@ -158,7 +159,7 @@ export function FAQ() {
           className="mx-auto mt-10 max-w-3xl"
         >
           {filtered.length === 0 ? (
-            <div className="rounded-3xl border border-brand-border bg-white p-10 text-center shadow-soft">
+            <div className="rounded-3xl border border-brand-border bg-card p-10 text-center shadow-soft">
               <HelpCircle className="mx-auto h-10 w-10 text-muted-foreground" />
               <p className="mt-3 font-medium text-brand-deep">No encontramos resultados</p>
               <p className="text-sm text-muted-foreground">Prueba con otra palabra o categoría.</p>
@@ -175,23 +176,23 @@ export function FAQ() {
                 >
                   <AccordionItem
                     value={`item-${i}`}
-                    className="overflow-hidden rounded-2xl border border-brand-border bg-white shadow-soft first:rounded-2xl"
+                    className="overflow-hidden rounded-2xl border border-brand-border bg-card shadow-soft first:rounded-2xl"
                   >
                     <AccordionTrigger className="px-5 py-5 text-left hover:no-underline hover:bg-brand-muted/40 transition-colors group">
                       <div className="flex items-start gap-3 pr-4">
-                        <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-muted text-brand-primary">
+                        <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-muted text-brand-secondary-ink">
                           <HelpCircle className="h-4 w-4" />
                         </span>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <Badge
                               variant="secondary"
-                              className="mb-1 bg-brand-muted text-brand-primary border-0 text-[10px] font-semibold uppercase tracking-wide"
+                              className="mb-1 bg-brand-muted text-brand-secondary-ink border-0 text-[10px] font-semibold uppercase tracking-wide"
                             >
                               {faq.category}
                             </Badge>
                           </div>
-                          <span className="font-display text-base font-semibold text-brand-deep group-hover:text-brand-primary transition-colors">
+                          <span className="font-display text-base font-semibold text-brand-deep group-hover:text-brand-secondary-ink transition-colors">
                             {faq.question}
                           </span>
                         </div>
@@ -217,7 +218,7 @@ export function FAQ() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-12 flex flex-col items-center justify-between gap-4 rounded-3xl gradient-primary p-[1.5px] shadow-glow sm:flex-row sm:p-[1.5px]"
         >
-          <div className="flex-1 rounded-[calc(1.5rem-1.5px)] bg-white p-6 sm:p-8">
+          <div className="flex-1 rounded-[calc(var(--radius-3xl)_-_1.5px)] bg-card p-6 sm:p-8">
             <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
               <div>
                 <h3 className="font-display text-xl font-bold text-brand-deep">
@@ -229,7 +230,7 @@ export function FAQ() {
               </div>
               <Button
                 asChild
-                className="shrink-0 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 px-6"
+                className="shrink-0 rounded-full btn-brand shadow-glow px-6"
               >
                 <Link href="#contacto">
                   Contáctanos

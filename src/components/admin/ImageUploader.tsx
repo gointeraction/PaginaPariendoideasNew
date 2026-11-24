@@ -131,7 +131,7 @@ export function ImageUploader({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <Label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-          <ImageIcon className="w-3.5 h-3.5 text-brand-primary" />
+          <ImageIcon className="w-3.5 h-3.5 text-brand-secondary-ink" />
           {label}
         </Label>
         <div className="flex items-center gap-1">
@@ -139,7 +139,7 @@ export function ImageUploader({
             type="button"
             onClick={() => setMode('upload')}
             className={`text-[11px] px-2 py-0.5 rounded transition ${
-              mode === 'upload' ? 'bg-brand-primary/10 text-brand-primary font-semibold' : 'text-muted-foreground hover:text-foreground'
+              mode === 'upload' ? 'bg-salmon-100 text-brand-secondary-ink font-semibold' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Subir archivo
@@ -149,7 +149,7 @@ export function ImageUploader({
             type="button"
             onClick={() => setMode('url')}
             className={`text-[11px] px-2 py-0.5 rounded transition ${
-              mode === 'url' ? 'bg-brand-primary/10 text-brand-primary font-semibold' : 'text-muted-foreground hover:text-foreground'
+              mode === 'url' ? 'bg-salmon-100 text-brand-secondary-ink font-semibold' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Pegar URL
@@ -195,7 +195,7 @@ export function ImageUploader({
       ) : mode === 'upload' ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-brand-border/70 hover:border-brand-primary/60 rounded-xl p-4 text-center cursor-pointer transition bg-card hover:bg-brand-primary/5 flex flex-col items-center justify-center gap-2 group"
+          className="border-2 border-dashed border-brand-border/70 hover:border-brand-secondary-ink/60 rounded-xl p-4 text-center cursor-pointer transition bg-card hover:bg-brand-secondary-ink/5 flex flex-col items-center justify-center gap-2 group"
         >
           <input
             ref={fileInputRef}
@@ -206,12 +206,12 @@ export function ImageUploader({
           />
           {uploading ? (
             <div className="flex flex-col items-center gap-2 py-2">
-              <Loader2 className="w-6 h-6 text-brand-primary animate-spin" />
+              <Loader2 className="w-6 h-6 text-brand-secondary-ink animate-spin" />
               <p className="text-xs text-muted-foreground font-medium">Procesando y optimizando imagen...</p>
             </div>
           ) : (
             <>
-              <div className="w-9 h-9 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-9 h-9 rounded-full bg-salmon-100 text-brand-secondary-ink flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Upload className="w-4 h-4" />
               </div>
               <div>
@@ -239,7 +239,7 @@ export function ImageUploader({
           <Button
             type="submit"
             size="sm"
-            className="h-9 text-xs bg-brand-primary text-white hover:bg-brand-primary/90 shrink-0"
+            className="h-9 text-xs btn-brand shrink-0"
           >
             Aplicar
           </Button>

@@ -1,99 +1,104 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, X, Sparkles, Crown, Rocket, Zap, ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { CheckCircle2, Sparkles, Crown, Rocket, Sprout, ArrowRight, Clock3 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
-import Link from 'next/link'
 import { ONBOARDING_URLS } from '@/lib/constants'
+import { useSubscribeModal } from '@/components/layout/SubscribeModalProvider'
 
-interface PlanFeature {
-  text: string
-  included: boolean
-}
+/** Fila de contenido de una columna (tabla "Elemento / Detalle"). */
+type FeatureRow =
+  /** Detalle = "Incluido" */
+  | { kind: 'check'; label: string }
+  /** Detalle = "Todo lo anterior" */
+  | { kind: 'previo'; label: string }
+  /** Detalle = lista de viñetas */
+  | { kind: 'list'; label: string; items: string[] }
+  /** Detalle = valor simple */
+  | { kind: 'value'; label: string; value: string }
+  /** Detalle = "próximamente" (feature aún no disponible) */
+  | { kind: 'soon'; label: string }
 
 interface Plan {
-  name: string
+  /** Columna / etapa (título de la tarjeta). */
   tier: string
   icon: React.ElementType
-  priceMonthly: number
-  priceAnnual: number
-  description: string
   popular: boolean
-  color: string
   accentBg: string
   accentText: string
-  gradientBtn: string
-  features: PlanFeature[]
+  ctaText: string
+  /** Muestra el icono de mano señalando 👉 delante del CTA. */
+  ctaEmoji?: boolean
+  /** Ruta de registro (abre el modal de suscripción). */
+  url: string
+  features: FeatureRow[]
 }
 
 const PLANS: Plan[] = [
   {
-    name: 'GRATIS',
-    tier: 'Emprende',
-    icon: Zap,
-    priceMonthly: 0,
-    priceAnnual: 0,
-    description: 'Comienza tu viaje emprendedor con las herramientas esenciales.',
+    tier: 'Semilla',
+    icon: Sprout,
     popular: false,
-    color: 'text-brand-deep',
     accentBg: 'bg-brand-muted',
-    accentText: 'text-brand-primary',
-    gradientBtn: 'bg-brand-deep hover:bg-brand-deep/90 text-white',
+    accentText: 'text-brand-secondary-ink',
+    ctaText: 'Solicitar Beca',
+    ctaEmoji: true,
+    url: ONBOARDING_URLS.becas,
     features: [
-      { text: 'Tienda online (hasta 10 productos)', included: true },
-      { text: 'POS básico', included: true },
-      { text: 'Perfil en marketplace', included: true },
-      { text: 'Comunidad (acceso limitado)', included: true },
-      { text: '0 sesiones de mentoría', included: false },
-      { text: 'Soporte por email', included: true },
+      { kind: 'check', label: 'Diagnóstico inicial / Hoja de ruta' },
+      { kind: 'check', label: 'Boletín informativo (mensual)' },
+      { kind: 'check', label: 'Acceso a comunidad' },
+      { kind: 'check', label: 'Acceso a los foros' },
+      { kind: 'check', label: 'Soporte emocional' },
+      { kind: 'check', label: 'Cursos (asincrónicos)' },
+      { kind: 'check', label: '¿Quieres avanzar?' },
+      {
+        kind: 'list',
+        label: 'Requisitos técnicos / Equipos',
+        items: ['Computador', 'Teléfono inteligente'],
+      },
     ],
   },
   {
-    name: 'PRO',
-    tier: 'Crece',
+    tier: 'Temprana',
     icon: Rocket,
-    priceMonthly: 29,
-    priceAnnual: 290,
-    description: 'Lleva tu negocio al siguiente nivel con herramientas ilimitadas y mentoría.',
     popular: true,
-    color: 'text-brand-primary',
-    accentBg: 'gradient-primary',
+    accentBg: 'gradient-primary-strong',
     accentText: 'text-white',
-    gradientBtn: 'gradient-primary text-white border-0 shadow-glow hover:opacity-90',
+    ctaText: 'Activar / Net Digital Mujer',
+    url: ONBOARDING_URLS.kitMujerCeo,
     features: [
-      { text: 'Tienda online ilimitada + dominio personalizado', included: true },
-      { text: 'POS completo + inventario', included: true },
-      { text: 'Marketplace destacado', included: true },
-      { text: 'Comunidad completa + grupos exclusivos', included: true },
-      { text: '6 sesiones de mentoría 1:1 / mes', included: true },
-      { text: 'Dashboard de métricas avanzado', included: true },
-      { text: 'Soporte prioritario', included: true },
+      { kind: 'previo', label: 'Nivel previo' },
+      {
+        kind: 'list',
+        label: 'Capacitación',
+        items: [
+          'Carreras Emprendedoras del año',
+          'Calificadas con-causality',
+          'Miembro Ecosystem-E',
+          'Diplomado',
+          'Becas / Bootcamps',
+        ],
+      },
+      { kind: 'list', label: 'Networking y Visibilidad', items: ['Rondas B2B', 'Vitrina Digital'] },
+      { kind: 'value', label: 'Seguimiento', value: 'Plan de seguimiento' },
+      { kind: 'value', label: 'Estado del negocio', value: 'Emprendimiento activo' },
+      { kind: 'soon', label: 'Marketplace Pariendo Ideas' },
     ],
   },
   {
-    name: 'ELITE',
-    tier: 'Escala',
+    tier: 'Consolidada / Legado',
     icon: Crown,
-    priceMonthly: 79,
-    priceAnnual: 790,
-    description: 'Escala sin límites con soporte dedicado, API y mentoría ilimitada.',
     popular: false,
-    color: 'text-brand-accent',
-    accentBg: 'bg-gradient-to-br from-orange-500 via-pink-500 to-purple-500',
+    accentBg: 'bg-gradient-to-br from-salmon-600 via-salmon-700 to-salmon-800',
     accentText: 'text-white',
-    gradientBtn: 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-white border-0 shadow-glow-orange hover:opacity-90',
+    ctaText: 'Agenda una asesoría',
+    url: ONBOARDING_URLS.aceleracion,
     features: [
-      { text: 'Todo de PRO +', included: true },
-      { text: 'Tiendas multi-idioma', included: true },
-      { text: 'API & webhooks', included: true },
-      { text: 'Mentoría ilimitada', included: true },
-      { text: 'Acceso a P.I. Fest VIP', included: true },
-      { text: 'Branding personalizado', included: true },
-      { text: 'Account manager dedicado', included: true },
+      { kind: 'previo', label: 'Nivel previo' },
+      { kind: 'value', label: 'Asesoría / Enfoque', value: 'Asesorías personalizadas' },
+      { kind: 'value', label: 'Expansión', value: 'Rondas Digital' },
+      { kind: 'value', label: 'Estado del negocio', value: 'Formalidad' },
     ],
   },
 ]
@@ -112,20 +117,71 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   },
 }
 
+/** Renderiza una fila de la tabla Elemento / Detalle, siempre con ícono ✓ (estilo Semilla). */
+function FeatureRowItem({ row, popular }: { row: FeatureRow; popular: boolean }) {
+  const checkCls = `mt-0.5 h-5 w-5 shrink-0 ${
+    popular ? 'text-brand-secondary-ink' : 'text-brand-secondary-ink/70'
+  }`
+
+  if (row.kind === 'list') {
+    return (
+      <span className="block space-y-1.5">
+        <span className="flex items-start gap-2.5">
+          <CheckCircle2 className={checkCls} />
+          <span className="text-sm font-semibold leading-snug text-brand-deep">{row.label}</span>
+        </span>
+        {row.items.map((item) => (
+          <span key={item} className="flex items-start gap-2.5 pl-7">
+            <CheckCircle2 className={checkCls} />
+            <span className="text-sm leading-snug text-brand-deep">{item}</span>
+          </span>
+        ))}
+      </span>
+    )
+  }
+
+  if (row.kind === 'soon') {
+    return (
+      <span className="flex flex-wrap items-center gap-2">
+        <Clock3 className={checkCls} />
+        <span className="text-sm font-semibold leading-snug text-brand-deep">{row.label}</span>
+        <span className="rounded-full bg-brand-muted px-2.5 py-0.5 text-xs font-bold text-brand-deep">
+          Próximamente
+        </span>
+      </span>
+    )
+  }
+
+  const text =
+    row.kind === 'check'
+      ? row.label
+      : row.kind === 'previo'
+        ? `${row.label}: Todo lo anterior`
+        : `${row.label}: ${row.value}`
+
+  return (
+    <span className="flex items-start gap-2.5">
+      <CheckCircle2 className={checkCls} />
+      <span className="text-sm leading-snug text-brand-deep">{text}</span>
+    </span>
+  )
+}
+
 export function Pricing() {
-  const [annual, setAnnual] = useState(false)
+  const { openSubscribeModal } = useSubscribeModal()
 
   return (
     <section id="pricing" className="relative overflow-hidden py-24 md:py-32">
       {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-muted/60 via-white to-white" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-muted/60 via-background to-background" />
       <div className="absolute inset-0 -z-10 bg-dots opacity-30 mask-fade-r" />
-      <div className="pointer-events-none absolute -top-20 -right-20 h-96 w-96 rounded-full bg-brand-primary/8 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-20 -left-20 h-96 w-96 rounded-full bg-brand-accent/8 blur-3xl" />
+      <div className="pointer-events-none absolute -top-20 -right-20 h-96 w-96 rounded-full bg-brand-border/16 blur-3xl" />
+      <img src="/decor/confeti.svg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-24 right-6 -z-10 w-24 -rotate-6 opacity-75 md:w-32" />
+      <div className="pointer-events-none absolute -bottom-20 -left-20 h-96 w-96 rounded-full bg-brand-border/16 blur-3xl" />
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-brand-secondary/5 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4">
@@ -138,8 +194,8 @@ export function Pricing() {
           className="mx-auto max-w-2xl text-center"
         >
           <span className="inline-flex items-center gap-2 rounded-full glass border border-brand-border/80 px-4 py-1.5 text-xs font-semibold text-brand-deep shadow-soft">
-            <Crown className="h-3.5 w-3.5 text-brand-primary" />
-            Kit Mujer CEO — Planes
+            <Crown className="h-3.5 w-3.5 text-brand-secondary-ink" />
+            Registro — Planes
           </span>
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-brand-deep text-balance sm:text-4xl md:text-5xl">
             El plan perfecto para cada
@@ -149,52 +205,6 @@ export function Pricing() {
             Emprende, crece o escala. Nuestros planes se adaptan a tu ritmo con herramientas,
             mentoría y comunidad diseñadas para mujeres emprendedoras.
           </p>
-        </motion.div>
-
-        {/* Toggle */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="mt-10 flex items-center justify-center gap-3"
-        >
-          <Label
-            htmlFor="billing-toggle"
-            className={`text-sm font-medium cursor-pointer transition-colors ${
-              !annual ? 'text-brand-deep' : 'text-muted-foreground'
-            }`}
-          >
-            Mensual
-          </Label>
-          <div className="relative">
-            <Switch
-              id="billing-toggle"
-              checked={annual}
-              onCheckedChange={setAnnual}
-              className="data-[state=checked]:bg-brand-primary data-[state=unchecked]:bg-brand-border"
-            />
-          </div>
-          <Label
-            htmlFor="billing-toggle"
-            className={`text-sm font-medium cursor-pointer transition-colors ${
-              annual ? 'text-brand-deep' : 'text-muted-foreground'
-            }`}
-          >
-            Anual
-          </Label>
-          <AnimatePresence>
-            {annual && (
-              <motion.span
-                initial={{ opacity: 0, scale: 0.8, x: -10 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.8, x: -10 }}
-                className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-700"
-              >
-                Ahorra ~17%
-              </motion.span>
-            )}
-          </AnimatePresence>
         </motion.div>
 
         {/* Cards */}
@@ -207,18 +217,18 @@ export function Pricing() {
         >
           {PLANS.map((plan) => (
             <motion.div
-              key={plan.name}
+              key={plan.tier}
               variants={cardVariants}
               className={`group relative flex flex-col rounded-3xl transition-all duration-500 ${
                 plan.popular
-                  ? 'bg-white p-6 md:p-8 shadow-glow lg:scale-105 lg:z-10 lg:py-10 border-2 border-brand-primary/30'
-                  : 'border border-brand-border bg-white p-6 md:p-8 shadow-soft hover:shadow-lift hover:-translate-y-1'
+                  ? 'bg-card p-6 md:p-8 shadow-glow lg:scale-105 lg:z-10 lg:py-10 border-2 border-salmon-500/50'
+                  : 'border border-brand-border bg-card p-6 md:p-8 shadow-soft hover:shadow-lift hover:-translate-y-1'
               }`}
             >
               {/* Popular badge */}
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-                  <span className="inline-flex items-center gap-1.5 rounded-full gradient-primary px-5 py-2 text-xs font-bold text-white shadow-glow">
+                  <span className="inline-flex items-center gap-1.5 rounded-full gradient-primary-strong px-5 py-2 text-xs font-bold text-white shadow-glow">
                     <Sparkles className="h-3.5 w-3.5" />
                     Más popular
                   </span>
@@ -230,7 +240,7 @@ export function Pricing() {
                 <div className="pointer-events-none absolute -inset-px rounded-3xl gradient-primary opacity-10 blur-sm" />
               )}
 
-              <div className="relative">
+              <div className="relative flex flex-1 flex-col">
                 {/* Plan header */}
                 <div className="flex items-center gap-3">
                   <span
@@ -239,65 +249,30 @@ export function Pricing() {
                     <plan.icon className="h-6 w-6" />
                   </span>
                   <div>
-                    <div className={`text-xs font-bold uppercase tracking-wider ${plan.color}`}>
-                      {plan.name}
-                    </div>
-                    <div className="text-sm font-semibold text-brand-deep">{plan.tier}</div>
+                    <h3 className="font-display text-xl font-bold text-brand-deep sm:text-2xl">
+                      {plan.tier}
+                    </h3>
                   </div>
                 </div>
 
-                {/* Price */}
-                <div className="mt-6">
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-display text-5xl font-bold text-brand-deep">
-                      ${annual ? plan.priceAnnual : plan.priceMonthly}
-                    </span>
-                    {plan.priceMonthly > 0 && (
-                      <span className="text-sm font-medium text-muted-foreground">
-                        /{annual ? 'año' : 'mes'}
-                      </span>
-                    )}
-                  </div>
-                  <AnimatePresence mode="wait">
-                    {annual && plan.priceMonthly > 0 && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
-                        className="mt-1 text-xs text-emerald-600 font-medium"
-                      >
-                        Equivale a ${Math.round(plan.priceAnnual / 12)}/mes
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Description */}
-                <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-                  {plan.description}
-                </p>
+                {/* Description removed: precios y toggle fuera (decisión 2026-11) */}
 
                 {/* CTA */}
                 <div className="mt-6">
                   <Button
                     asChild
                     size="lg"
-                    className={`group/btn w-full rounded-full h-12 text-sm font-semibold ${plan.gradientBtn}`}
+                    className="group/btn w-full rounded-full h-12 text-sm font-semibold btn-brand shadow-glow"
                   >
                     <a
-                      href={
-                        plan.priceMonthly === 0
-                          ? ONBOARDING_URLS.becas
-                          : plan.popular
-                            ? ONBOARDING_URLS.kitMujerCeo
-                            : ONBOARDING_URLS.aceleracion
-                      }
+                      href={plan.url}
+                      onClick={(ev) => {
+                        ev.preventDefault()
+                        openSubscribeModal({ originUrl: plan.url })
+                      }}
                     >
-                      {plan.priceMonthly === 0
-                        ? 'Solicitar Beca 100%'
-                        : plan.popular
-                          ? 'Activar Kit Mujer CEO'
-                          : 'Comenzar aceleración'}
+                      {plan.ctaEmoji && <span className="mr-1.5 text-base leading-none">👉</span>}
+                      {plan.ctaText}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                     </a>
                   </Button>
@@ -306,31 +281,17 @@ export function Pricing() {
                 {/* Divider */}
                 <div className="my-6 h-px bg-gradient-to-r from-transparent via-brand-border to-transparent" />
 
-                {/* Features */}
-                <ul className="flex-1 space-y-3.5">
+                {/* Features (Elemento / Detalle) */}
+                <ul className="flex-1 space-y-4">
                   {plan.features.map((feature, i) => (
                     <motion.li
-                      key={feature.text}
+                      key={`${plan.tier}-${i}`}
                       initial={{ opacity: 0, x: -8 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.3 + i * 0.05 }}
-                      className="flex items-start gap-2.5"
                     >
-                      {feature.included ? (
-                        <CheckCircle2 className={`mt-0.5 h-5 w-5 shrink-0 ${plan.popular ? 'text-brand-primary' : 'text-brand-primary/70'}`} />
-                      ) : (
-                        <X className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground/30" />
-                      )}
-                      <span
-                        className={`text-sm leading-snug ${
-                          feature.included
-                            ? 'text-brand-deep'
-                            : 'text-muted-foreground/50 line-through'
-                        }`}
-                      >
-                        {feature.text}
-                      </span>
+                      <FeatureRowItem row={feature} popular={plan.popular} />
                     </motion.li>
                   ))}
                 </ul>
@@ -341,9 +302,9 @@ export function Pricing() {
                 className={`absolute bottom-0 left-0 h-1 w-full origin-left scale-x-0 rounded-b-3xl transition-transform duration-500 group-hover:scale-x-100 ${
                   plan.popular
                     ? 'gradient-primary'
-                    : plan.name === 'ELITE'
-                      ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500'
-                      : 'bg-brand-deep'
+                    : plan.tier === 'Consolidada / Legado'
+                      ? 'bg-gradient-to-r from-salmon-600 via-salmon-700 to-salmon-800'
+                      : 'bg-fucsia'
                 }`}
               />
             </motion.div>
@@ -359,25 +320,26 @@ export function Pricing() {
           className="mt-12 flex flex-col items-center gap-4"
         >
           <p className="text-center text-sm text-muted-foreground">
-            Todos los planes incluyen acceso al marketplace Pariendo Ideas. Sin contratos de permanencia. Cancela cuando quieras.
+            Todas las etapas incluyen acceso al marketplace Pariendo Ideas. Avanza a tu ritmo,
+            sin compromisos.
           </p>
-          <div className="flex items-center gap-6 rounded-2xl border border-brand-border bg-white/80 p-4 shadow-soft backdrop-blur">
+          <div className="flex flex-wrap items-center justify-center gap-6 rounded-2xl border border-brand-border bg-background/80 p-4 shadow-soft backdrop-blur">
             <div className="flex items-center gap-2">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                 <CheckCircle2 className="h-4 w-4" />
               </span>
-              <span className="text-xs font-medium text-brand-deep">Garantía 30 días</span>
+              <span className="text-xs font-medium text-brand-deep">Registro gratuito</span>
             </div>
             <div className="h-4 w-px bg-brand-border" />
             <div className="flex items-center gap-2">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-muted text-brand-primary">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-muted text-brand-secondary-ink">
                 <Sparkles className="h-4 w-4" />
               </span>
               <span className="text-xs font-medium text-brand-deep">Setup gratuito</span>
             </div>
             <div className="h-4 w-px bg-brand-border" />
             <div className="flex items-center gap-2">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-secondary/10 text-brand-secondary">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-salmon-100 text-brand-secondary-ink">
                 <Crown className="h-4 w-4" />
               </span>
               <span className="text-xs font-medium text-brand-deep">Sin tarjeta de crédito</span>

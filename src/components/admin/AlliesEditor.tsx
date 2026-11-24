@@ -52,7 +52,7 @@ export function AlliesEditor({ allies, onChange }: AlliesEditorProps) {
         <Button
           type="button"
           onClick={addAlly}
-          className="bg-brand-primary text-white hover:bg-brand-primary/90 flex items-center gap-2"
+          className="btn-brand flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Agregar Aliado
         </Button>

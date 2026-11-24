@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SectionHeading } from './Modules'
 import { ONBOARDING_URLS, getMentorBookingUrl } from '@/lib/constants'
+import { useSubscribeModal } from '@/components/layout/SubscribeModalProvider'
 
 type Mentor = {
   id: string
@@ -54,7 +55,7 @@ const MENTORS: Mentor[] = [
   },
   {
     id: 'lic-celsa-moza',
-    name: 'Lic. Celsa Moza',
+    name: 'Lic. Celsa Perez',
     specialty: 'Experta en Programación Neurolingüística (PNL)',
     image: '/Mentores/5.png',
   },
@@ -66,7 +67,7 @@ const MENTORS: Mentor[] = [
   },
   {
     id: 'arq-dioraisa-lomartire',
-    name: 'Arq. Dioraisa Lomartire',
+    name: 'Arq. Dioraisa Lo Martire',
     specialty: 'Arquitecta Especialista en Diseño de Interiores y Feng Shui',
     image: '/Mentores/7.png',
   },
@@ -76,9 +77,40 @@ const MENTORS: Mentor[] = [
     specialty: 'Abogada Especialista en Derecho Contractual',
     image: '/Mentores/8.png',
   },
+  {
+    id: 'luis-yanez',
+    name: 'Luis Yanez',
+    specialty: 'Mentor Pariendo Ideas',
+    image: '/Mentores/9.png',
+  },
+  {
+    id: 'angelica-jalaff',
+    name: 'Lic. Angélica Jalaff',
+    specialty: 'Lic. en Contaduría Pública y Abogada',
+    image: '/Mentores/10.png',
+  },
+  {
+    id: 'gabriela-rodriguez',
+    name: 'Gabriela Rodríguez',
+    specialty: 'Marketing',
+    image: '/Mentores/11.png',
+  },
+  {
+    id: 'rafael-nunez',
+    name: 'Rafael Nuñez',
+    specialty: 'Ciberseguridad',
+    image: '/Mentores/12.png',
+  },
+  {
+    id: 'jaylene-mendoza',
+    name: 'Jaylene Mendoza',
+    specialty: 'Mentor Pariendo Ideas',
+    image: '/Mentores/13.png',
+  },
 ]
 
 export function Mentorship() {
+  const { openSubscribeModal } = useSubscribeModal()
   const [isPaused, setIsPaused] = React.useState(false)
   const [canScrollLeft, setCanScrollLeft] = React.useState(false)
   const [canScrollRight, setCanScrollRight] = React.useState(true)
@@ -118,9 +150,10 @@ export function Mentorship() {
 
   return (
     <section id="mentoria" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-brand-muted/20 to-white" />
-      <div className="pointer-events-none absolute top-1/4 -left-32 h-72 w-72 rounded-full bg-brand-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-1/4 -right-32 h-80 w-80 rounded-full bg-brand-secondary/10 blur-3xl" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-brand-muted/20 to-background" />
+      <div className="pointer-events-none absolute top-1/4 -left-32 h-72 w-72 rounded-full bg-salmon-100 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-1/4 -right-32 h-80 w-80 rounded-full bg-salmon-100 blur-3xl" />
+      <img src="/decor/hojas.svg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-28 right-6 -z-10 w-24 rotate-6 opacity-80 md:w-32" />
 
       <div className="mx-auto max-w-7xl px-4">
         <SectionHeading
@@ -139,7 +172,7 @@ export function Mentorship() {
           <div className="flex items-center gap-2">
             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-semibold text-brand-deep">
-              Red de Mentoras y Mentores Pariendo Ideas (8 profesionales)
+              Red de Mentoras y Mentores Pariendo Ideas ({MENTORS.length} profesionales)
             </span>
           </div>
 
@@ -150,7 +183,7 @@ export function Mentorship() {
               size="icon"
               onClick={() => scroll('left')}
               disabled={!canScrollLeft}
-              className="h-9 w-9 rounded-full border-brand-border bg-white text-brand-deep shadow-sm hover:border-brand-primary hover:text-brand-primary disabled:opacity-40"
+              className="h-9 w-9 rounded-full border-brand-border bg-card text-brand-deep shadow-sm hover:border-brand-secondary-ink hover:text-brand-secondary-ink disabled:opacity-40"
               aria-label="Anterior mentor"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -161,7 +194,7 @@ export function Mentorship() {
               size="icon"
               onClick={() => scroll('right')}
               disabled={!canScrollRight}
-              className="h-9 w-9 rounded-full border-brand-border bg-white text-brand-deep shadow-sm hover:border-brand-primary hover:text-brand-primary disabled:opacity-40"
+              className="h-9 w-9 rounded-full border-brand-border bg-card text-brand-deep shadow-sm hover:border-brand-secondary-ink hover:text-brand-secondary-ink disabled:opacity-40"
               aria-label="Siguiente mentor"
             >
               <ChevronRight className="h-4 w-4" />
@@ -177,17 +210,17 @@ export function Mentorship() {
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
-          className="mt-6 flex gap-5 overflow-x-auto pb-6 pt-2 scroll-smooth no-scrollbar snap-x snap-mandatory"
+          className="mt-6 flex gap-4 overflow-x-auto pb-6 pt-2 scroll-smooth no-scrollbar snap-x snap-mandatory"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {MENTORS.map((m) => (
             <div
               key={m.id}
-              className="w-[260px] sm:w-[290px] md:w-[310px] shrink-0 snap-start"
+              className="w-[200px] sm:w-[220px] md:w-[240px] shrink-0 snap-start"
             >
-              <div className="group relative flex flex-col h-full overflow-hidden rounded-3xl border border-brand-border bg-white shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-lift hover:border-brand-primary/50">
+              <div className="group relative flex flex-col h-full overflow-hidden rounded-2xl border border-brand-border bg-card shadow-soft transition-all duration-500 hover:-translate-y-2 hover:shadow-lift hover:border-brand-secondary-ink/50">
                 {/* Mentor Photo */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-brand-muted/20">
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-muted/20">
                   <img
                     src={m.image}
                     alt={m.name}
@@ -198,21 +231,26 @@ export function Mentorship() {
                 </div>
 
                 {/* Mentor Details - Sin estrellas, limpio y formal */}
-                <div className="flex flex-1 flex-col p-5">
-                  <h3 className="font-display text-base sm:text-lg font-bold text-brand-deep group-hover:text-brand-primary transition-colors leading-snug">
+                <div className="flex flex-1 flex-col p-4">
+                  <h3 className="font-display text-sm sm:text-base font-bold text-brand-deep group-hover:text-brand-secondary-ink transition-colors leading-snug">
                     {m.name}
                   </h3>
-                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2 min-h-[2.5rem]">
+                  <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed line-clamp-2 min-h-[2.25rem]">
                     {m.specialty}
                   </p>
 
-                  <div className="mt-4 pt-4 border-t border-brand-border/60">
+                  <div className="mt-3 pt-3 border-t border-brand-border/60">
                     <Button
                       asChild
-                      variant="outline"
-                      className="w-full rounded-full border-2 border-brand-border text-brand-deep hover:border-brand-primary/40 hover:bg-brand-muted/40 text-xs font-semibold group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all shadow-sm"
+                      className="w-full rounded-full btn-brand text-[11px] font-semibold transition-all"
                     >
-                      <a href={getMentorBookingUrl(m.name)}>
+                      <a
+                        href={getMentorBookingUrl(m.name)}
+                        onClick={(ev) => {
+                          ev.preventDefault()
+                          openSubscribeModal({ originUrl: getMentorBookingUrl(m.name) })
+                        }}
+                      >
                         <Calendar className="mr-1.5 h-3.5 w-3.5" />
                         Agendar sesión 1:1
                       </a>
@@ -238,10 +276,10 @@ export function Mentorship() {
           transition={{ duration: 0.55 }}
           className="mt-14 rounded-3xl gradient-primary p-[1.5px] shadow-glow"
         >
-          <div className="rounded-[calc(1.5rem-1.5px)] bg-white p-8 md:p-10">
+          <div className="rounded-[calc(var(--radius-3xl)_-_1.5px)] bg-card p-8 md:p-10">
             <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
               <div>
-                <Badge className="bg-brand-muted text-brand-primary border-0 hover:bg-brand-muted">
+                <Badge className="bg-brand-muted text-brand-secondary-ink border-0 hover:bg-brand-muted">
                   <Sparkles className="h-3 w-3 mr-1" />
                   Cómo funciona el matching
                 </Badge>
@@ -255,9 +293,15 @@ export function Mentorship() {
                 </p>
                 <Button
                   asChild
-                  className="mt-6 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90"
+                  className="mt-6 rounded-full btn-brand shadow-glow"
                 >
-                  <a href={ONBOARDING_URLS.aceleracion}>
+                  <a
+                    href={ONBOARDING_URLS.aceleracion}
+                    onClick={(ev) => {
+                      ev.preventDefault()
+                      openSubscribeModal({ originUrl: ONBOARDING_URLS.aceleracion })
+                    }}
+                  >
                     Comenzar aceleración
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
@@ -275,10 +319,10 @@ export function Mentorship() {
                     className="relative rounded-2xl bg-brand-muted/40 p-4 border border-brand-border"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg gradient-primary text-white text-xs font-bold">
+                      <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg gradient-primary-strong text-white text-xs font-bold">
                         {s.n}
                       </span>
-                      <s.icon className="h-4 w-4 text-brand-primary" />
+                      <s.icon className="h-4 w-4 text-brand-secondary-ink" />
                     </div>
                     <div className="mt-2 font-semibold text-brand-deep text-sm">{s.t}</div>
                     <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed">{s.d}</p>

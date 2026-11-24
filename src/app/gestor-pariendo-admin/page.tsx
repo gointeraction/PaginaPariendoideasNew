@@ -13,7 +13,6 @@ import {
 import { AdminLogin } from '@/components/admin/AdminLogin'
 import { SliderEditor } from '@/components/admin/SliderEditor'
 import { AlliesEditor } from '@/components/admin/AlliesEditor'
-import { TrustBarEditor } from '@/components/admin/TrustBarEditor'
 import { ApplicationsManager } from '@/components/admin/ApplicationsManager'
 import { MediaManager } from '@/components/admin/MediaManager'
 import { Button } from '@/components/ui/button'
@@ -24,7 +23,6 @@ import {
   RotateCcw,
   Sliders,
   Building2,
-  Layers,
   Users,
   FolderOpen,
   CheckCircle2,
@@ -40,7 +38,7 @@ export default function GestorPariendoAdminPage() {
   const [authChecking, setAuthChecking] = React.useState(true)
 
   const [content, setContent] = React.useState<LandingPageContent>(DEFAULT_CMS_CONTENT)
-  const [activeTab, setActiveTab] = React.useState<'slider' | 'allies' | 'trustbar' | 'applications' | 'media'>('slider')
+  const [activeTab, setActiveTab] = React.useState<'slider' | 'allies' | 'applications' | 'media'>('slider')
   const [isSaving, setIsSaving] = React.useState(false)
   const [feedback, setFeedback] = React.useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const [hasChanges, setHasChanges] = React.useState(false)
@@ -154,7 +152,7 @@ export default function GestorPariendoAdminPage() {
             <div>
               <h1 className="font-bold text-sm sm:text-base text-foreground flex items-center gap-2">
                 CMS Pariendo Ideas
-                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] rounded-full bg-brand-primary/10 text-brand-primary font-semibold">
+                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] rounded-full bg-salmon-100 text-brand-secondary-ink font-semibold">
                   Admin
                 </span>
               </h1>
@@ -190,7 +188,7 @@ export default function GestorPariendoAdminPage() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-brand-primary text-white hover:bg-brand-primary/90 text-xs sm:text-sm h-9 px-4 font-semibold shadow-md shadow-brand-primary/20"
+              className="btn-brand text-xs sm:text-sm h-9 px-4 font-semibold shadow-md shadow-brand-primary/20"
             >
               {isSaving ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1.5" />
@@ -251,7 +249,7 @@ export default function GestorPariendoAdminPage() {
             onClick={() => setActiveTab('slider')}
             className={`flex items-center gap-2 py-3 px-5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'slider'
-                ? 'border-brand-primary text-brand-primary'
+                ? 'border-brand-secondary-ink text-brand-secondary-ink'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -264,7 +262,7 @@ export default function GestorPariendoAdminPage() {
             onClick={() => setActiveTab('allies')}
             className={`flex items-center gap-2 py-3 px-5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'allies'
-                ? 'border-brand-primary text-brand-primary'
+                ? 'border-brand-secondary-ink text-brand-secondary-ink'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -274,23 +272,10 @@ export default function GestorPariendoAdminPage() {
 
           <button
             type="button"
-            onClick={() => setActiveTab('trustbar')}
-            className={`flex items-center gap-2 py-3 px-5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
-              activeTab === 'trustbar'
-                ? 'border-brand-primary text-brand-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Herramientas / Marquesina ({content.trustBar.length})</span>
-          </button>
-
-          <button
-            type="button"
             onClick={() => setActiveTab('applications')}
             className={`flex items-center gap-2 py-3 px-5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'applications'
-                ? 'border-brand-primary text-brand-primary'
+                ? 'border-brand-secondary-ink text-brand-secondary-ink'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -303,7 +288,7 @@ export default function GestorPariendoAdminPage() {
             onClick={() => setActiveTab('media')}
             className={`flex items-center gap-2 py-3 px-5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'media'
-                ? 'border-brand-primary text-brand-primary'
+                ? 'border-brand-secondary-ink text-brand-secondary-ink'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -329,16 +314,6 @@ export default function GestorPariendoAdminPage() {
               allies={content.allies}
               onChange={(newAllies) => {
                 setContent({ ...content, allies: newAllies })
-                setHasChanges(true)
-              }}
-            />
-          )}
-
-          {activeTab === 'trustbar' && (
-            <TrustBarEditor
-              tools={content.trustBar}
-              onChange={(newTools) => {
-                setContent({ ...content, trustBar: newTools })
                 setHasChanges(true)
               }}
             />

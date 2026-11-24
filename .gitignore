@@ -52,3 +52,5 @@ prompt
 server.log
 # Skills directory
 /skills/
+# Credenciales Radarsystems (no subir al repo publico)
+src/lib/email-service.ts

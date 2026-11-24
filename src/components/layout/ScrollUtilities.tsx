@@ -40,7 +40,7 @@ export function ScrollUtilities() {
             whileTap={{ scale: 0.95 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             aria-label="Volver arriba"
-            className="fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full gradient-primary text-white shadow-glow hover:shadow-glow-pink transition-shadow"
+            className="fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full btn-brand shadow-glow hover:shadow-glow-salmon transition-shadow"
           >
             <ArrowUp className="h-5 w-5" strokeWidth={2.5} />
             <span className="absolute inset-0 rounded-full animate-ping bg-brand-primary/30 -z-10" />

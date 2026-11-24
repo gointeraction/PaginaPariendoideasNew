@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import * as React from 'react'
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion'
@@ -12,9 +12,9 @@ const IMPACT_STATS = [
     label: 'Emprendedoras aceleradas',
     description: 'Mujeres que han transformado su vida y negocio con nosotros.',
     icon: TrendingUp,
-    color: 'from-purple-500 to-fuchsia-500',
-    bg: 'bg-brand-primary/10',
-    text: 'text-brand-primary',
+    color: 'from-fucsia to-violeta',
+    bg: 'bg-salmon-100',
+    text: 'text-brand-secondary-ink',
   },
   {
     value: 3200000,
@@ -23,20 +23,20 @@ const IMPACT_STATS = [
     label: 'Ventas generadas por la comunidad',
     description: 'Ingresos reales generados a través del Kit Mujer CEO.',
     icon: Award,
-    color: 'from-pink-500 to-rose-500',
-    bg: 'bg-brand-secondary/10',
-    text: 'text-brand-secondary',
+    color: 'from-fucsia to-violeta',
+    bg: 'bg-salmon-100',
+    text: 'text-brand-secondary-ink',
   },
   {
     value: 87,
     prefix: '',
     suffix: '%',
     label: 'Aumentan sus ingresos en 6 meses',
-    description: 'De las egresadas del Programa Renacer.',
+    description: 'De las egresadas del Programa Impulso.',
     icon: HeartHandshake,
-    color: 'from-orange-500 to-amber-500',
-    bg: 'bg-brand-accent/10',
-    text: 'text-brand-accent',
+    color: 'from-fucsia to-violeta',
+    bg: 'bg-salmon-100',
+    text: 'text-brand-secondary-ink',
   },
   {
     value: 12,
@@ -45,9 +45,9 @@ const IMPACT_STATS = [
     label: 'Países en LATAM',
     description: 'Venezuela, Colombia, Perú, Argentina, Chile, Ecuador, México y más.',
     icon: Globe2,
-    color: 'from-violet-500 to-purple-500',
-    bg: 'bg-brand-primary/10',
-    text: 'text-brand-primary',
+    color: 'from-fucsia to-violeta',
+    bg: 'bg-salmon-100',
+    text: 'text-brand-secondary-ink',
   },
 ]
 
@@ -94,7 +94,7 @@ export function ImpactStats() {
       {/* Light background with subtle blur accents */}
       <div className="absolute inset-0 -z-10 bg-neutral-50/60" />
       <div className="absolute inset-0 -z-10 opacity-20 pointer-events-none">
-        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-brand-primary/20 blur-3xl" />
+        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-brand-border/40 blur-3xl" />
         <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-brand-secondary/20 blur-3xl" />
       </div>
 
@@ -108,7 +108,7 @@ export function ImpactStats() {
           className="text-center"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-neutral-100 px-4 py-1.5 text-xs font-semibold text-black shadow-sm">
-            <TrendingUp className="h-3.5 w-3.5 text-brand-secondary" />
+            <TrendingUp className="h-3.5 w-3.5 text-brand-secondary-ink" />
             Nuestro Impacto
           </span>
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-black text-balance sm:text-4xl md:text-5xl">
@@ -130,7 +130,7 @@ export function ImpactStats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-neutral-300"
+              className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-neutral-300"
             >
               {/* Glow on hover */}
               <div
@@ -169,11 +169,11 @@ export function ImpactStats() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-12 flex flex-col items-center justify-center gap-6 rounded-3xl border border-neutral-200 bg-white p-8 text-center shadow-sm md:flex-row md:justify-between md:text-left"
+          className="mt-12 flex flex-col items-center justify-center gap-6 rounded-3xl border border-neutral-200 bg-card p-8 text-center shadow-sm md:flex-row md:justify-between md:text-left"
         >
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
-              {['from-pink-400 to-rose-500', 'from-purple-400 to-fuchsia-500', 'from-orange-400 to-amber-500', 'from-violet-400 to-purple-500'].map(
+              {['from-salmon-700 to-salmon-900', 'from-fucsia to-violeta', 'from-salmon-700 to-salmon-900', 'from-fucsia to-violeta'].map(
                 (g, i) => (
                   <span
                     key={i}

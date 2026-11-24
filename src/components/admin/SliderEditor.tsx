@@ -43,7 +43,7 @@ export function SliderEditor({ slides, onChange }: SliderEditorProps) {
           >
             <div className="flex items-center justify-between pb-3 border-b border-brand-border/40">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-7 h-7 rounded-full bg-brand-primary/10 text-brand-primary font-bold text-sm">
+                <span className="flex items-center justify-center w-7 h-7 rounded-full bg-salmon-100 text-brand-secondary-ink font-bold text-sm">
                   {index + 1}
                 </span>
                 <h3 className="font-semibold text-foreground text-base">
@@ -68,7 +68,7 @@ export function SliderEditor({ slides, onChange }: SliderEditorProps) {
                 <Input
                   value={slide.tag}
                   onChange={(e) => updateSlide(index, 'tag', e.target.value)}
-                  placeholder="ej. Programa Renacer 2025"
+                  placeholder="ej. Programa Impulso 2026"
                 />
               </div>
               <div className="space-y-1.5">
@@ -110,49 +110,25 @@ export function SliderEditor({ slides, onChange }: SliderEditorProps) {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-brand-border/30">
-              <div className="space-y-3 p-3 rounded-lg bg-brand-muted/20 border border-brand-border/40">
-                <p className="text-xs font-bold text-brand-primary uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" /> Botón Primario (Principal)
-                </p>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Texto del Botón</Label>
-                  <Input
-                    value={slide.primaryCtaText}
-                    onChange={(e) => updateSlide(index, 'primaryCtaText', e.target.value)}
-                    placeholder="ej. Solicitar Beca"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">URL de Destino (Onboarding / Link)</Label>
-                  <Input
-                    value={slide.primaryCtaHref}
-                    onChange={(e) => updateSlide(index, 'primaryCtaHref', e.target.value)}
-                    placeholder="https://onboarding.pariendoideas.com/?programa=..."
-                  />
-                </div>
+            <div className="space-y-3 p-3 rounded-lg bg-brand-muted/20 border border-brand-border/40">
+              <p className="text-xs font-bold text-brand-secondary-ink uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" /> Botón Primario (Principal)
+              </p>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Texto del Botón</Label>
+                <Input
+                  value={slide.primaryCtaText}
+                  onChange={(e) => updateSlide(index, 'primaryCtaText', e.target.value)}
+                  placeholder="ej. Solicitar Beca"
+                />
               </div>
-
-              <div className="space-y-3 p-3 rounded-lg bg-brand-muted/20 border border-brand-border/40">
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  Botón Secundario
-                </p>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Texto del Botón</Label>
-                  <Input
-                    value={slide.secondaryCtaText}
-                    onChange={(e) => updateSlide(index, 'secondaryCtaText', e.target.value)}
-                    placeholder="ej. Ver Programa Impulso"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">URL o Ancla</Label>
-                  <Input
-                    value={slide.secondaryCtaHref}
-                    onChange={(e) => updateSlide(index, 'secondaryCtaHref', e.target.value)}
-                    placeholder="#impulso o URL"
-                  />
-                </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">URL de Destino (Registro / Link)</Label>
+                <Input
+                  value={slide.primaryCtaHref}
+                  onChange={(e) => updateSlide(index, 'primaryCtaHref', e.target.value)}
+                  placeholder="https://onboarding.pariendoideas.com/?programa=..."
+                />
               </div>
             </div>
 
@@ -160,7 +136,7 @@ export function SliderEditor({ slides, onChange }: SliderEditorProps) {
               <ImageUploader
                 value={slide.imageUrl || ''}
                 onChange={(url) => updateSlide(index, 'imageUrl', url)}
-                label="Imagen Ilustrativa / Fotografía del Slide (Opcional)"
+                label="Imagen de fondo del Slide (opcional — reemplaza la imagen por defecto)"
                 aspectRatio="wide"
                 folder="slider_images"
               />

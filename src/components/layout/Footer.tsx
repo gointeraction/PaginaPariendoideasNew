@@ -1,6 +1,5 @@
 'use client'
 
-import * as React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -9,24 +8,21 @@ import {
   Linkedin,
   Facebook,
   Youtube,
-  Mail,
   MapPin,
   Heart,
   ArrowUpRight,
-  CheckCircle2,
-  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ONBOARDING_URLS } from '@/lib/constants'
+import { ONBOARDING_BASE_URL, ONBOARDING_URLS } from '@/lib/constants'
+import { useSubscribeModal } from './SubscribeModalProvider'
 
 const FOOTER_LINKS = [
   {
     title: 'Programa Impulso',
     links: [
-      { label: 'Acompañamiento Psicosocial', href: '#impulso' },
-      { label: 'Reconstrucción Digital', href: '#impulso' },
-      { label: 'Becas de Formación', href: ONBOARDING_URLS.becas },
+      { label: 'Acompañamiento Psicosocial', href: '#modulos' },
+      { label: 'Reconstrucción Digital', href: '#modulos' },
+      { label: 'Solicitar Beca', href: ONBOARDING_URLS.becas },
       { label: 'Mentoría 1:1', href: '#mentoria' },
     ],
   },
@@ -41,16 +37,15 @@ const FOOTER_LINKS = [
   {
     title: 'Comunidad',
     links: [
-      { label: 'Foro de emprendedoras', href: '#comunidad' },
-      { label: 'Directorio', href: '#comunidad' },
-      { label: 'Grupos de interés', href: '#comunidad' },
-      { label: 'Tablón de oportunidades', href: '#comunidad' },
+      { label: 'Foro de emprendedoras', href: '#testimonios' },
+      { label: 'Directorio', href: '#testimonios' },
+      { label: 'Grupos de interés', href: '#testimonios' },
+      { label: 'Tablón de oportunidades', href: '#testimonios' },
     ],
   },
   {
     title: 'Plataforma',
     links: [
-      { label: 'Soporte', href: '#soporte' },
       { label: 'Términos y privacidad', href: '#legal' },
     ],
   },
@@ -59,118 +54,55 @@ const FOOTER_LINKS = [
 const SOCIAL_LINKS = [
   { icon: Instagram, href: '#', label: 'Instagram' },
   { icon: Linkedin, href: '#', label: 'LinkedIn' },
-  { icon: Facebook, href: '#', label: 'Facebook' },
+  { icon: Facebook, href: 'https://www.facebook.com/share/1A1U5ajm4N/', label: 'Facebook' },
   { icon: Youtube, href: '#', label: 'YouTube' },
 ]
 
 export function Footer() {
-  const [email, setEmail] = React.useState('')
-  const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [errorMsg, setErrorMsg] = React.useState('')
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim()) return
-
-    setStatus('loading')
-    setErrorMsg('')
-
-    try {
-      const res = await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      const data = await res.json()
-
-      if (res.ok) {
-        setStatus('success')
-        setEmail('')
-      } else {
-        setStatus('error')
-        setErrorMsg(data.error || 'Algo salió mal')
-      }
-    } catch {
-      setStatus('error')
-      setErrorMsg('Error de conexión')
-    }
-  }
+  const { openSubscribeModal } = useSubscribeModal()
 
   return (
-    <footer className="relative mt-auto overflow-hidden bg-brand-deep text-white">
+    <footer className="relative mt-auto overflow-hidden bg-brand-surface text-white">
       {/* Decorative top gradient line */}
       <div className="h-1 w-full gradient-primary" />
 
       {/* Decorative blobs */}
-      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-primary/30 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-border/60 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-brand-secondary/25 blur-3xl" />
-      <div className="pointer-events-none absolute top-1/3 right-1/4 h-56 w-56 rounded-full bg-brand-accent/15 blur-3xl" />
+      <div className="pointer-events-none absolute top-1/3 right-1/4 h-56 w-56 rounded-full bg-brand-border/30 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4">
-        {/* Newsletter CTA */}
+        {/* CTA principal */}
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-8 py-14 border-b border-white/10">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white/80 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
-              Únete al movimiento
+              <Sparkles className="h-3.5 w-3.5 text-brand-secondary" />
+              Únete al primer hub de aceleramiento femenino
             </span>
             <h3 className="mt-4 font-display text-3xl md:text-4xl font-bold leading-tight text-balance">
-              Recibe oportunidades, becas y herramientas
-              <span className="block gradient-text">para hacer crecer tu emprendimiento.</span>
+              Impulsa tu potencial con{' '}
+              <span className="gradient-text">educación, tecnología y mentoría</span>{' '}
+              de alto impacto.
             </h3>
-            <p className="mt-3 text-white/70 max-w-xl text-pretty">
-              Más de 12,000 mujeres de Venezuela y LATAM ya forman parte de la comunidad
-              Pariendo Ideas. Llega el próximo boletín cada lunes a tu correo.
-            </p>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-3 self-end w-full"
-          >
-            {status === 'success' ? (
-              <div className="flex items-center gap-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 p-4">
-                <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-400" />
-                <div>
-                  <p className="font-semibold text-emerald-200">¡Suscrita con éxito!</p>
-                  <p className="text-sm text-emerald-300/80">Revisa tu correo para confirmar tu suscripción.</p>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => { setEmail(e.target.value); setStatus('idle') }}
-                    placeholder="tu@email.com"
-                    required
-                    className="h-12 flex-1 rounded-full bg-white/10 border-white/15 text-white placeholder:text-white/50 backdrop-blur focus-visible:ring-brand-secondary/60"
-                  />
-                  <Button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="h-12 px-6 rounded-full gradient-primary text-white border-0 shadow-glow hover:opacity-90 disabled:opacity-60"
-                  >
-                    {status === 'loading' ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <>
-                        Suscribirme
-                        <ArrowUpRight className="ml-1.5 h-4 w-4" />
-                      </>
-                    )}
-                  </Button>
-                </div>
-                {status === 'error' && (
-                  <p className="text-sm text-red-300">{errorMsg}</p>
-                )}
-                <p className="text-xs text-white/50">
-                  Al suscribirte aceptas recibir comunicaciones de Pariendo Ideas. Puedes darte de baja cuando quieras.
-                </p>
-              </>
-            )}
-          </form>
+          <div className="flex flex-col justify-end gap-4">
+            <p className="max-w-xl text-white/70 text-pretty">
+              Sé parte de una red de mujeres que se impulsan entre sí. Accede a
+              herramientas de empoderamiento, bienestar, resiliencia y networking
+              estratégico para escalar tus proyectos.
+            </p>
+            <div>
+              <Button
+                type="button"
+                onClick={() => openSubscribeModal({ originUrl: ONBOARDING_BASE_URL })}
+                className="h-12 px-6 rounded-full btn-brand shadow-glow font-bold"
+              >
+                Quiero ser parte
+                <ArrowUpRight className="ml-1.5 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* Links grid */}
@@ -187,7 +119,7 @@ export function Footer() {
                 />
               </span>
               <span className="font-display text-2xl font-bold">
-                Pariendo<span className="gradient-text-purple-pink"> Ideas</span>
+                Pariendo<span className="gradient-text-brand"> Ideas</span>
               </span>
             </Link>
             <p className="mt-4 text-sm text-white/70 max-w-xs leading-relaxed">
@@ -195,16 +127,22 @@ export function Footer() {
               CEO y profesionales en reconversión digital en Venezuela y LATAM.
             </p>
             <div className="mt-5 flex items-center gap-2">
-              {SOCIAL_LINKS.map((s) => (
-                <Link
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 hover:bg-gradient-to-br hover:from-brand-primary hover:to-brand-secondary hover:text-white transition-all"
-                >
-                  <s.icon className="h-4.5 w-4.5" />
-                </Link>
-              ))}
+              {SOCIAL_LINKS.map((s) => {
+                // Enlaces externos (p. ej. Facebook) se abren en pestaña nueva
+                const isExternal = s.href.startsWith('http')
+                return (
+                  <Link
+                    key={s.label}
+                    href={s.href}
+                    aria-label={s.label}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 hover:bg-gradient-to-br hover:from-[#5f9ba0] hover:to-[#1e575b] hover:text-white transition-all"
+                  >
+                    <s.icon className="h-4.5 w-4.5" />
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
@@ -214,17 +152,28 @@ export function Footer() {
                 {col.title}
               </h4>
               <ul className="mt-4 space-y-2.5">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <Link
-                      href={l.href}
-                      className="group inline-flex items-center text-sm text-white/65 hover:text-white transition-colors"
-                    >
-                      <span className="mr-0 h-px w-0 bg-brand-accent transition-all duration-300 group-hover:mr-2 group-hover:w-4" />
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
+                {col.links.map((l) => {
+                  const isOnboarding = l.href.startsWith(ONBOARDING_BASE_URL)
+                  return (
+                    <li key={l.label}>
+                      <Link
+                        href={l.href}
+                        onClick={
+                          isOnboarding
+                            ? (e) => {
+                                e.preventDefault()
+                                openSubscribeModal({ originUrl: l.href })
+                              }
+                            : undefined
+                        }
+                        className="group inline-flex items-center text-sm text-white/65 hover:text-white transition-colors"
+                      >
+                        <span className="mr-0 h-px w-0 bg-brand-secondary transition-all duration-300 group-hover:mr-2 group-hover:w-4" />
+                        {l.label}
+                      </Link>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}
@@ -232,12 +181,8 @@ export function Footer() {
 
         {/* Contact strip */}
         <div className="grid gap-4 py-6 border-t border-white/10 sm:grid-cols-2 text-sm text-white/70">
-          <div className="flex items-center gap-2">
-            <Mail className="h-4 w-4 text-brand-accent" />
-            <span>hola@pariendoideas.com</span>
-          </div>
-          <div className="flex items-center gap-2 sm:justify-end">
-            <MapPin className="h-4 w-4 text-brand-accent" />
+          <div className="flex items-center gap-2 sm:col-start-2 sm:justify-end">
+            <MapPin className="h-4 w-4 text-brand-secondary" />
             <span>Caracas, Venezuela · Cobertura LATAM</span>
           </div>
         </div>
